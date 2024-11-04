@@ -1,5 +1,18 @@
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import Layout from "./components/common/Layout";
+
 function App() {
-  return <div className="bg-blue-500 text-white p-4">Hello, Tailwind CSS!</div>;
+  return (
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
+  );
 }
 
 export default App;
