@@ -5,7 +5,7 @@ const Layout = ({ children }) => {
   return (
     <div>
       <Header />
-      <main className="min-h-screen home-background">{children}</main>
+      <main className="custom-height">{children}</main>
       <Footer />
     </div>
   );
