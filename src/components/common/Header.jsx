@@ -1,5 +1,7 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { navigation } from "../../constants/navigation";
@@ -40,9 +42,50 @@ export default function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/login" className="text-sm/6 font-semibold text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <MenuButton className="relative inline-flex items-center justify-center">
+                <div className="group relative inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-200 hover:bg-gray-300 active:bg-gray-400">
+                  <svg
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="h-full w-full text-gray-500"
+                  >
+                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="absolute bottom-0 right-0 h-4 w-4 text-gray-400 bg-white rounded-full"
+                  />
+                </div>
+              </MenuButton>
+            </div>
+
+            <MenuItems
+              transition
+              className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+            >
+              <div className="py-1">
+                <MenuItem>
+                  <Link
+                    to="/register"
+                    className="block px-4 py-2 text-sm font-semibold text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                  >
+                    Sign up
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-sm  text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                  >
+                    Log in
+                  </Link>
+                </MenuItem>
+              </div>
+            </MenuItems>
+          </Menu>
         </div>
       </nav>
       <Dialog
@@ -67,12 +110,13 @@ export default function Header() {
             </button>
           </div>
           <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
+            <div className="-my-6 divide-y divide-gray-500/20">
               <div className="space-y-2 py-6">
                 {navigation.main.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
                     className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                   >
                     {item.name}
@@ -81,7 +125,15 @@ export default function Header() {
               </div>
               <div className="py-6">
                 <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  Sign up
+                </Link>
+                <Link
                   to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Log in
