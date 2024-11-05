@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoePrints } from "@fortawesome/pro-duotone-svg-icons";
 
@@ -12,6 +12,13 @@ export default function Register() {
   });
 
   const [error, setError] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState(true);
+
+  useEffect(() => {
+    if (formData.password && formData.confirmPassword) {
+      setPasswordMatch(formData.password === formData.confirmPassword);
+    }
+  }, [formData.password, formData.confirmPassword]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -23,7 +30,7 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
+    if (!passwordMatch) {
       setError("Passwords do not match");
       return;
     }
@@ -40,7 +47,7 @@ export default function Register() {
             You're just a few steps away from your dream vacation...
           </h2>
           <div className="flex mx-auto">
-            {[...Array(8)].map((_, index) => (
+            {[...Array(6)].map((_, index) => (
               <FontAwesomeIcon
                 key={index}
                 icon={faShoePrints}
@@ -138,6 +145,11 @@ export default function Register() {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
                 />
               </div>
+              {!passwordMatch && (
+                <p className="text-red-500 text-sm mt-2">
+                  Passwords do not match
+                </p>
+              )}
             </div>
 
             <div className="flex items-center">
