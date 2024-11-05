@@ -42,3 +42,19 @@ header {
   background-position: bottom;
   background-repeat: no-repeat;
 }
+
+/* Register page styling */
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.icon-animation {
+  animation: fadeInOut 4s infinite;
+}
