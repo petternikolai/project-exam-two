@@ -1,4 +1,5 @@
 import loginImg from "../assets/login-img.jpg";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   return (
@@ -12,9 +13,9 @@ export default function Login() {
               </h2>
               <p className="mt-2 text-sm/6 text-gray-500">
                 Not a member?{" "}
-                <a href="#" className="font-semibold text-accent">
+                <Link to="/register" className="font-semibold text-accent">
                   Sign up now
-                </a>
+                </Link>
               </p>
             </div>
 
