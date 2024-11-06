@@ -1,8 +1,8 @@
 export const navigationFooter = {
   main: [
-    { name: "About", href: "/about" },
-    { name: "FAQ", href: "/faq" },
-    { name: "Contact", href: "/contact" },
+    { name: "About", href: "/project-exam-two/about" },
+    { name: "FAQ", href: "/project-exam-two/faq" },
+    { name: "Contact", href: "/project-exam-two/contact" },
   ],
   social: [
     {

@@ -13,7 +13,10 @@ export default function Login() {
               </h2>
               <p className="mt-2 text-sm/6 text-gray-500">
                 Not a member?{" "}
-                <Link to="/register" className="font-semibold text-accent">
+                <Link
+                  to="/project-exam-two/register"
+                  className="font-semibold text-accent"
+                >
                   Sign up now
                 </Link>
               </p>

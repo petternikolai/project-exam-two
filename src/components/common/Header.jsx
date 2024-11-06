@@ -69,7 +69,7 @@ export default function Header() {
               <div className="py-1">
                 <MenuItem>
                   <Link
-                    to="/register"
+                    to="/project-exam-two/register"
                     className="block px-4 py-2 text-sm font-semibold text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                   >
                     Sign up
@@ -77,7 +77,7 @@ export default function Header() {
                 </MenuItem>
                 <MenuItem>
                   <Link
-                    to="/login"
+                    to="/project-exam-two/login"
                     className="block px-4 py-2 text-sm  text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                   >
                     Log in
@@ -125,14 +125,14 @@ export default function Header() {
               </div>
               <div className="py-6">
                 <Link
-                  to="/register"
+                  to="/project-exam-two/register"
                   onClick={() => setMobileMenuOpen(false)}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >
                   Sign up
                 </Link>
                 <Link
-                  to="/login"
+                  to="/project-exam-two/login"
                   onClick={() => setMobileMenuOpen(false)}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >

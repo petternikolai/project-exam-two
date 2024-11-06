@@ -18,13 +18,13 @@ export default function Homepage() {
               </p>
               <div className="mt-10 flex items-center gap-x-6">
                 <Link
-                  to="/venues"
+                  to="/project-exam-two/venues"
                   className="rounded-md bg-accent px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Find your stay
                 </Link>
                 <Link
-                  to="/register"
+                  to="/project-exam-two/register"
                   className="text-sm/6 font-semibold text-gray-900"
                 >
                   Sign up <span aria-hidden="true">→</span>
