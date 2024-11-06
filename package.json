@@ -31,6 +31,7 @@
     "@fortawesome/sharp-thin-svg-icons": "^6.6.0",
     "@headlessui/react": "^2.1.10",
     "@heroicons/react": "^2.1.5",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
