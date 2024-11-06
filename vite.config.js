@@ -7,6 +7,9 @@ export default defineConfig({
   css: {
     postcss: "./postcss.config.js",
   },
+  build: {
+    outDir: "dist",
+  },
   server: {
     historyApiFallback: true,
   },
