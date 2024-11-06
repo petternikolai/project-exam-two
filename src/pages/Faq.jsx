@@ -11,9 +11,9 @@ export default function Faq() {
     <div className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:px-4 lg:py-20">
         <div className="mx-auto max-w-4xl divide-y divide-gray-900/10">
-          <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+          <h1 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
             Frequently asked questions
-          </h2>
+          </h1>
           <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
             {faqs.map((faq) => (
               <Disclosure key={faq.question} as="div" className="pt-6">
