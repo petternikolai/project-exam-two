@@ -4,7 +4,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { navigation } from "../../constants/navigation";
+import { navigationNav } from "../../constants/navigationNav";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,7 +31,7 @@ export default function Header() {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.main.map((item) => (
+          {navigationNav.main.map((item) => (
             <Link
               key={item.name}
               to={item.href}
@@ -112,7 +112,7 @@ export default function Header() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/20">
               <div className="space-y-2 py-6">
-                {navigation.main.map((item) => (
+                {navigationNav.main.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}

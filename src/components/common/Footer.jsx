@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { navigation } from "../../constants/navigation";
+import { navigationFooter } from "../../constants/navigationFooter";
 
 export default function Footer() {
   return (
@@ -10,7 +10,7 @@ export default function Footer() {
           aria-label="Footer"
           className="-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6"
         >
-          {navigation.main.map((item) => (
+          {navigationFooter.main.map((item) => (
             <Link
               key={item.name}
               to={item.href}
@@ -21,7 +21,7 @@ export default function Footer() {
           ))}
         </nav>
         <div className="mt-16 flex justify-center gap-x-10">
-          {navigation.social.map((item) => (
+          {navigationFooter.social.map((item) => (
             <Link
               key={item.name}
               to={item.href}
