@@ -3,7 +3,9 @@
   <head>
     <meta http-equiv="refresh" content="0; URL=/" />
     <script>
-      window.location.href = "/project-exam-two/";
+      // Preserve the path and redirect to the correct base path
+      var pathname = window.location.pathname.replace("/project-exam-two", "");
+      window.location.href = "/project-exam-two" + pathname;
     </script>
   </head>
   <body></body>
