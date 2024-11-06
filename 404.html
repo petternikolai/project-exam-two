@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <script>
       // Preserve the path and redirect to the correct base path
-      var pathname = window.location.pathname;
+      var pathname = window.location.pathname.replace("/project-exam-two", "");
       window.location.href = "/project-exam-two" + pathname;
     </script>
   </head>
