@@ -77,3 +77,21 @@ header {
     background-position: -200% center;
   }
 }
+
+/* DatePicker styling */
+
+.start-date {
+  background-color: #afbf36;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+}
+
+.end-date {
+  background-color: #afbf36;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.in-between-dates {
+  background-color: rgb(175, 191, 54, 0.5);
+}
