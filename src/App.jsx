@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Faq from "./pages/Faq";
+import Venues from "./pages/Venues";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/project-exam-two/about" element={<About />} />
           <Route path="/project-exam-two/faq" element={<Faq />} />
           <Route path="/project-exam-two/contact" element={<Contact />} />
+          <Route path="/project-exam-two/venues" element={<Venues />} />
         </Routes>
       </Layout>
     </HashRouter>
