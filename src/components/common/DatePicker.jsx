@@ -150,7 +150,7 @@ export default function DatePicker() {
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      "text-gray-300"
+                      "text-gray-300/100"
                   )}
                 >
                   <time
