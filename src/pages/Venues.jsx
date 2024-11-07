@@ -3,7 +3,6 @@ import useFetch from "../hooks/useFetch";
 import { API_BASE_URL, API_VENUES_URL } from "../constants/apiUrls";
 import FilterSort from "../components/filters/FilterSort";
 import VenueSkeleton from "../components/loaders/VenueSkeleton";
-import DatePicker from "../components/common/DatePicker";
 
 export default function Venues() {
   const { venues, loading, error } = useFetch(
@@ -21,7 +20,6 @@ export default function Venues() {
   return (
     <>
       <FilterSort />
-      <DatePicker />
       <div className="bg-white">
         <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 mt-8 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">

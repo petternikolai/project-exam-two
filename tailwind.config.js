@@ -10,7 +10,6 @@ export default {
         sans: ["InterVariable", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        background: "#D9D2D0",
         accent: "#AFBF36",
       },
     },

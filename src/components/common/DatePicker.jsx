@@ -13,6 +13,7 @@ import {
   isBefore,
   isSameDay,
   isAfter,
+  differenceInCalendarDays,
 } from "date-fns";
 
 function classNames(...classes) {
@@ -63,30 +64,18 @@ export default function DatePicker() {
     }
   };
 
-  const isSelected = (day) => {
-    return (
-      (selectedStartDate && isSameDay(day, selectedStartDate)) ||
-      (selectedEndDate && isSameDay(day, selectedEndDate)) ||
-      (selectedStartDate &&
-        selectedEndDate &&
-        isAfter(day, selectedStartDate) &&
-        isBefore(day, selectedEndDate)) ||
-      (isToday(day) && !selectedStartDate && !selectedEndDate) // Allow today to be selected without range
-    );
-  };
-
   const isStartOrEnd = (day) => {
     return isSameDay(day, selectedStartDate) || isSameDay(day, selectedEndDate);
   };
 
-  //   const getSelectedRange = () => {
-  //     if (!selectedStartDate || !selectedEndDate) return null;
-  //     const daysCount = differenceInCalendarDays(
-  //       selectedEndDate,
-  //       selectedStartDate
-  //     );
-  //     return `${daysCount + 1} days selected`;
-  //   };
+  const getSelectedRange = () => {
+    if (!selectedStartDate || !selectedEndDate) return null;
+    const daysCount = differenceInCalendarDays(
+      selectedEndDate,
+      selectedStartDate
+    );
+    return `${daysCount + 1} days selected`;
+  };
 
   const isPastDate = (day) => {
     return isBefore(day, new Date());
@@ -139,17 +128,29 @@ export default function DatePicker() {
                     isInMonth
                       ? "bg-white text-gray-900"
                       : "bg-white text-gray-400",
-                    isInMonth && isSelected(day) && "bg-accent/100 text-black", // Highlight selected dates
-                    isInMonth && isStartOrEnd(day) && " text-black",
+
+                    // Apply styles to start date
                     isInMonth &&
-                      isSelected(day) &&
+                      isSameDay(day, selectedStartDate) &&
+                      "start-date",
+
+                    // Apply styles to end date
+                    isInMonth && isSameDay(day, selectedEndDate) && "end-date ",
+
+                    // Apply color to days in between the start and end date
+                    isInMonth &&
+                      selectedStartDate &&
+                      selectedEndDate &&
                       !isStartOrEnd(day) &&
-                      "bg-accent text-black", // Color the days in between the start and end date
+                      isAfter(day, selectedStartDate) &&
+                      isBefore(day, selectedEndDate) &&
+                      "in-between-dates text-black", // Light gray background for days between
+
+                    // Gray out past dates except today
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      " text-gray-300", // Gray out past dates except today
-                    "relative py-1.5 focus:z-10"
+                      "text-gray-300"
                   )}
                 >
                   <time
@@ -167,13 +168,13 @@ export default function DatePicker() {
           </div>
         </section>
 
-        {/* <div className="mt-4 text-center">
+        <div className="mt-4 text-center">
           {getSelectedRange() && (
             <span className="text-sm font-semibold text-gray-900">
               {getSelectedRange()}
             </span>
           )}
-        </div> */}
+        </div>
       </div>
     </div>
   );
