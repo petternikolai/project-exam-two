@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { API_BASE_URL, API_VENUES_URL } from "../constants/apiUrls";
 import FilterSort from "../components/filters/FilterSort";
@@ -14,6 +14,7 @@ export default function Venues() {
     error,
   } = useFetch(`${API_BASE_URL}${API_VENUES_URL}`);
   const { filters, setFilters, clearFilters, applyFilters } = useVenueFilters();
+  const [sortOption, setSortOption] = useState("");
 
   if (loading) {
     return <VenueSkeleton />;
@@ -25,17 +26,34 @@ export default function Venues() {
 
   const filteredVenues = applyFilters(venues);
 
+  const sortedVenues = filteredVenues.sort((a, b) => {
+    switch (sortOption) {
+      case "Rating (High to low)":
+        return b.rating - a.rating;
+      case "Rating (Low to high)":
+        return a.rating - b.rating;
+      case "Price (High to low)":
+        return b.price - a.price;
+      case "Price (Low to high)":
+        return a.price - b.price;
+      default:
+        return 0;
+    }
+  });
+
   return (
     <>
       <FilterSort
         filters={filters}
         setFilters={setFilters}
         clearFilters={clearFilters}
+        sortOption={sortOption}
+        setSortOption={setSortOption}
       />
       <div className="bg-white">
         <div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 mt-8 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
-            {filteredVenues.map((venue) => (
+            {sortedVenues.map((venue) => (
               <a
                 key={venue.id}
                 href={venue.href}
@@ -66,7 +84,9 @@ export default function Venues() {
                       className="text-accent mt-3 text-lg mr-2"
                     />
                     <p className="mt-4 text-gray-900">
-                      {venue.rating.toFixed(1)}
+                      {venue.rating === 0
+                        ? "No ratings"
+                        : venue.rating.toFixed(1)}
                     </p>
                   </div>
                 </div>

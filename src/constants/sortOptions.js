@@ -1,5 +1,6 @@
 export const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
+  { name: "Rating (High to low)", current: false },
+  { name: "Rating (Low to high)", current: false },
+  { name: "Price (High to low)", current: false },
+  { name: "Price (Low to high)", current: false },
 ];
