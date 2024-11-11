@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./pages/Homepage";
 import Layout from "./components/common/Layout";
 import Login from "./pages/Login";
@@ -11,9 +11,10 @@ import Venues from "./pages/Venues";
 
 function App() {
   return (
-    <HashRouter>
+    <Router>
       <Layout>
         <Routes>
+          <Route path="/" element={<Venues />} />
           <Route path="/project-exam-two/" element={<Homepage />} />
           <Route path="/project-exam-two/login" element={<Login />} />
           <Route path="/project-exam-two/register" element={<Register />} />
@@ -23,7 +24,7 @@ function App() {
           <Route path="/project-exam-two/venues" element={<Venues />} />
         </Routes>
       </Layout>
-    </HashRouter>
+    </Router>
   );
 }
 
