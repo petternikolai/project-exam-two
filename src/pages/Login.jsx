@@ -1,7 +1,79 @@
 import loginImg from "../assets/login-img.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { API_BASE_URL, API_LOGIN_URL } from "../constants/apiUrls";
+import { useAuth } from "../hooks/useAuth"; // Import useAuth hook
 
 export default function Login() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const { login } = useAuth(); // Get login function from useAuth
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      // Redirect to dashboard or desired page
+      navigate("/project-exam-two/");
+    }
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    const payload = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_LOGIN_URL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Invalid email or password");
+        } else if (response.status === 401) {
+          throw new Error("Unauthorized access");
+        } else {
+          throw new Error("Login failed");
+        }
+      }
+
+      const data = await response.json();
+      console.log("Form submitted", data);
+
+      // Store the token in local storage
+      localStorage.setItem("authToken", data.data.accessToken);
+
+      // Log in the user
+      login(data.data, data.data.accessToken);
+
+      // Redirect to dashboard or desired page
+      navigate("/project-exam-two/");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <>
       <div className="flex custom-height">
@@ -24,7 +96,7 @@ export default function Login() {
 
             <div className="mt-10">
               <div>
-                <form action="#" method="POST" className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label
                       htmlFor="email"
@@ -37,6 +109,8 @@ export default function Login() {
                       id="email"
                       name="email"
                       required
+                      value={formData.email}
+                      onChange={handleChange}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent sm:text-sm"
                     />
                   </div>
@@ -52,25 +126,13 @@ export default function Login() {
                       id="password"
                       name="password"
                       required
+                      value={formData.password}
+                      onChange={handleChange}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent sm:text-sm"
+                      autoComplete="current-password"
                     />
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="remember_me"
-                        name="remember_me"
-                        className="h-4 w-4 text-accent border-gray-300 rounded focus:ring-accent"
-                      />
-                      <label
-                        htmlFor="remember_me"
-                        className="ml-2 block text-sm/6 text-gray-900"
-                      >
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
                   <div>
                     <button
                       type="submit"
