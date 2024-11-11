@@ -1,6 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
+import { faWifi, faCircleParking } from "@fortawesome/pro-solid-svg-icons";
+import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
 
 const VenueCard = ({ venue }) => (
   <a key={venue.id} href={venue.href} className="group text-sm cursor-pointer">
@@ -31,6 +33,7 @@ const VenueCard = ({ venue }) => (
         </p>
       </div>
     </div>
+
     {venue.location.country && venue.location.city ? (
       <p className="mt-2 text-gray-600">
         {venue.location.city}, {venue.location.country}
@@ -38,7 +41,18 @@ const VenueCard = ({ venue }) => (
     ) : (
       ""
     )}
-    <p className="mt-2 text-gray-600">${venue.price} per night</p>
+    <p className="mt-2 text-gray-600">
+      Capacity: {venue.maxGuests} {venue.maxGuests === 1 ? "guest" : "guests"}
+    </p>
+    <div className="flex justify-between">
+      <p className="mt-2 text-gray-600">${venue.price} per night</p>
+      <div className="mt-2 flex space-x-2 text-gray-600">
+        {venue.meta.wifi && <FontAwesomeIcon icon={faWifi} />}
+        {venue.meta.parking && <FontAwesomeIcon icon={faCircleParking} />}
+        {venue.meta.breakfast && <FontAwesomeIcon icon={faPanFrying} />}
+        {venue.meta.pets && <FontAwesomeIcon icon={faPaw} />}
+      </div>
+    </div>
   </a>
 );
 

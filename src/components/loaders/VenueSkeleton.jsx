@@ -14,9 +14,21 @@ export default function VenueSkeleton() {
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-100">
                   <div className="h-64 w-full skeleton"></div>
                 </div>
-                <div className="mt-4 h-6 w-3/4 skeleton"></div>
+                <div className="flex justify-between items-center">
+                  <div className="mt-4 h-6 w-3/4 skeleton"></div>
+                  <div className="mt-4 h-6 w-1/4 skeleton"></div>
+                </div>
                 <div className="mt-2 h-4 w-1/2 skeleton"></div>
                 <div className="mt-2 h-4 w-1/4 skeleton"></div>
+                <div className="flex justify-between">
+                  <div className="mt-2 h-4 w-1/4 skeleton"></div>
+                  <div className="mt-2 flex space-x-2">
+                    <div className="h-4 w-4 skeleton"></div>
+                    <div className="h-4 w-4 skeleton"></div>
+                    <div className="h-4 w-4 skeleton"></div>
+                    <div className="h-4 w-4 skeleton"></div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
