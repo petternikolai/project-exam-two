@@ -16,7 +16,7 @@ export default function Navbar({
       className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
     >
       <div className="flex lg:flex-1">
-        <Link to="/project-exam-two/" className="-m-1.5 p-1.5">
+        <Link to="/" className="-m-1.5 p-1.5">
           <span className="sr-only">Holidaze</span>
           <div className="logo text-accent">Holidaze</div>
         </Link>
