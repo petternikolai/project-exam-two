@@ -15,7 +15,7 @@ export default function MobileMenu({
   return (
     <Dialog
       open={mobileMenuOpen}
-      onClose={setMobileMenuOpen}
+      onClose={() => setMobileMenuOpen(false)}
       className="lg:hidden"
     >
       <div className="fixed inset-0 z-50" />
@@ -66,13 +66,6 @@ export default function MobileMenu({
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                   >
                     Profile
-                  </Link>
-                  <Link
-                    to="/project-exam-two/bookings"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    Bookings
                   </Link>
                   <button
                     onClick={() => {
