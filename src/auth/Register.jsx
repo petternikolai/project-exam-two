@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoePrints } from "@fortawesome/pro-duotone-svg-icons";
 import { API_KEY } from "../constants/apiKey";
 import { API_BASE_URL, API_REGISTER_URL } from "../constants/apiUrls";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "./useAuth";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../components/form/TextInput";
 import CheckboxInput from "../components/form/CheckboxInput";

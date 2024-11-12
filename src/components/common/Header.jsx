@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../hooks/useAuth"; // Import custom hook for authentication
+import { useAuth } from "../../auth/useAuth"; // Import custom hook for authentication
 import MobileMenu from "./MobileMenu"; // Import MobileMenu component
 import Navbar from "./Navbar"; // Import Navbar component
 
