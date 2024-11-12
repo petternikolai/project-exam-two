@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_KEY } from "../constants/apiKey"; // Import the API key
 
 export default function useFetch(url) {
   const [data, setData] = useState(null);
@@ -8,7 +9,12 @@ export default function useFetch(url) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": API_KEY, // Include the API key in the headers
+          },
+        });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
