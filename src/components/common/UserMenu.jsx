@@ -75,7 +75,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
               <MenuItem>
                 <Link
                   to="/project-exam-two/login"
-                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                  className="block px-4 py-2 font-semibold text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                 >
                   Log in
                 </Link>
@@ -83,7 +83,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
               <MenuItem>
                 <Link
                   to="/project-exam-two/register"
-                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                  className="block px-4 py-2 font-semibold text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                 >
                   Sign up
                 </Link>
