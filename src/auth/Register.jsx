@@ -80,6 +80,10 @@ export default function Register() {
     }
   };
 
+  const isPasswordLongEnough = (password) => {
+    return password.length >= 8;
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -103,8 +107,8 @@ export default function Register() {
           </h3>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-2xl flex flex-col lg:flex-row lg:space-x-8">
+          <form onSubmit={handleSubmit} className="space-y-6 flex-1">
             <TextInput
               id="name"
               name="name"
@@ -135,6 +139,24 @@ export default function Register() {
               required
               autoComplete="new-password"
             />
+            {formData.password && (
+              <div className="mt-2">
+                <div className="relative w-full h-2 bg-gray-200 rounded-full">
+                  <div
+                    className={`absolute top-0 left-0 h-full rounded-full transition-all duration-300 ${
+                      isPasswordLongEnough(formData.password)
+                        ? "bg-green-500 w-full"
+                        : "bg-red-500 w-1/3"
+                    }`}
+                  ></div>
+                </div>
+                {!isPasswordLongEnough(formData.password) && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Password must be at least 8 characters long
+                  </p>
+                )}
+              </div>
+            )}
             <TextInput
               id="confirmPassword"
               name="confirmPassword"
@@ -167,6 +189,21 @@ export default function Register() {
               </button>
             </div>
           </form>
+          <div className="bg-accent p-4 rounded-md text-sm text-black mt-4 lg:mt-0 lg:w-1/3">
+            <h4 className="font-semibold">Guidelines:</h4>
+            <ul className="space-y-2 pl-0 mt-2">
+              <li className="pl-0">
+                The username must not contain punctuation symbols apart from
+                underscore (_).
+              </li>
+              <li className="pl-0">
+                The email must be a valid stud.noroff.no email address.
+              </li>
+              <li className="pl-0">
+                The password must be at least 8 characters long.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </>
