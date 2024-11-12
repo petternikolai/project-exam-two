@@ -1,6 +1,6 @@
-import ProfileForm from "./ProfileUpdateForm";
-import Bookings from "../../pages/Bookings";
-import Venues from "../../pages/MyVenues";
+import ProfileForm from "../components/common/ProfileForm";
+import Bookings from "../pages/Bookings";
+import Venues from "../pages/MyVenues";
 
 export default function RenderContent({
   selectedNav,
