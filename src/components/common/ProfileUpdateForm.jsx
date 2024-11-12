@@ -1,6 +1,6 @@
 import TextInput from "../form/TextInput";
 
-export default function ProfileForm({
+export default function ProfileUpdateForm({
   formData,
   handleChange,
   handleSelectChange,
