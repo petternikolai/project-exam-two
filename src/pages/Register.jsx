@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoePrints } from "@fortawesome/pro-duotone-svg-icons";
 import { API_KEY } from "../constants/apiKey";
 import { API_BASE_URL, API_REGISTER_URL } from "../constants/apiUrls";
-import { useAuth } from "../hooks/useAuth"; // Import useAuth hook
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import TextInput from "../components/form/TextInput";
+import CheckboxInput from "../components/form/CheckboxInput";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -14,11 +16,10 @@ export default function Register() {
     confirmPassword: "",
     venueManager: false,
   });
-
   const [error, setError] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
-  const { login } = useAuth(); // Get login function from useAuth
-  const navigate = useNavigate(); // Initialize useNavigate
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (formData.password && formData.confirmPassword) {
@@ -28,10 +29,10 @@ export default function Register() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -46,7 +47,7 @@ export default function Register() {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      venueManager: formData.venueManager, // Ensure boolean value
+      venueManager: formData.venueManager,
     };
 
     try {
@@ -72,10 +73,7 @@ export default function Register() {
       const data = await response.json();
       console.log("Form submitted", data);
 
-      // Log in the user after successful registration
       login(data.userProfile);
-
-      // Redirect to the desired page
       navigate("/project-exam-two/login");
     } catch (error) {
       setError(error.message);
@@ -96,7 +94,7 @@ export default function Register() {
                 icon={faShoePrints}
                 className={`mt-6 mx-auto text-accent text-xl/6 icon-animation`}
                 style={{ animationDelay: `${index * 0.5}s` }}
-                swapOpacity={index % 2 === 0} // Applies to every other icon
+                swapOpacity={index % 2 === 0}
               />
             ))}
           </div>
@@ -107,114 +105,59 @@ export default function Register() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Username
-              </label>
-              <div className="mt-2">
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  autoComplete="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Password
-              </label>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  autoComplete="new-password" // Add autocomplete attribute
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Confirm Password
-              </label>
-              <div className="mt-2">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-                  autoComplete="new-password" // Add autocomplete attribute
-                />
-              </div>
-              {!passwordMatch && (
-                <p className="text-red-500 text-sm mt-2">
-                  Passwords do not match
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="venueManager"
-                name="venueManager"
-                type="checkbox"
-                checked={formData.venueManager}
-                onChange={handleChange}
-                className="h-4 w-4 text-accent border-gray-300 rounded focus:ring-accent"
-              />
-              <label
-                htmlFor="venueManager"
-                className="ml-2 block text-sm/6 text-gray-900"
-              >
-                I want to be a venue manager
-              </label>
-            </div>
-
+            <TextInput
+              id="name"
+              name="name"
+              type="text"
+              label="Username"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              autoComplete="username"
+            />
+            <TextInput
+              id="email"
+              name="email"
+              type="email"
+              label="Email address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              autoComplete="email"
+            />
+            <TextInput
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              autoComplete="new-password"
+            />
+            <TextInput
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              autoComplete="new-password"
+            />
+            {!passwordMatch && (
+              <p className="text-red-500 text-sm mt-2">
+                Passwords do not match
+              </p>
+            )}
+            <CheckboxInput
+              id="venueManager"
+              name="venueManager"
+              label="I want to be a venue manager"
+              checked={formData.venueManager}
+              onChange={handleChange}
+            />
             {error && <p className="text-red-500 text-sm">{error}</p>}
-
             <div>
               <button
                 type="submit"
