@@ -1,8 +1,9 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
+  const navigate = useNavigate();
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -63,7 +64,14 @@ export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
               </MenuItem>
               <MenuItem>
                 <button
-                  onClick={logout}
+                  onClick={() => {
+                    localStorage.setItem(
+                      "previousUrl",
+                      window.location.pathname
+                    );
+                    logout();
+                    navigate("/project-exam-two/login");
+                  }}
                   className="block w-full text-left px-4 py-2 text-sm font-semibold text-red-600 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                 >
                   Log out
@@ -74,18 +82,18 @@ export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
             <>
               <MenuItem>
                 <Link
-                  to="/project-exam-two/register"
-                  className="block px-4 py-2 text-sm font-semibold text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                  to="/project-exam-two/login"
+                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                 >
-                  Sign up
+                  Log in
                 </Link>
               </MenuItem>
               <MenuItem>
                 <Link
-                  to="/project-exam-two/login"
-                  className="block px-4 py-2 text-sm  text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                  to="/project-exam-two/register"
+                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                 >
-                  Log in
+                  Sign up
                 </Link>
               </MenuItem>
             </>
