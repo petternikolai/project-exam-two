@@ -76,7 +76,7 @@ export default function Register() {
       login(data.userProfile);
 
       // Redirect to the desired page
-      navigate("/project-exam-two/");
+      navigate("/project-exam-two/login");
     } catch (error) {
       setError(error.message);
     }
