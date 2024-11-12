@@ -3,7 +3,13 @@ import { navigationNav } from "../../constants/navigationNav";
 import UserMenu from "./UserMenu"; // Import UserMenu component
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
-export default function Navbar({ isLoggedIn, logout, userProfile, loading }) {
+export default function Navbar({
+  isLoggedIn,
+  logout,
+  userProfile,
+  loading,
+  setMobileMenuOpen,
+}) {
   return (
     <nav
       aria-label="Global"
