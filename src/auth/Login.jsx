@@ -1,6 +1,6 @@
 import loginImg from "../assets/login-img.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { API_BASE_URL, API_LOGIN_URL } from "../constants/apiUrls";
 import { useAuth } from "./useAuth"; // Updated path
 import TextInput from "../components/form/TextInput";
@@ -10,13 +10,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      navigate("/project-exam-two/");
-    }
-  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,11 +21,14 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}${API_LOGIN_URL}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}${API_LOGIN_URL}?_holidaze=true`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
         const errorMessage =
@@ -43,10 +39,13 @@ export default function Login() {
       }
 
       const data = await response.json();
+      console.log("Login successful, data:", data);
       localStorage.setItem("authToken", data.data.accessToken);
       login(data.data, data.data.accessToken);
-      navigate("/project-exam-two/");
+      const afterLogin = "/project-exam-two/profile";
+      navigate(afterLogin);
     } catch (error) {
+      console.error("Login error:", error);
       setError(error.message);
     }
   };

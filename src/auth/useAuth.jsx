@@ -14,9 +14,6 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
 
-    console.log("Retrieved token from localStorage:", token); // Log the retrieved token
-    console.log("Retrieved username from localStorage:", username); // Log the retrieved username
-
     if (token && username) {
       // Fetch user profile using the stored username and token
       fetchUserProfile(username, token)
@@ -45,19 +42,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userProfile, token) => {
-    console.log("User profile received in login:", userProfile); // Log the user profile
     const username = userProfile?.name; // Extract username from userProfile
-    if (username) {
-      localStorage.setItem("authToken", token);
+    const accessToken = userProfile?.accessToken; // Extract accessToken from userProfile
+    if (username && accessToken) {
+      localStorage.setItem("authToken", accessToken);
       localStorage.setItem("username", username);
-      console.log("Stored token in localStorage:", token); // Log the stored token
-      console.log("Stored username in localStorage:", username); // Log the stored username
       setAuthState({
         isLoggedIn: true,
         userProfile: userProfile.data || userProfile, // Handle both structures
       });
     } else {
-      console.error("Username is undefined in userProfile");
+      console.error("Username or accessToken is undefined in userProfile");
     }
   };
 
@@ -68,11 +63,19 @@ export const AuthProvider = ({ children }) => {
     });
     localStorage.removeItem("authToken");
     localStorage.removeItem("username");
-    console.log("Removed token and username from localStorage"); // Log the removal of token and username
+  };
+
+  const setUserProfile = (profile) => {
+    setAuthState((prevState) => ({
+      ...prevState,
+      userProfile: profile,
+    }));
   };
 
   return (
-    <AuthContext.Provider value={{ ...authState, login, logout }}>
+    <AuthContext.Provider
+      value={{ ...authState, login, logout, setUserProfile }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -82,10 +85,8 @@ export const useAuth = () => useContext(AuthContext);
 
 const fetchUserProfile = async (username, token) => {
   try {
-    console.log("Fetching user profile with token:", token); // Log the token
-
     const response = await fetch(
-      `${API_BASE_URL}/holidaze/profiles/${username}`,
+      `${API_BASE_URL}/holidaze/profiles/${username}?_holidaze=true`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -96,7 +97,6 @@ const fetchUserProfile = async (username, token) => {
 
     const responseData = await response.json();
     if (response.ok) {
-      console.log("Fetched user profile:", responseData.data); // Log the fetched user profile
       return responseData.data; // Return the data property
     } else {
       console.error("Failed to fetch user profile:", responseData);
