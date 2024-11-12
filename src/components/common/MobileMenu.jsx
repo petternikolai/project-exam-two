@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { navigationNav } from "../../constants/navigationNav";
 
 export default function MobileMenu({
@@ -10,6 +10,8 @@ export default function MobileMenu({
   logout,
   userProfile,
 }) {
+  const navigate = useNavigate();
+
   return (
     <Dialog
       open={mobileMenuOpen}
@@ -74,8 +76,13 @@ export default function MobileMenu({
                   </Link>
                   <button
                     onClick={() => {
+                      localStorage.setItem(
+                        "previousUrl",
+                        window.location.pathname
+                      );
                       setMobileMenuOpen(false);
                       logout();
+                      navigate("/project-exam-two/login");
                     }}
                     className="-mx-3 block w-full text-left rounded-lg px-3 py-2.5 text-base/7 font-semibold text-red-600 hover:bg-gray-50"
                   >
