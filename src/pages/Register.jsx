@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoePrints } from "@fortawesome/pro-duotone-svg-icons";
+import { API_KEY } from "../constants/apiKey";
+import { API_BASE_URL, API_REGISTER_URL } from "../constants/apiUrls";
+import { useAuth } from "../hooks/useAuth"; // Import useAuth hook
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -13,6 +17,8 @@ export default function Register() {
 
   const [error, setError] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const { login } = useAuth(); // Get login function from useAuth
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     if (formData.password && formData.confirmPassword) {
@@ -28,15 +34,52 @@ export default function Register() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!passwordMatch) {
       setError("Passwords do not match");
       return;
     }
-    // Proceed with form submission (e.g., API call)
     setError("");
-    console.log("Form submitted", formData);
+
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      venueManager: formData.venueManager, // Ensure boolean value
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_REGISTER_URL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Invalid registration details");
+        } else if (response.status === 409) {
+          throw new Error("User already exists");
+        } else {
+          throw new Error("Registration failed");
+        }
+      }
+
+      const data = await response.json();
+      console.log("Form submitted", data);
+
+      // Log in the user after successful registration
+      login(data.userProfile);
+
+      // Redirect to the desired page
+      navigate("/project-exam-two/login");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -69,7 +112,7 @@ export default function Register() {
                 htmlFor="name"
                 className="block text-sm/6 font-medium text-gray-900"
               >
-                Name
+                Username
               </label>
               <div className="mt-2">
                 <input
@@ -119,7 +162,7 @@ export default function Register() {
                   name="password"
                   type="password"
                   required
-                  autoComplete="current-password"
+                  autoComplete="new-password" // Add autocomplete attribute
                   value={formData.password}
                   onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
@@ -143,6 +186,7 @@ export default function Register() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
+                  autoComplete="new-password" // Add autocomplete attribute
                 />
               </div>
               {!passwordMatch && (
