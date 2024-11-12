@@ -21,6 +21,7 @@ export default function Header() {
         logout={logout}
         userProfile={userProfile}
         loading={loading}
+        setMobileMenuOpen={setMobileMenuOpen} // Pass the function as a prop
       />
       <MobileMenu
         mobileMenuOpen={mobileMenuOpen}
