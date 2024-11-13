@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Faq from "./pages/Faq";
 import Venues from "./pages/Venues";
 import Profile from "./pages/Profile";
+import SpecificVenue from "./pages/SpecificVenue";
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
           <Route path="/project-exam-two/contact" element={<Contact />} />
           <Route path="/project-exam-two/venues" element={<Venues />} />
           <Route path="/project-exam-two/profile" element={<Profile />} />
+          <Route
+            path="/project-exam-two/venues/:id"
+            element={<SpecificVenue />}
+          />
         </Routes>
       </Layout>
     </Router>
