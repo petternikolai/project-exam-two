@@ -1,87 +1,71 @@
-import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { classNames } from "../utils/classNames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
+import { faWifi, faCircleParking } from "@fortawesome/pro-solid-svg-icons";
+import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
+import { useEffect, useState } from "react";
+import DatePicker from "../components/common/DatePicker";
+import DateErrorModal from "../components/modals/DateErrorModal"; // Import the new modal
+import { format } from "date-fns";
+
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function SpecificVenue() {
   const location = useLocation();
   const venue = location.state.venue;
   console.log(venue);
 
-  return (
-    <div className="bg-white">
-      <div className="pt-6">
-        <nav aria-label="Breadcrumb">
-          <ol
-            role="list"
-            className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-          >
-            {venue.breadcrumbs.map((breadcrumb) => (
-              <li key={breadcrumb.id}>
-                <div className="flex items-center">
-                  <a
-                    href={breadcrumb.href}
-                    className="mr-2 text-sm font-medium text-gray-900"
-                  >
-                    {breadcrumb.name}
-                  </a>
-                  <svg
-                    fill="currentColor"
-                    width={16}
-                    height={20}
-                    viewBox="0 0 16 20"
-                    aria-hidden="true"
-                    className="h-5 w-4 text-gray-300"
-                  >
-                    <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                  </svg>
-                </div>
-              </li>
-            ))}
-            <li className="text-sm">
-              <a
-                href={venue.href}
-                aria-current="page"
-                className="font-medium text-gray-500 hover:text-gray-600"
-              >
-                {venue.name}
-              </a>
-            </li>
-          </ol>
-        </nav>
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const today = format(new Date(), "MM/dd/yyyy");
+  const [selectedDates, setSelectedDates] = useState(`${today} - ${today}`);
+  const [selectedGuests, setSelectedGuests] = useState(1);
 
+  const handleDateChange = (days, startDate, endDate) => {
+    setTotalPrice(days * venue.price);
+    if (startDate && endDate) {
+      setSelectedDates(
+        `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+      );
+    } else {
+      setSelectedDates("");
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setModalContent("");
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const handleScroll = (event) => {};
+
+    window.addEventListener("mousewheel", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("mousewheel", handleScroll);
+    };
+  }, []);
+
+  return (
+    <div className="bg-white mt-10">
+      <div>
         {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-          <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-            <img
-              alt={venue.images[0].alt}
-              src={venue.images[0].src}
-              className="size-full object-cover object-center"
-            />
-          </div>
-          <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+        <div className="mx-auto max-w-2xl sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:gap-x-8 overflow-hidden">
+          <div className="flex items-center justify-center">
+            {venue.media[0] && (
               <img
-                alt={venue.images[1].alt}
-                src={venue.images[1].src}
-                className="size-full object-cover object-center"
+                alt={venue.media[0].alt}
+                src={venue.media[0].url}
+                className="w-full h-full object-cover object-center"
               />
-            </div>
-            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-              <img
-                alt={venue.images[2].alt}
-                src={venue.images[2].src}
-                className="size-full object-cover object-center"
-              />
-            </div>
-          </div>
-          <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-            <img
-              alt={venue.images[3].alt}
-              src={venue.images[3].src}
-              className="size-full object-cover object-center"
-            />
+            )}
           </div>
         </div>
 
@@ -97,11 +81,11 @@ export default function SpecificVenue() {
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-gray-900">
-              ${venue.price}
+              ${venue.price} / day
             </p>
 
             {/* Reviews */}
-            <div className="mt-6">
+            <div className="mt-4">
               <h3 className="sr-only">Reviews</h3>
               <div className="flex items-center">
                 <div className="flex items-center">
@@ -110,126 +94,58 @@ export default function SpecificVenue() {
                       key={rating}
                       aria-hidden="true"
                       className={classNames(
-                        venue.rating > rating
-                          ? "text-gray-900"
-                          : "text-gray-200",
+                        venue.rating > rating ? "text-accent" : "text-gray-200",
                         "size-5 shrink-0"
                       )}
                     />
                   ))}
                 </div>
                 <p className="sr-only">{venue.rating} out of 5 stars</p>
-                <a
-                  href={venue.reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  {venue.reviews.totalCount} reviews
-                </a>
               </div>
             </div>
 
+            {/* Selected dates */}
+            {selectedDates && (
+              <h3 className="mt-4 block text-sm font-medium text-gray-700">
+                <p>
+                  Selected dates:<br></br>
+                  {selectedDates}
+                </p>
+              </h3>
+            )}
+
+            {/* Guests selection */}
+            <div className="mt-4">
+              <label
+                htmlFor="guests"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Number of guests
+              </label>
+              <select
+                id="guests"
+                name="guests"
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                value={selectedGuests}
+                onChange={(e) => setSelectedGuests(Number(e.target.value))}
+              >
+                {Array.from({ length: venue.maxGuests }, (_, i) => i + 1).map(
+                  (guest) => (
+                    <option key={guest} value={guest}>
+                      {guest}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+
             <form className="mt-10">
-              {/* Colors */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Color</h3>
-
-                <fieldset aria-label="Choose a color" className="mt-4">
-                  <RadioGroup
-                    value={selectedColor}
-                    onChange={setSelectedColor}
-                    className="flex items-center space-x-3"
-                  >
-                    {venue.colors.map((color) => (
-                      <Radio
-                        key={color.name}
-                        value={color}
-                        aria-label={color.name}
-                        className={classNames(
-                          color.selectedClass,
-                          "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1"
-                        )}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            color.class,
-                            "size-8 rounded-full border border-black/10"
-                          )}
-                        />
-                      </Radio>
-                    ))}
-                  </RadioGroup>
-                </fieldset>
-              </div>
-
-              {/* Sizes */}
-              <div className="mt-10">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Size guide
-                  </a>
-                </div>
-
-                <fieldset aria-label="Choose a size" className="mt-4">
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4"
-                  >
-                    {venue.sizes.map((size) => (
-                      <Radio
-                        key={size.name}
-                        value={size}
-                        disabled={!size.inStock}
-                        className={classNames(
-                          size.inStock
-                            ? "cursor-pointer bg-white text-gray-900 shadow-sm"
-                            : "cursor-not-allowed bg-gray-50 text-gray-200",
-                          "group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-indigo-500 sm:flex-1 sm:py-6"
-                        )}
-                      >
-                        <span>{size.name}</span>
-                        {size.inStock ? (
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
-                          />
-                        ) : (
-                          <span
-                            aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                          >
-                            <svg
-                              stroke="currentColor"
-                              viewBox="0 0 100 100"
-                              preserveAspectRatio="none"
-                              className="absolute inset-0 size-full stroke-2 text-gray-200"
-                            >
-                              <line
-                                x1={0}
-                                x2={100}
-                                y1={100}
-                                y2={0}
-                                vectorEffect="non-scaling-stroke"
-                              />
-                            </svg>
-                          </span>
-                        )}
-                      </Radio>
-                    ))}
-                  </RadioGroup>
-                </fieldset>
-              </div>
-
               <button
                 type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-accent px-8 py-3 text-base font-medium text-black focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                disabled={!selectedDates} // Disable button if no dates are selected
               >
-                Add to bag
+                Book now
               </button>
             </form>
           </div>
@@ -245,29 +161,119 @@ export default function SpecificVenue() {
             </div>
 
             <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-
-              <div className="mt-4">
-                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {venue.highlights.map((highlight) => (
-                    <li key={highlight} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
+              <h3 className="text-sm font-medium text-gray-900">Your host</h3>
+              <div className="flex items-center mt-2 gap-2">
+                <img
+                  className="w-10 h-10 rounded-full"
+                  src={venue.owner.avatar.url}
+                  alt={venue.owner.avatar.alt}
+                ></img>
+                <p className="text-gray-600">{venue.owner.name}</p>
               </div>
             </div>
 
             <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Details</h2>
+              <h3 className="text-sm font-medium text-gray-900">
+                Availability
+              </h3>
+              <DatePicker
+                className="mt-6 justify-start"
+                pricePerDay={venue.price}
+                onDateChange={(days, startDate, endDate) =>
+                  handleDateChange(days, startDate, endDate)
+                }
+                bookings={venue.bookings} // Pass bookings to DatePicker
+                setIsModalOpen={setIsModalOpen} // Pass setIsModalOpen to DatePicker
+                setModalContent={setModalContent} // Pass setModalContent to DatePicker
+              />
+              <div className="mt-2 text-left">
+                {totalPrice > 0 && (
+                  <span className="text-sm font-semibold text-gray-900">
+                    Total: ${totalPrice}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+
+              <div className="mt-2 text-gray-600">
+                <table>
+                  <tbody>
+                    {venue.meta.wifi && (
+                      <tr>
+                        <td className="pr-2">
+                          <FontAwesomeIcon icon={faWifi} />
+                        </td>
+                        <td>Free WiFi</td>
+                      </tr>
+                    )}
+                    {venue.meta.parking && (
+                      <tr>
+                        <td className="pr-2">
+                          <FontAwesomeIcon icon={faCircleParking} />
+                        </td>
+                        <td>Free parking</td>
+                      </tr>
+                    )}
+                    {venue.meta.breakfast && (
+                      <tr>
+                        <td className="pr-2">
+                          <FontAwesomeIcon icon={faPanFrying} />
+                        </td>
+                        <td>Breakfast included</td>
+                      </tr>
+                    )}
+                    {venue.meta.pets && (
+                      <tr>
+                        <td className="pr-2">
+                          <FontAwesomeIcon icon={faPaw} />
+                        </td>
+                        <td>Pets allowed</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-sm font-medium text-gray-900">Details</h3>
+
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">
+                  Max guests: {venue.maxGuests}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-sm font-medium text-gray-900">Location</h3>
 
               <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{venue.details}</p>
+                <iframe
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
+                    venue.location.address +
+                      ", " +
+                      venue.location.city +
+                      ", " +
+                      venue.location.country
+                  )}`}
+                  allowFullScreen
+                ></iframe>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>
+        {modalContent}
+      </DateErrorModal>
     </div>
   );
 }

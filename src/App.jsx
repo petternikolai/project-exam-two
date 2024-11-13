@@ -1,5 +1,6 @@
 import React from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
 import Homepage from "./pages/Homepage";
 import Layout from "./components/common/Layout";
 import Login from "./auth/Login";
@@ -14,6 +15,7 @@ import SpecificVenue from "./pages/SpecificVenue";
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<Homepage />} />
