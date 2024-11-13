@@ -199,7 +199,7 @@ const DatePicker = ({
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      "text-gray-300",
+                      "text-gray-300/100",
 
                     isBooked(day) && "line-through" // Add line-through for booked dates
                   )}
@@ -221,11 +221,6 @@ const DatePicker = ({
         {errorMessage && (
           <div className="mt-4 text-left text-red-500">{errorMessage}</div>
         )}
-        <div className="mt-4 text-left">
-          {getSelectedRange() && (
-            <span className="text-sm text-gray-900">{getSelectedRange()}</span>
-          )}
-        </div>
       </div>
     </div>
   );

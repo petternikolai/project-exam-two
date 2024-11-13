@@ -9,10 +9,12 @@ export default function useFetch(url) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const accessToken = localStorage.getItem("authToken"); // Get accessToken from local storage
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": API_KEY, // Include the API key in the headers
+            Authorization: `Bearer ${accessToken}`,
+            "X-Noroff-API-Key": API_KEY, // Include the API key in the headers
           },
         });
         if (!response.ok) {
