@@ -11,6 +11,8 @@ import Faq from "./pages/Faq";
 import Venues from "./pages/Venues";
 import Profile from "./pages/Profile";
 import SpecificVenue from "./pages/SpecificVenue";
+import UserProfile from "./pages/UserProfile";
+import RenderUserProfile from "./components/common/RenderUserProfile";
 
 function App() {
   return (
@@ -30,6 +32,11 @@ function App() {
             path="/project-exam-two/venues/:id"
             element={<SpecificVenue />}
           />
+          <Route
+            path="/project-exam-two/user-profile/:id"
+            element={<UserProfile />}
+          />
+          <Route path="/user/:id" element={<RenderUserProfile />} />
         </Routes>
       </Layout>
     </Router>

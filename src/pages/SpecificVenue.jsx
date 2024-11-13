@@ -1,29 +1,49 @@
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { Radio, RadioGroup } from "@headlessui/react";
 import { classNames } from "../utils/classNames";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
-import { faWifi, faCircleParking } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faPaw,
+  faWifi,
+  faCircleParking,
+} from "@fortawesome/pro-solid-svg-icons";
 import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
-import { useEffect, useState } from "react";
 import DatePicker from "../components/common/DatePicker";
-import DateErrorModal from "../components/modals/DateErrorModal"; // Import the new modal
+import DateErrorModal from "../components/modals/DateErrorModal";
+import Avatar from "../components/common/Avatar";
 import { format } from "date-fns";
+import { API_BASE_URL } from "../constants/apiUrls";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export default function SpecificVenue() {
-  const location = useLocation();
-  const venue = location.state.venue;
-  console.log(venue);
-
+  const { id } = useParams();
+  const [venue, setVenue] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const today = format(new Date(), "MM/dd/yyyy");
   const [selectedDates, setSelectedDates] = useState(`${today} - ${today}`);
   const [selectedGuests, setSelectedGuests] = useState(1);
+
+  useEffect(() => {
+    // Fetch the full venue details based on the venue ID
+    async function fetchVenueDetails() {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/holidaze/venues/${id}?_owner=true&_bookings=true`
+        );
+        const data = await response.json();
+        console.log(data);
+        setVenue(data.data);
+      } catch (error) {
+        console.error("Error fetching venue details:", error);
+      }
+    }
+
+    fetchVenueDetails();
+  }, [id]);
 
   const handleDateChange = (days, startDate, endDate) => {
     setTotalPrice(days * venue.price);
@@ -53,24 +73,28 @@ export default function SpecificVenue() {
     };
   }, []);
 
+  if (!venue) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="bg-white mt-10">
+    <div className="bg-white">
       <div>
         {/* Image gallery */}
-        <div className="mx-auto max-w-2xl sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:gap-x-8 overflow-hidden">
+        <div className="mx-auto max-w-2xl sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-1 lg:gap-x-8 overflow-hidden">
           <div className="flex items-center justify-center">
-            {venue.media[0] && (
+            {venue.media?.[0] && (
               <img
                 alt={venue.media[0].alt}
                 src={venue.media[0].url}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-96 object-cover object-center" // Removed rounded-lg class
               />
             )}
           </div>
         </div>
 
         {/* Product info */}
-        <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+        <div className="mx-auto max-w-2xl px-4 pb-8 pt-5 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-8 lg:pt-8">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
               {venue.name}
@@ -162,14 +186,13 @@ export default function SpecificVenue() {
 
             <div className="mt-10">
               <h3 className="text-sm font-medium text-gray-900">Your host</h3>
-              <div className="flex items-center mt-2 gap-2">
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={venue.owner.avatar.url}
-                  alt={venue.owner.avatar.alt}
-                ></img>
-                <p className="text-gray-600">{venue.owner.name}</p>
-              </div>
+              {venue.owner && venue.owner.avatar && (
+                <Avatar
+                  imageUrl={venue.owner.avatar.url}
+                  altText={venue.owner.avatar.alt}
+                  name={venue.owner.name}
+                />
+              )}
             </div>
 
             <div className="mt-10">
@@ -177,22 +200,15 @@ export default function SpecificVenue() {
                 Availability
               </h3>
               <DatePicker
-                className="mt-6 justify-start"
+                className="mt-2 justify-start"
                 pricePerDay={venue.price}
                 onDateChange={(days, startDate, endDate) =>
                   handleDateChange(days, startDate, endDate)
                 }
-                bookings={venue.bookings} // Pass bookings to DatePicker
+                bookings={venue.bookings || []} // Pass bookings to DatePicker
                 setIsModalOpen={setIsModalOpen} // Pass setIsModalOpen to DatePicker
                 setModalContent={setModalContent} // Pass setModalContent to DatePicker
               />
-              <div className="mt-2 text-left">
-                {totalPrice > 0 && (
-                  <span className="text-sm font-semibold text-gray-900">
-                    Total: ${totalPrice}
-                  </span>
-                )}
-              </div>
             </div>
 
             <div className="mt-10">
@@ -201,7 +217,7 @@ export default function SpecificVenue() {
               <div className="mt-2 text-gray-600">
                 <table>
                   <tbody>
-                    {venue.meta.wifi && (
+                    {venue.meta?.wifi && (
                       <tr>
                         <td className="pr-2">
                           <FontAwesomeIcon icon={faWifi} />
@@ -209,7 +225,7 @@ export default function SpecificVenue() {
                         <td>Free WiFi</td>
                       </tr>
                     )}
-                    {venue.meta.parking && (
+                    {venue.meta?.parking && (
                       <tr>
                         <td className="pr-2">
                           <FontAwesomeIcon icon={faCircleParking} />
@@ -217,7 +233,7 @@ export default function SpecificVenue() {
                         <td>Free parking</td>
                       </tr>
                     )}
-                    {venue.meta.breakfast && (
+                    {venue.meta?.breakfast && (
                       <tr>
                         <td className="pr-2">
                           <FontAwesomeIcon icon={faPanFrying} />
@@ -225,7 +241,7 @@ export default function SpecificVenue() {
                         <td>Breakfast included</td>
                       </tr>
                     )}
-                    {venue.meta.pets && (
+                    {venue.meta?.pets && (
                       <tr>
                         <td className="pr-2">
                           <FontAwesomeIcon icon={faPaw} />
