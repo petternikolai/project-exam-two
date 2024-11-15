@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   format,
   startOfMonth,
@@ -14,6 +14,7 @@ import {
   isSameDay,
   isAfter,
   differenceInCalendarDays,
+  addDays,
 } from "date-fns";
 
 function classNames(...classes) {
@@ -28,10 +29,53 @@ const DatePicker = ({
   setModalContent,
 }) => {
   const today = new Date();
-  const [currentMonth, setCurrentMonth] = useState(today);
-  const [selectedStartDate, setSelectedStartDate] = useState(today);
-  const [selectedEndDate, setSelectedEndDate] = useState(today);
+
+  const isBooked = (day) => {
+    return bookings.some((booking) => {
+      const dateFrom = new Date(booking.dateFrom);
+      const dateTo = new Date(booking.dateTo);
+      return (
+        isSameDay(day, dateFrom) ||
+        isSameDay(day, dateTo) ||
+        (isAfter(day, dateFrom) && isBefore(day, dateTo))
+      );
+    });
+  };
+
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    if (isBooked(today)) {
+      let nextAvailableDate = today;
+      while (
+        isBooked(nextAvailableDate) ||
+        isBefore(nextAvailableDate, today)
+      ) {
+        nextAvailableDate = addDays(nextAvailableDate, 1);
+      }
+      return nextAvailableDate;
+    }
+    return today;
+  });
+
+  const [selectedStartDate, setSelectedStartDate] = useState(() => {
+    if (isBooked(today)) {
+      // Find the first available date if today is booked
+      let nextAvailableDate = today;
+      while (
+        isBooked(nextAvailableDate) ||
+        isBefore(nextAvailableDate, today)
+      ) {
+        nextAvailableDate = addDays(nextAvailableDate, 1);
+      }
+      return nextAvailableDate;
+    }
+    return today;
+  });
+  const [selectedEndDate, setSelectedEndDate] = useState(selectedStartDate);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    onDateChange(1, selectedStartDate, selectedEndDate);
+  }, []);
 
   // Get the start and end date of the month and generate only the days in the current month
   const startOfTheMonth = startOfMonth(currentMonth);
@@ -61,14 +105,14 @@ const DatePicker = ({
       // Set new start date and reset total price
       setSelectedStartDate(day);
       setSelectedEndDate(null); // Reset end date if a new range starts
-      onDateChange(0, null, null); // Reset total price
+      onDateChange(0, day, null); // Reset total price
       setErrorMessage(""); // Reset error message
     } else {
       // Set end date and calculate the range
       if (isBefore(day, selectedStartDate)) {
         setSelectedStartDate(day);
         setSelectedEndDate(null);
-        onDateChange(0, null, null); // Reset total price
+        onDateChange(0, day, null); // Reset total price
         setErrorMessage(""); // Reset error message
       } else {
         const daysCount = differenceInCalendarDays(day, selectedStartDate) + 1;
@@ -116,18 +160,6 @@ const DatePicker = ({
 
   const isPastDate = (day) => {
     return isBefore(day, new Date());
-  };
-
-  const isBooked = (day) => {
-    return bookings.some((booking) => {
-      const dateFrom = new Date(booking.dateFrom);
-      const dateTo = new Date(booking.dateTo);
-      return (
-        isSameDay(day, dateFrom) ||
-        isSameDay(day, dateTo) ||
-        (isAfter(day, dateFrom) && isBefore(day, dateTo))
-      );
-    });
   };
 
   return (
@@ -199,9 +231,9 @@ const DatePicker = ({
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      "text-gray-300/100",
+                      "text-gray-300/60",
 
-                    isBooked(day) && "line-through" // Add line-through for booked dates
+                    isBooked(day) && "line-through text-red-500" // Add red color for booked dates
                   )}
                 >
                   <time
