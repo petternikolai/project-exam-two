@@ -1,4 +1,4 @@
-import ProfileForm from "./ProfileUpdateForm";
+import ProfileForm from "../admin/ProfileUpdateForm";
 import Bookings from "../../pages/Bookings";
 import Venues from "../../pages/MyVenues";
 
