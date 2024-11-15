@@ -12,10 +12,11 @@ import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
 import DatePicker from "../components/common/DatePicker";
 import DateErrorModal from "../components/modals/DateErrorModal";
 import Avatar from "../components/common/Avatar";
+import MapComponent from "../components/common/MapComponent";
 import { format } from "date-fns";
 import { API_BASE_URL } from "../constants/apiUrls";
-
-const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function SpecificVenue() {
   const { id } = useParams();
@@ -35,7 +36,6 @@ export default function SpecificVenue() {
           `${API_BASE_URL}/holidaze/venues/${id}?_owner=true&_bookings=true`
         );
         const data = await response.json();
-        console.log(data);
         setVenue(data.data);
       } catch (error) {
         console.error("Error fetching venue details:", error);
@@ -74,7 +74,31 @@ export default function SpecificVenue() {
   }, []);
 
   if (!venue) {
-    return <div>Loading...</div>;
+    return (
+      <div className="bg-white">
+        <div className="mx-auto max-w-2xl sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-1 lg:gap-x-8 overflow-hidden">
+          <Skeleton height={400} />
+        </div>
+        <div className="mx-auto max-w-2xl px-4 pb-8 pt-5 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-8 lg:pt-8">
+          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+            <Skeleton height={40} width={300} />
+          </div>
+          <div className="mt-4 lg:row-span-3 lg:mt-0">
+            <Skeleton height={40} width={100} />
+            <div className="mt-4">
+              <Skeleton height={20} width={150} />
+              <Skeleton height={20} width={150} />
+            </div>
+            <div className="mt-4">
+              <Skeleton height={40} width={200} />
+            </div>
+          </div>
+          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+            <Skeleton height={20} count={5} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -268,19 +292,7 @@ export default function SpecificVenue() {
               <h3 className="text-sm font-medium text-gray-900">Location</h3>
 
               <div className="mt-4 space-y-6">
-                <iframe
-                  width="100%"
-                  height="300"
-                  style={{ border: 0 }}
-                  src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(
-                    venue.location.address +
-                      ", " +
-                      venue.location.city +
-                      ", " +
-                      venue.location.country
-                  )}`}
-                  allowFullScreen
-                ></iframe>
+                <MapComponent location={venue.location} />
               </div>
             </div>
           </div>

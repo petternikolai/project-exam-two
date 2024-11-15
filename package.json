@@ -31,6 +31,7 @@
     "@fortawesome/sharp-thin-svg-icons": "^6.6.0",
     "@headlessui/react": "^2.1.10",
     "@heroicons/react": "^2.1.5",
+    "@react-google-maps/api": "^2.20.3",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "autoprefixer": "^10.4.20",
@@ -39,6 +40,7 @@
     "postcss": "^8.4.47",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^6.27.0",
     "tailwindcss": "^3.4.14"
   },
