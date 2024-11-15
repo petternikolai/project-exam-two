@@ -3,9 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
 import { faWifi, faCircleParking } from "@fortawesome/pro-solid-svg-icons";
 import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
+import { Link } from "react-router-dom";
 
 const VenueCard = ({ venue }) => (
-  <a key={venue.id} href={venue.href} className="group text-sm cursor-pointer">
+  <Link
+    key={venue.id}
+    to={`/project-exam-two/venues/${venue.id}`}
+    state={{ venue }}
+    className="group text-sm cursor-pointer"
+  >
     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
       {venue.media[0] ? (
         <img
@@ -53,7 +59,7 @@ const VenueCard = ({ venue }) => (
         {venue.meta.pets && <FontAwesomeIcon icon={faPaw} />}
       </div>
     </div>
-  </a>
+  </Link>
 );
 
 export default VenueCard;

@@ -1,42 +1,65 @@
-import React, { useState } from "react";
-import useFetch from "../hooks/useFetch";
-import { API_BASE_URL, API_VENUES_URL } from "../constants/apiUrls";
+import React, { useState, useEffect } from "react";
 import FilterSort from "../components/filters/FilterSort";
 import VenueSkeleton from "../components/loaders/VenueSkeleton";
 import useVenueFilters from "../hooks/useVenueFilters";
 import SearchInput from "../components/common/SearchInput";
 import VenueCard from "../components/common/VenueCard";
-
-const sortVenues = (venues, sortOption) => {
-  return venues.sort((a, b) => {
-    switch (sortOption) {
-      case "Rating (High to low)":
-        return b.rating - a.rating;
-      case "Rating (Low to high)":
-        return a.rating - b.rating;
-      case "Price (High to low)":
-        return b.price - a.price;
-      case "Price (Low to high)":
-        return a.price - b.price;
-      default:
-        return 0;
-    }
-  });
-};
+import Pagination from "../components/common/Pagination"; // Import Pagination component
+import sortVenues from "../utils/sortVenues"; // Import sortVenues function
+import fetchAllVenues from "../services/fetchAllVenues"; // Import fetchAllVenues function
 
 export default function Venues() {
-  const {
-    data: venues,
-    loading,
-    error,
-  } = useFetch(`${API_BASE_URL}${API_VENUES_URL}`);
+  const [currentPage, setCurrentPage] = useState(1);
+  const venuesPerPage = 50;
+  const [allFetchedVenues, setAllFetchedVenues] = useState([]); // State to store all fetched venues
+  const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
+
   const { filters, setFilters, clearFilters, applyFilters } = useVenueFilters();
   const [sortOption, setSortOption] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedVenue, setSelectedVenue] = useState(null);
 
-  const handleVenueClick = (venue) => {
-    setSelectedVenue(venue);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { allFetchedVenues, totalFetchedCount } = await fetchAllVenues();
+        setAllFetchedVenues(allFetchedVenues);
+        setTotalCount(totalFetchedCount);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (allFetchedVenues.length > 0 && typeof applyFilters === "function") {
+      const filteredVenues = applyFilters({ data: allFetchedVenues }).filter(
+        (venue) => venue.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      const sortedVenues = sortVenues(filteredVenues, sortOption);
+      setVenues(
+        sortedVenues.slice(
+          (currentPage - 1) * venuesPerPage,
+          currentPage * venuesPerPage
+        )
+      );
+      setTotalCount(filteredVenues.length); // Update totalCount to reflect filtered results
+    }
+  }, [allFetchedVenues, currentPage, sortOption, searchQuery, filters]);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page when filters or search query change
+  }, [filters, searchQuery]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   if (loading) {
@@ -46,12 +69,6 @@ export default function Venues() {
   if (error) {
     return <p>{error.message}</p>;
   }
-
-  const filteredVenues = applyFilters(venues).filter((venue) =>
-    venue.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const sortedVenues = sortVenues(filteredVenues, sortOption);
 
   return (
     <>
@@ -69,14 +86,16 @@ export default function Venues() {
             setSearchQuery={setSearchQuery}
           />
           <div className="grid grid-cols-1 mt-8 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
-            {sortedVenues.map((venue) => (
-              <VenueCard
-                key={venue.id}
-                venue={venue}
-                onClick={() => handleVenueClick(venue)}
-              />
+            {venues.map((venue) => (
+              <VenueCard key={venue.id} venue={venue} />
             ))}
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalCount={totalCount}
+            pageSize={venuesPerPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </>

@@ -1,5 +1,7 @@
 import React from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { LoadScript } from "@react-google-maps/api";
+import ScrollToTop from "./components/ScrollToTop";
 import Homepage from "./pages/Homepage";
 import Layout from "./components/common/Layout";
 import Login from "./auth/Login";
@@ -9,23 +11,40 @@ import About from "./pages/About";
 import Faq from "./pages/Faq";
 import Venues from "./pages/Venues";
 import Profile from "./pages/Profile";
+import SpecificVenue from "./pages/SpecificVenue";
+import UserProfile from "./pages/UserProfile";
+import RenderUserProfile from "./components/common/RenderUserProfile";
+
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/project-exam-two/login" element={<Login />} />
-          <Route path="/project-exam-two/register" element={<Register />} />
-          <Route path="/project-exam-two/about" element={<About />} />
-          <Route path="/project-exam-two/faq" element={<Faq />} />
-          <Route path="/project-exam-two/contact" element={<Contact />} />
-          <Route path="/project-exam-two/venues" element={<Venues />} />
-          <Route path="/project-exam-two/profile" element={<Profile />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <LoadScript googleMapsApiKey={apiKey} libraries={["marker"]}>
+      <Router>
+        <ScrollToTop />
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/project-exam-two/login" element={<Login />} />
+            <Route path="/project-exam-two/register" element={<Register />} />
+            <Route path="/project-exam-two/about" element={<About />} />
+            <Route path="/project-exam-two/faq" element={<Faq />} />
+            <Route path="/project-exam-two/contact" element={<Contact />} />
+            <Route path="/project-exam-two/venues" element={<Venues />} />
+            <Route path="/project-exam-two/profile" element={<Profile />} />
+            <Route
+              path="/project-exam-two/venues/:id"
+              element={<SpecificVenue />}
+            />
+            <Route
+              path="/project-exam-two/user-profile/:id"
+              element={<UserProfile />}
+            />
+            <Route path="/user/:id" element={<RenderUserProfile />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </LoadScript>
   );
 }
 
