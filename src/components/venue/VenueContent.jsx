@@ -8,6 +8,7 @@ import VenueHighlights from "./VenueHighlights";
 import VenueDetails from "./VenueDetails";
 import VenueLocation from "./VenueLocation";
 import { handleDateChange } from "../../utils/venueUtils";
+import React from "react";
 
 export default function VenueContent({
   venue,
@@ -18,6 +19,8 @@ export default function VenueContent({
   setSelectedDates,
   setIsModalOpen,
   setModalContent,
+  onBookNow,
+  handleBooking, // Add handleBooking as a prop
 }) {
   return (
     <>
@@ -31,6 +34,8 @@ export default function VenueContent({
           selectedGuests={selectedGuests}
           setSelectedGuests={setSelectedGuests}
           maxGuests={venue.maxGuests}
+          onBookNow={onBookNow} // Pass onBookNow here
+          handleBooking={handleBooking} // Pass handleBooking here
         />
         <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
           <VenueDescription description={venue.description} />

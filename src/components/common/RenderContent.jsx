@@ -15,10 +15,10 @@ export default function RenderContent({
       return (
         <>
           <div className="col-span-1">
-            <h2 className="text-base/7 font-semibold text-black">
+            <h1 className="text-2xl font-bold text-gray-800">
               Personal Information
-            </h2>
-            <p className="mt-1 text-sm/6 text-gray-400">
+            </h1>
+            <p className="mt-2 text-lg text-gray-500">
               Update your profile information.
             </p>
           </div>
