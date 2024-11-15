@@ -20,10 +20,18 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DatePicker() {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
+const DatePicker = ({
+  className,
+  onDateChange,
+  bookings,
+  setIsModalOpen,
+  setModalContent,
+}) => {
+  const today = new Date();
+  const [currentMonth, setCurrentMonth] = useState(today);
+  const [selectedStartDate, setSelectedStartDate] = useState(today);
+  const [selectedEndDate, setSelectedEndDate] = useState(today);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Get the start and end date of the month and generate only the days in the current month
   const startOfTheMonth = startOfMonth(currentMonth);
@@ -50,16 +58,45 @@ export default function DatePicker() {
     }
 
     if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-      // Set new start date
+      // Set new start date and reset total price
       setSelectedStartDate(day);
       setSelectedEndDate(null); // Reset end date if a new range starts
+      onDateChange(0, null, null); // Reset total price
+      setErrorMessage(""); // Reset error message
     } else {
       // Set end date and calculate the range
       if (isBefore(day, selectedStartDate)) {
         setSelectedStartDate(day);
         setSelectedEndDate(null);
+        onDateChange(0, null, null); // Reset total price
+        setErrorMessage(""); // Reset error message
       } else {
-        setSelectedEndDate(day);
+        const daysCount = differenceInCalendarDays(day, selectedStartDate) + 1;
+        const rangeHasBookedDates = eachDayOfInterval({
+          start: selectedStartDate,
+          end: day,
+        }).some(isBooked);
+
+        if (rangeHasBookedDates) {
+          const bookedDates = eachDayOfInterval({
+            start: selectedStartDate,
+            end: day,
+          })
+            .filter(isBooked)
+            .map((d) => format(d, "yyyy-MM-dd"))
+            .join(", ");
+          setModalContent(
+            `The following dates are already booked: ${bookedDates}`
+          );
+          setIsModalOpen(true);
+          setSelectedStartDate(null); // Reset start date
+          setSelectedEndDate(null); // Reset end date
+          onDateChange(0, null, null); // Reset total price
+        } else {
+          setSelectedEndDate(day);
+          onDateChange(daysCount, selectedStartDate, day);
+          setErrorMessage(""); // Reset error message
+        }
       }
     }
   };
@@ -81,8 +118,20 @@ export default function DatePicker() {
     return isBefore(day, new Date());
   };
 
+  const isBooked = (day) => {
+    return bookings.some((booking) => {
+      const dateFrom = new Date(booking.dateFrom);
+      const dateTo = new Date(booking.dateTo);
+      return (
+        isSameDay(day, dateFrom) ||
+        isSameDay(day, dateTo) ||
+        (isAfter(day, dateFrom) && isBefore(day, dateTo))
+      );
+    });
+  };
+
   return (
-    <div className="mx-auto max-w-96">
+    <div className={`max-w-96 ${className}`}>
       <div className="relative text-center">
         <button
           type="button"
@@ -122,7 +171,7 @@ export default function DatePicker() {
                 <button
                   key={day ? day.toISOString() : `empty-${dayIdx}`}
                   type="button"
-                  disabled={isPastDate(day) && !isToday(day)} // Only disable past dates (today is not disabled)
+                  disabled={(isPastDate(day) && !isToday(day)) || isBooked(day)} // Disable booked dates
                   onClick={() => isInMonth && handleDateClick(day)}
                   className={classNames(
                     isInMonth
@@ -150,7 +199,9 @@ export default function DatePicker() {
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      "text-gray-300/100"
+                      "text-gray-300/100",
+
+                    isBooked(day) && "line-through" // Add line-through for booked dates
                   )}
                 >
                   <time
@@ -167,15 +218,12 @@ export default function DatePicker() {
             })}
           </div>
         </section>
-
-        <div className="mt-4 text-center">
-          {getSelectedRange() && (
-            <span className="text-sm font-semibold text-gray-900">
-              {getSelectedRange()}
-            </span>
-          )}
-        </div>
+        {errorMessage && (
+          <div className="mt-4 text-left text-red-500">{errorMessage}</div>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default DatePicker;

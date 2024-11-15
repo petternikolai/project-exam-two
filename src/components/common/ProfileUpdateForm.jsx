@@ -56,7 +56,7 @@ export default function ProfileUpdateForm({
               name="venueManager"
               value={formData.venueManager ? "Yes" : "No"}
               onChange={handleSelectChange}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent sm:text-sm"
             >
               <option value="Yes">Yes</option>
               <option value="No">No</option>
