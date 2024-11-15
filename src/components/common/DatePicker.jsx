@@ -231,7 +231,7 @@ const DatePicker = ({
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      "text-gray-300/60",
+                      "text-gray-300/100",
 
                     isBooked(day) && "line-through text-red-500" // Add red color for booked dates
                   )}

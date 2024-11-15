@@ -12,7 +12,7 @@ export default function CommonLayout({
   return (
     <>
       <div className="flex justify-center">
-        <div className="w-full">
+        <div className="w-full max-w-7xl">
           <main>
             <h1 className="sr-only">{selectedNav}</h1>
             <SecondaryNavigation
