@@ -2,7 +2,7 @@ import loginImg from "../assets/login-img.jpg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { API_BASE_URL, API_LOGIN_URL } from "../constants/apiUrls";
-import { useAuth } from "./useAuth"; // Updated path
+import useAuth from "./useAuth";
 import TextInput from "../components/form/TextInput";
 
 export default function Login() {

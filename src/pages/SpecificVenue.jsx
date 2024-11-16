@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import VenueSkeleton from "../components/venue/VenueSkeleton";
 import VenueContent from "../components/venue/VenueContent";
 import DateErrorModal from "../components/modals/DateErrorModal";
-import { fetchVenueDetails } from "../utils/venueUtils";
+import fetchVenueDetails from "../services/fetchVenueDetails";
 
 export default function SpecificVenue() {
   const { id } = useParams();
@@ -56,10 +56,6 @@ export default function SpecificVenue() {
     });
   };
 
-  const handleBookingClick = () => {
-    handleBooking();
-  };
-
   if (!venue) {
     return <VenueSkeleton />;
   }
@@ -75,7 +71,7 @@ export default function SpecificVenue() {
         setSelectedDates={setSelectedDates}
         setIsModalOpen={setIsModalOpen}
         setModalContent={setModalContent}
-        handleBooking={handleBooking} // Pass handleBooking as a prop
+        handleBooking={handleBooking}
       />
 
       <DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>

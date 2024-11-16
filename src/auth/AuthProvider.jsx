@@ -1,10 +1,8 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { API_BASE_URL } from "../constants/apiUrls";
-import { API_KEY } from "../constants/apiKey";
+import { useState, useEffect } from "react";
+import AuthContext from "./AuthContext";
+import fetchUserProfile from "../services/fetchUserProfile";
 
-const AuthContext = createContext();
-
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     userProfile: null,
@@ -15,7 +13,6 @@ export const AuthProvider = ({ children }) => {
     const username = localStorage.getItem("username");
 
     if (token && username) {
-      // Fetch user profile using the stored username and token
       fetchUserProfile(username, token)
         .then((userProfile) => {
           if (userProfile) {
@@ -32,7 +29,7 @@ export const AuthProvider = ({ children }) => {
           }
         })
         .catch((error) => {
-          console.error("Error fetching user profile:", error); // Log any errors
+          console.error("Error fetching user profile:", error);
           setAuthState({
             isLoggedIn: false,
             userProfile: null,
@@ -42,14 +39,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userProfile, token) => {
-    const username = userProfile?.name; // Extract username from userProfile
-    const accessToken = userProfile?.accessToken; // Extract accessToken from userProfile
+    const username = userProfile?.name;
+    const accessToken = userProfile?.accessToken;
     if (username && accessToken) {
       localStorage.setItem("authToken", accessToken);
       localStorage.setItem("username", username);
       setAuthState({
         isLoggedIn: true,
-        userProfile: userProfile.data || userProfile, // Handle both structures
+        userProfile: userProfile.data || userProfile,
       });
     } else {
       console.error("Username or accessToken is undefined in userProfile");
@@ -81,29 +78,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
-
-const fetchUserProfile = async (username, token) => {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/holidaze/profiles/${username}?_holidaze=true`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "X-Noroff-API-Key": API_KEY,
-        },
-      }
-    );
-
-    const responseData = await response.json();
-    if (response.ok) {
-      return responseData.data; // Return the data property
-    } else {
-      console.error("Failed to fetch user profile:", responseData);
-      return null;
-    }
-  } catch (error) {
-    console.error("Error in fetchUserProfile:", error); // Log any errors
-    return null;
-  }
-};
+export default AuthProvider;
