@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import RenderUserProfile from "../components/common/RenderUserProfile";
+import RenderUserProfile from "../components/profile/RenderUserProfile";
 import useFetch from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants/apiUrls";
 
@@ -17,7 +17,7 @@ export default function UserProfile() {
 
   const renderContent = () => {
     if (loading) {
-      return <div>Loading...</div>;
+      return <div>""</div>;
     }
     if (error) {
       return <div>Error: {error.message}</div>;

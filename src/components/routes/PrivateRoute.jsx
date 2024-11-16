@@ -1,4 +1,3 @@
-// src/components/common/PrivateRoute.jsx
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { usePreviousLocation } from "../../context/PreviousLocationContext";

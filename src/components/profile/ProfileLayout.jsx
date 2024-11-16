@@ -1,5 +1,5 @@
-import SecondaryNavigation from "./SecondaryNavigation";
-import Notification from "./Notification";
+import SecondaryNavigation from "../common/SecondaryNavigation";
+import Notification from "../common/Notification";
 
 export default function CommonLayout({
   secondaryNavigation,

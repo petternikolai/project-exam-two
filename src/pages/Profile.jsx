@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import useAuth from "../auth/useAuth";
-import ProfileLayout from "../components/common/ProfileLayout";
+import ProfileLayout from "../components/profile/ProfileLayout";
 import { secondaryNavigation as initialNavigation } from "../components/common/SecondaryNavigation";
 import { handleNavClick } from "../utils/navigationUtils";
 import { handleSubmit } from "../utils/handleSubmit";
-import ProfileRenderContent from "../components/common/ProfileRenderContent";
+import ProfileRenderContent from "../components/profile/ProfileRenderContent";
 
 const Profile = () => {
   const { userProfile, setUserProfile } = useAuth();

@@ -2,9 +2,12 @@ import { Link } from "react-router-dom";
 
 export default function RenderUserProfile({ profileData }) {
   if (!profileData) {
-    return <div className="loading text-center text-gray-500">Loading...</div>;
+    return (
+      <div className="loading text-center text-gray-500">
+        Profile not found...
+      </div>
+    );
   }
-  console.log(profileData);
   return (
     <div className="max-w-xl mx-auto">
       <div className="flex items-center mt-4 px-4">

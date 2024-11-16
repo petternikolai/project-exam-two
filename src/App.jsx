@@ -13,9 +13,9 @@ import Venues from "./pages/Venues";
 import Profile from "./pages/Profile";
 import SpecificVenue from "./pages/SpecificVenue";
 import UserProfile from "./pages/UserProfile";
-import RenderUserProfile from "./components/common/RenderUserProfile";
+import RenderUserProfile from "./components/profile/RenderUserProfile";
 import CreateBooking from "./pages/CreateBooking";
-import PrivateRoute from "./components/common/PrivateRoute";
+import PrivateRoute from "./components/routes/PrivateRoute";
 import { PreviousLocationProvider } from "./context/PreviousLocationContext";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
