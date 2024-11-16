@@ -69,10 +69,6 @@ export default function MobileMenu({
                   </Link>
                   <button
                     onClick={() => {
-                      localStorage.setItem(
-                        "previousUrl",
-                        window.location.pathname
-                      );
                       setMobileMenuOpen(false);
                       logout();
                       navigate("/project-exam-two/login");

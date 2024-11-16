@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { navigationNav } from "../../constants/navigationNav";
-import UserMenu from "./UserMenu"; // Import UserMenu component
+import UserMenu from "./UserMenu";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function Navbar({
   isLoggedIn,
   logout,
   userProfile,
-  loading,
   setMobileMenuOpen,
 }) {
   return (
@@ -47,7 +46,6 @@ export default function Navbar({
           isLoggedIn={isLoggedIn}
           logout={logout}
           userProfile={userProfile}
-          loading={loading}
         />
       </div>
     </nav>
