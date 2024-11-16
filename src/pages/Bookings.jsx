@@ -1,6 +1,6 @@
 import useFetch from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants/apiUrls";
-import { useAuth } from "../auth/useAuth"; // Import the useAuth hook
+import useAuth from "../auth/useAuth"; // Import the useAuth hook
 import { useState, useEffect, useRef } from "react"; // Import useState, useEffect, and useRef
 import { API_KEY } from "../constants/apiKey";
 

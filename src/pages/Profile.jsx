@@ -6,7 +6,7 @@ import { handleNavClick } from "../utils/navigationUtils";
 import { handleSubmit } from "../utils/handleSubmit";
 import ProfileRenderContent from "../components/common/ProfileRenderContent";
 
-export default function Profile() {
+const Profile = () => {
   const { userProfile, setUserProfile } = useAuth();
   const token = localStorage.getItem("authToken");
   const [formData, setFormData] = useState({
@@ -88,4 +88,6 @@ export default function Profile() {
       handleCloseNotification={handleCloseNotification}
     />
   );
-}
+};
+
+export default Profile;

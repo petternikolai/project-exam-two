@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
+export default function UserMenu({ isLoggedIn, logout, userProfile }) {
   const navigate = useNavigate();
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -10,7 +10,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
         <MenuButton className="relative inline-flex items-center justify-center">
           <div className="group relative inline-block h-10 w-10 overflow-visible rounded-full bg-gray-200 hover:bg-gray-300 active:bg-gray-400">
             {/* Avatar */}
-            {!loading && userProfile?.avatar?.url ? (
+            {userProfile?.avatar?.url ? (
               <img
                 src={userProfile.avatar.url}
                 alt={userProfile.avatar.alt}
@@ -57,10 +57,6 @@ export default function UserMenu({ isLoggedIn, logout, userProfile, loading }) {
               <MenuItem>
                 <button
                   onClick={() => {
-                    localStorage.setItem(
-                      "previousUrl",
-                      window.location.pathname
-                    );
                     logout();
                     navigate("/project-exam-two/login");
                   }}
