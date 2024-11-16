@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../auth/useAuth";
-import CommonLayout from "../components/common/CommonLayout";
+import ProfileLayout from "../components/common/ProfileLayout";
 import { secondaryNavigation as initialNavigation } from "../components/common/SecondaryNavigation";
 import { handleNavClick } from "../utils/navigationUtils";
 import { handleSubmit } from "../utils/handleSubmit";
-import RenderContent from "../components/common/RenderContent";
+import ProfileRenderContent from "../components/common/ProfileRenderContent";
 
 export default function Profile() {
   const { userProfile, setUserProfile } = useAuth();
@@ -66,7 +66,7 @@ export default function Profile() {
   };
 
   const renderContent = () => (
-    <RenderContent
+    <ProfileRenderContent
       selectedNav={selectedNav}
       formData={formData}
       handleChange={handleChange}
@@ -77,7 +77,7 @@ export default function Profile() {
   );
 
   return (
-    <CommonLayout
+    <ProfileLayout
       secondaryNavigation={secondaryNavigation}
       handleNavClick={(name) =>
         handleNavClick(name, setSelectedNav, setSecondaryNavigation)
