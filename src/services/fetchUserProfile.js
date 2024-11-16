@@ -4,7 +4,7 @@ import { API_KEY } from "../constants/apiKey";
 async function fetchUserProfile(username, token) {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/holidaze/profiles/${username}?_holidaze=true`,
+      `${API_BASE_URL}/holidaze/profiles/${username}?_holidaze=true&_bookings=true&_venues=true`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
