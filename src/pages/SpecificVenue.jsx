@@ -77,15 +77,7 @@ export default function SpecificVenue() {
         setModalContent={setModalContent}
         handleBooking={handleBooking} // Pass handleBooking as a prop
       />
-      <form className="mt-10">
-        <button
-          type="button"
-          className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-accent px-8 py-3 text-base font-medium text-black focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          onClick={handleBookingClick}
-        >
-          Book now
-        </button>
-      </form>
+
       <DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>
         {modalContent}
       </DateErrorModal>
