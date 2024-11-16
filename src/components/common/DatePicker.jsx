@@ -95,26 +95,30 @@ const DatePicker = ({
     setCurrentMonth(addMonths(currentMonth, -1));
   const handleNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
+  const [clickCount, setClickCount] = useState(0); // Tracks the number of clicks
+
   const handleDateClick = (day) => {
     if (isBefore(day, new Date()) && !isToday(day)) {
       // Don't allow selecting past dates, except today
       return;
     }
 
-    if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-      // Set new start date and reset total price
+    if (clickCount % 2 === 0) {
+      // On even clicks: Set both start and end date to the clicked date
       setSelectedStartDate(day);
-      setSelectedEndDate(null); // Reset end date if a new range starts
-      onDateChange(0, day, null); // Reset total price
+      setSelectedEndDate(day);
+      onDateChange(1, day, day); // Notify parent about the change for a single day
       setErrorMessage(""); // Reset error message
     } else {
-      // Set end date and calculate the range
+      // On odd clicks: Set range (start and end date)
       if (isBefore(day, selectedStartDate)) {
+        // If the clicked date is before the current start date, reset to the clicked date
         setSelectedStartDate(day);
-        setSelectedEndDate(null);
-        onDateChange(0, day, null); // Reset total price
-        setErrorMessage(""); // Reset error message
+        setSelectedEndDate(day);
+        onDateChange(1, day, day); // Notify parent about the single day selection
+        setErrorMessage("");
       } else {
+        // Calculate the range
         const daysCount = differenceInCalendarDays(day, selectedStartDate) + 1;
         const rangeHasBookedDates = eachDayOfInterval({
           start: selectedStartDate,
@@ -138,11 +142,13 @@ const DatePicker = ({
           onDateChange(0, null, null); // Reset total price
         } else {
           setSelectedEndDate(day);
-          onDateChange(daysCount, selectedStartDate, day);
+          onDateChange(daysCount, selectedStartDate, day); // Notify parent about the range
           setErrorMessage(""); // Reset error message
         }
       }
     }
+
+    setClickCount((prev) => prev + 1); // Increment click count
   };
 
   const isStartOrEnd = (day) => {
@@ -231,7 +237,7 @@ const DatePicker = ({
                     isInMonth &&
                       isPastDate(day) &&
                       !isToday(day) &&
-                      "text-gray-300/100",
+                      "text-gray-500/60", // Ensure past dates are grayed out
 
                     isBooked(day) && "line-through text-red-500" // Add red color for booked dates
                   )}
