@@ -95,3 +95,8 @@ header {
 .in-between-dates {
   background-color: rgb(175, 191, 54, 0.5);
 }
+
+/* CalendarGrid styling */
+.past-date {
+  color: rgba(0, 0, 0, 0.3);
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../auth/useAuth";
+import useAuth from "../auth/useAuth";
 import ProfileLayout from "../components/common/ProfileLayout";
 import { secondaryNavigation as initialNavigation } from "../components/common/SecondaryNavigation";
 import { handleNavClick } from "../utils/navigationUtils";

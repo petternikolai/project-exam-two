@@ -35,7 +35,7 @@ const CalendarGrid = ({
             isAfter(day, selectedStartDate) &&
             isBefore(day, selectedEndDate) &&
             "in-between-dates text-black",
-          isInMonth && isPastDate(day) && !isToday(day) && "text-black/30",
+          isInMonth && isPastDate(day) && !isToday(day) && "past-date",
           isBooked(day) && "line-through text-red-500"
         );
         const timeClasses = classNames(
