@@ -1,9 +1,9 @@
 import React from "react";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { LoadScript } from "@react-google-maps/api";
-import ScrollToTop from "./components/common/ScrollToTop";
+import ScrollToTop from "./utils/ScrollToTop";
 import Homepage from "./pages/Homepage";
-import Layout from "./components/common/Layout";
+import Layout from "./components/layout/Layout";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Contact from "./pages/Contact";

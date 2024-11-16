@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { navigationNav } from "../../constants/navigationNav";
-import UserMenu from "./UserMenu";
+import UserMenu from "./DesktopMenu";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function Navbar({

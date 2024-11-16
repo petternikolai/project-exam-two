@@ -1,4 +1,4 @@
-import Avatar from "../common/Avatar";
+import Avatar from "../layout/Avatar";
 
 export default function VenueHost({ owner }) {
   return (
