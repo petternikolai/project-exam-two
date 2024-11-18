@@ -10,7 +10,7 @@ import fetchAllVenues from "../services/fetchAllVenues"; // Import fetchAllVenue
 
 export default function Venues() {
   const [currentPage, setCurrentPage] = useState(1);
-  const venuesPerPage = 50;
+  const venuesPerPage = 27;
   const [allFetchedVenues, setAllFetchedVenues] = useState([]); // State to store all fetched venues
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);

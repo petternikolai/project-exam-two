@@ -7,7 +7,7 @@ const fetchAllVenues = async () => {
 
   while (true) {
     const response = await fetch(
-      `${API_BASE_URL}${API_VENUES_URL}?_owner=true&_bookings=true&page=${page}`
+      `${API_BASE_URL}${API_VENUES_URL}?_owner=true&_bookings=true&page=${page}&sort=created&sortOrder=desc`
     );
     const data = await response.json();
     if (!Array.isArray(data.data)) {
