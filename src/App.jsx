@@ -17,6 +17,7 @@ import RenderUserProfile from "./components/profile/RenderUserProfile";
 import CreateBooking from "./pages/CreateBooking";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { PreviousLocationProvider } from "./context/PreviousLocationContext";
+import AuthProvider from "./auth/AuthProvider";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -25,33 +26,38 @@ function App() {
     <LoadScript googleMapsApiKey={apiKey} libraries={["marker"]}>
       <Router>
         <ScrollToTop />
-        <Layout>
-          <PreviousLocationProvider>
-            <Routes>
-              <Route path="/" element={<Homepage />} />
-              <Route path="/project-exam-two/login" element={<Login />} />
-              <Route path="/project-exam-two/register" element={<Register />} />
-              <Route path="/project-exam-two/about" element={<About />} />
-              <Route path="/project-exam-two/faq" element={<Faq />} />
-              <Route path="/project-exam-two/contact" element={<Contact />} />
-              <Route path="/project-exam-two/venues" element={<Venues />} />
-              <Route path="/project-exam-two/profile" element={<Profile />} />
-              <Route
-                path="/project-exam-two/venues/:id"
-                element={<SpecificVenue />}
-              />
-              <Route
-                path="/project-exam-two/user-profile/:id"
-                element={<UserProfile />}
-              />
-              <Route path="/user/:id" element={<RenderUserProfile />} />
-              <Route
-                path="/project-exam-two/create-booking"
-                element={<PrivateRoute element={<CreateBooking />} />}
-              />
-            </Routes>
-          </PreviousLocationProvider>
-        </Layout>
+        <PreviousLocationProvider>
+          <AuthProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Homepage />} />
+                <Route path="/project-exam-two/login" element={<Login />} />
+                <Route
+                  path="/project-exam-two/register"
+                  element={<Register />}
+                />
+                <Route path="/project-exam-two/about" element={<About />} />
+                <Route path="/project-exam-two/faq" element={<Faq />} />
+                <Route path="/project-exam-two/contact" element={<Contact />} />
+                <Route path="/project-exam-two/venues" element={<Venues />} />
+                <Route path="/project-exam-two/profile" element={<Profile />} />
+                <Route
+                  path="/project-exam-two/venues/:id"
+                  element={<SpecificVenue />}
+                />
+                <Route
+                  path="/project-exam-two/user-profile/:id"
+                  element={<UserProfile />}
+                />
+                <Route path="/user/:id" element={<RenderUserProfile />} />
+                <Route
+                  path="/project-exam-two/create-booking"
+                  element={<PrivateRoute element={<CreateBooking />} />}
+                />
+              </Routes>
+            </Layout>
+          </AuthProvider>
+        </PreviousLocationProvider>
       </Router>
     </LoadScript>
   );

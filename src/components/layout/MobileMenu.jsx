@@ -71,7 +71,6 @@ export default function MobileMenu({
                     onClick={() => {
                       setMobileMenuOpen(false);
                       logout();
-                      navigate("/project-exam-two/login");
                     }}
                     className="-mx-3 block w-full text-left rounded-lg px-3 py-2.5 text-base/7 font-semibold text-red-600 hover:bg-gray-50"
                   >

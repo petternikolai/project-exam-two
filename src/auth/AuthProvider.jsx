@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import fetchUserProfile from "../services/fetchUserProfile";
+import { usePreviousLocation } from "../context/PreviousLocationContext";
 
 const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     userProfile: null,
   });
+  const navigate = useNavigate();
+  const location = useLocation();
+  const previousLocation = usePreviousLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -21,15 +26,13 @@ const AuthProvider = ({ children }) => {
               userProfile: userProfile,
             });
           } else {
-            console.error("User profile not found");
             setAuthState({
               isLoggedIn: false,
               userProfile: null,
             });
           }
         })
-        .catch((error) => {
-          console.error("Error fetching user profile:", error);
+        .catch(() => {
           setAuthState({
             isLoggedIn: false,
             userProfile: null,
@@ -48,8 +51,6 @@ const AuthProvider = ({ children }) => {
         isLoggedIn: true,
         userProfile: userProfile.data || userProfile,
       });
-    } else {
-      console.error("Username or accessToken is undefined in userProfile");
     }
   };
 
@@ -60,6 +61,10 @@ const AuthProvider = ({ children }) => {
     });
     localStorage.removeItem("authToken");
     localStorage.removeItem("username");
+
+    // Redirect to the current location or home page
+    const redirectTo = location.pathname || "/";
+    navigate(redirectTo);
   };
 
   const setUserProfile = (profile) => {

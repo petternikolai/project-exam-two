@@ -25,7 +25,6 @@ export default function SpecificVenue() {
     fetchVenueDetails(id)
       .then((venueData) => {
         if (venueData) {
-          console.log("Fetched venue data:", venueData); // Log the venue data
           setVenue(venueData);
         } else {
           console.error("Invalid venue data:", venueData);
@@ -45,11 +44,8 @@ export default function SpecificVenue() {
 
   const handleBooking = () => {
     if (!isAuthenticated) {
-      // Store the current path (specific venue page) in state
-      const currentPath = window.location.pathname + window.location.search;
-
       // Redirect to login page with state
-      navigate("/project-exam-two/login", { state: { from: currentPath } });
+      navigate("/project-exam-two/login");
       return; // Prevent further execution
     }
 
