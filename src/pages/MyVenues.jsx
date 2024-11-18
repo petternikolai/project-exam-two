@@ -31,8 +31,7 @@ const MyVenues = () => {
           if (data) {
             const venuesWithBookings = data.venues.map((venue) => {
               return fetchVenueDetails(venue.id).then((venueDetails) => {
-                console.log("Fetched venue details:", venueDetails); // Log the venue details
-                return { ...venue, bookings: venueDetails.data.bookings || [] }; // Ensure bookings are correctly set
+                return { ...venue, bookings: venueDetails.data.bookings || [] };
               });
             });
 
@@ -42,7 +41,6 @@ const MyVenues = () => {
           }
         })
         .catch((error) => {
-          console.error("Error fetching data:", error);
           setError(error);
         })
         .finally(() => {
@@ -110,24 +108,14 @@ const MyVenues = () => {
           setEditingVenue(null);
           setIsModalOpen(false); // Close the modal after updating
         })
-        .catch((error) => {
-          console.error(
-            "Error updating venue:",
-            error.response ? error.response.data : error.message
-          );
-        });
+        .catch((error) => {});
     } else {
       createVenue(newVenue)
         .then((response) => {
           setVenues((prevVenues) => [...prevVenues, response]);
           setIsModalOpen(false); // Close the modal after creating
         })
-        .catch((error) => {
-          console.error(
-            "Error creating venue:",
-            error.response ? error.response.data : error.message
-          );
-        });
+        .catch((error) => {});
     }
   };
 
@@ -150,11 +138,8 @@ const MyVenues = () => {
       if (response.status === 204) {
         setVenues(venues.filter((venue) => venue.id !== venueId));
       } else {
-        console.error("Failed to delete venue:", response.statusText);
       }
-    } catch (error) {
-      console.error("Error deleting venue:", error);
-    }
+    } catch (error) {}
   };
 
   const handleEdit = (venue) => {
