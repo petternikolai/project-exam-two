@@ -16,18 +16,26 @@ export default function SpecificVenue() {
   const today = format(new Date(), "MM/dd/yyyy");
   const [selectedDates, setSelectedDates] = useState(`${today} - ${today}`);
   const [selectedGuests, setSelectedGuests] = useState(1);
+  const [error, setError] = useState(null);
 
   // Check if the user is authenticated based on the presence of 'authToken' in localStorage
   const isAuthenticated = localStorage.getItem("authToken") !== null;
 
   useEffect(() => {
-    fetchVenueDetails(id, (venueData) => {
-      if (venueData) {
-        setVenue(venueData);
-      } else {
-        console.error("Invalid venue data:", venueData);
-      }
-    });
+    fetchVenueDetails(id)
+      .then((venueData) => {
+        if (venueData) {
+          console.log("Fetched venue data:", venueData); // Log the venue data
+          setVenue(venueData);
+        } else {
+          console.error("Invalid venue data:", venueData);
+          setError("Invalid venue data");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching venue details:", error);
+        setError("Failed to load venue details");
+      });
   }, [id]);
 
   const handleModalClose = () => {
@@ -55,6 +63,10 @@ export default function SpecificVenue() {
       },
     });
   };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   if (!venue) {
     return <VenueSkeleton />;

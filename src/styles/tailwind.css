@@ -109,7 +109,8 @@ header {
 
 /* Custom transition for bookings */
 .transition-max-height {
-  transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 1s ease-out;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s ease-in-out;
 }
 .max-h-0 {
   max-height: 0;

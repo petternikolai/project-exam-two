@@ -19,21 +19,25 @@ const MyVenues = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookings, setBookings] = useState([]); // Add state for bookings
   const [showBookings, setShowBookings] = useState(false); // Add state for toggling bookings
+  const [selectedVenue, setSelectedVenue] = useState(null); // Add state for selected venue
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
 
-    if (token && username) {
+    if (token) {
       fetchUserProfile(username, token)
         .then((data) => {
           if (data) {
-            setVenues(data.venues);
-            // Preload bookings for each venue
-            data.venues.forEach((venue) => {
-              fetchVenueDetails(venue.id, (venueDetails) => {
-                venue.bookings = venueDetails.bookings || [];
+            const venuesWithBookings = data.venues.map((venue) => {
+              return fetchVenueDetails(venue.id).then((venueDetails) => {
+                console.log("Fetched venue details:", venueDetails); // Log the venue details
+                return { ...venue, bookings: venueDetails.data.bookings || [] }; // Ensure bookings are correctly set
               });
+            });
+
+            Promise.all(venuesWithBookings).then((venues) => {
+              setVenues(venues);
             });
           }
         })
@@ -168,12 +172,17 @@ const MyVenues = () => {
   };
 
   const handleViewBookings = (venue) => {
-    if (showBookings) {
-      setShowBookings(false);
-      setTimeout(() => setBookings([]), 700); // Delay clearing bookings for smooth transition
+    if (selectedVenue?.id === venue.id) {
+      setShowBookings(!showBookings);
+      if (!showBookings) {
+        setBookings(venue.bookings || []);
+      } else {
+        setSelectedVenue(null);
+      }
     } else {
-      setBookings(venue.bookings || []); // Set bookings state
       setShowBookings(true);
+      setBookings(venue.bookings || []);
+      setSelectedVenue(venue);
     }
   };
 
@@ -284,39 +293,49 @@ const MyVenues = () => {
                         onClick={() => handleViewBookings(venue)}
                         className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                       >
-                        {showBookings ? "Hide Bookings" : "View Bookings"}
+                        {showBookings && selectedVenue?.id === venue.id
+                          ? "Hide Bookings"
+                          : "View Bookings"}
                       </button>
                     </div>
                     <div
                       className={`mt-4 transition-max-height ${
-                        showBookings
+                        showBookings && selectedVenue?.id === venue.id
                           ? "max-h-screen opacity-100"
                           : "max-h-0 opacity-0"
                       } overflow-hidden`}
                     >
                       <h3 className="text-lg font-semibold">Bookings:</h3>
                       <ul className="mt-2 space-y-2">
-                        {bookings.map((booking, index) => (
-                          <React.Fragment key={booking.id}>
-                            <li className="text-gray-600">
-                              <p className="font-semibold">
-                                Booking ID: {booking.id}
-                              </p>
-                              <p>User: {booking.customer.name}</p>
-                              <p className="mt-1">
-                                {new Date(
-                                  booking.dateFrom
-                                ).toLocaleDateString()}{" "}
-                                -{" "}
-                                {new Date(booking.dateTo).toLocaleDateString()}
-                              </p>
-                              <p className="mt-1">Guests: {booking.guests}</p>
-                            </li>
-                            {index < bookings.length - 1 && (
-                              <hr className="my-2 border-gray-300" />
-                            )}
-                          </React.Fragment>
-                        ))}
+                        {Array.isArray(bookings) && bookings.length > 0 ? (
+                          bookings.map((booking, index) => (
+                            <React.Fragment key={booking.id}>
+                              <li className="text-gray-600">
+                                <p className="font-semibold">
+                                  Booking ID: {booking.id}
+                                </p>
+                                <p>User: {booking.customer.name}</p>
+                                <p className="mt-1">
+                                  {new Date(
+                                    booking.dateFrom
+                                  ).toLocaleDateString()}{" "}
+                                  -{" "}
+                                  {new Date(
+                                    booking.dateTo
+                                  ).toLocaleDateString()}
+                                </p>
+                                <p className="mt-1">Guests: {booking.guests}</p>
+                              </li>
+                              {index < bookings.length - 1 && (
+                                <hr className="my-2 border-gray-300" />
+                              )}
+                            </React.Fragment>
+                          ))
+                        ) : (
+                          <li className="text-gray-600">
+                            This venue has not been booked yet...
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </div>
