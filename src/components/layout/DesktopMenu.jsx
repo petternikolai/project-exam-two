@@ -58,7 +58,6 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
                 <button
                   onClick={() => {
                     logout();
-                    navigate("/project-exam-two/login");
                   }}
                   className="block w-full text-left px-4 py-2 text-sm font-semibold text-red-600 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                 >

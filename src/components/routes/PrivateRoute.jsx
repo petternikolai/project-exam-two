@@ -12,7 +12,7 @@ const PrivateRoute = ({ element: Component }) => {
   ) : (
     <Navigate
       to="/project-exam-two/login"
-      state={{ from: previousLocation || location }}
+      state={{ from: previousLocation?.pathname || location.pathname }}
       replace
     />
   );

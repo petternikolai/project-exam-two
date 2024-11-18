@@ -1,9 +1,10 @@
 import loginImg from "../assets/login-img.jpg";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { API_BASE_URL, API_LOGIN_URL } from "../constants/apiUrls";
 import useAuth from "./useAuth";
 import TextInput from "../components/form/TextInput";
+import { usePreviousLocation } from "../context/PreviousLocationContext";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -11,11 +12,7 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation(); // Get location to access the 'state' passed from the previous page
-
-  useEffect(() => {
-    // Log the 'from' state when the component is rendered
-    console.log("Navigated from:", location.state?.from);
-  }, [location.state]);
+  const previousLocation = usePreviousLocation(); // Get previous location from context
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,17 +42,17 @@ export default function Login() {
       }
 
       const data = await response.json();
-      console.log("Login successful, data:", data);
       localStorage.setItem("authToken", data.data.accessToken);
       login(data.data, data.data.accessToken);
 
-      // Check if there is a 'from' state in location, otherwise fallback to a default page (e.g., profile or home)
-      const afterLogin = location.state?.from || "/project-exam-two/profile";
+      // Check if there is a 'from' state in location, otherwise fallback to the previous location from context or a default page (e.g., profile or home)
+      const afterLogin =
+        location.state?.from ||
+        previousLocation?.pathname ||
+        "/project-exam-two/profile";
 
-      console.log("Redirecting to:", afterLogin); // Debugging line
       navigate(afterLogin);
     } catch (error) {
-      console.error("Login error:", error);
       setError(error.message);
     }
   };
