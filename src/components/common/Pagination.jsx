@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
@@ -7,20 +7,29 @@ import {
 const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
   const totalPages = Math.ceil(totalCount / pageSize);
 
+  const handlePageChange = (page) => {
+    onPageChange(page);
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  };
+
   const handlePrevious = () => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
+      handlePageChange(currentPage - 1);
+    } else {
+      handlePageChange(totalPages); // Go to the last page
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
+      handlePageChange(currentPage + 1);
+    } else {
+      handlePageChange(1); // Go to the first page
     }
   };
 
   const handlePageClick = (page) => {
-    onPageChange(page);
+    handlePageChange(page);
   };
 
   const renderPageNumbers = () => {
