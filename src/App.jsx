@@ -20,12 +20,17 @@ import { PreviousLocationProvider } from "./context/PreviousLocationContext";
 import AuthProvider from "./auth/AuthProvider";
 import Bookings from "./pages/Bookings";
 import MyVenues from "./pages/MyVenues";
+import Loader from "./components/loaders/Loader";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 function App() {
   return (
-    <LoadScript googleMapsApiKey={apiKey} libraries={["marker"]}>
+    <LoadScript
+      googleMapsApiKey={apiKey}
+      libraries={["marker"]}
+      loadingElement={<Loader />}
+    >
       <Router>
         <ScrollToTop />
         <PreviousLocationProvider>
