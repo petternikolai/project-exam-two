@@ -5,6 +5,9 @@ import { faWifi, faCircleParking } from "@fortawesome/pro-solid-svg-icons";
 import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
 import { Link } from "react-router-dom";
 
+const defaultImageUrl =
+  "https://amorgoshotel.com/wp-content/uploads/2014/12/Amorgos-Standard-Room1-e1464286427430.jpg";
+
 const VenueCard = ({ venue }) => (
   <Link
     key={venue.id}
@@ -13,19 +16,15 @@ const VenueCard = ({ venue }) => (
     className="group text-sm cursor-pointer"
   >
     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-      {venue.media[0] ? (
-        <img
-          alt={venue.media[0].alt}
-          src={venue.media[0].url}
-          className="h-64 w-full object-cover object-center"
-        />
-      ) : (
-        <img
-          alt="No image"
-          src="https://via.placeholder.com/300"
-          className="h-64 w-full object-cover object-center"
-        />
-      )}
+      <img
+        alt={venue.media[0]?.alt || "No image"}
+        src={venue.media[0]?.url || defaultImageUrl}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = defaultImageUrl;
+        }}
+        className="h-64 w-full object-cover object-center"
+      />
     </div>
     <div className="flex justify-between items-center">
       <h3 className="mt-4 font-medium text-gray-900">{venue.name}</h3>

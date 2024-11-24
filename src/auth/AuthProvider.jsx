@@ -3,11 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import fetchUserProfile from "../services/fetchUserProfile";
 import { usePreviousLocation } from "../context/PreviousLocationContext";
+import Loader from "../components/loaders/Loader";
 
 const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     userProfile: null,
+    loading: true, // Ny tilstand for å spore lasting
   });
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,11 +26,13 @@ const AuthProvider = ({ children }) => {
             setAuthState({
               isLoggedIn: true,
               userProfile: userProfile,
+              loading: false, // Lasting fullført
             });
           } else {
             setAuthState({
               isLoggedIn: false,
               userProfile: null,
+              loading: false,
             });
           }
         })
@@ -36,8 +40,14 @@ const AuthProvider = ({ children }) => {
           setAuthState({
             isLoggedIn: false,
             userProfile: null,
+            loading: false,
           });
         });
+    } else {
+      setAuthState((prevState) => ({
+        ...prevState,
+        loading: false, // Ingen token, lasting fullført
+      }));
     }
   }, []);
 
@@ -50,6 +60,7 @@ const AuthProvider = ({ children }) => {
       setAuthState({
         isLoggedIn: true,
         userProfile: userProfile.data || userProfile,
+        loading: false,
       });
     }
   };
@@ -58,6 +69,7 @@ const AuthProvider = ({ children }) => {
     setAuthState({
       isLoggedIn: false,
       userProfile: null,
+      loading: false,
     });
     localStorage.removeItem("authToken");
     localStorage.removeItem("username");
@@ -78,7 +90,7 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{ ...authState, login, logout, setUserProfile }}
     >
-      {children}
+      {authState.loading ? <Loader /> : children}
     </AuthContext.Provider>
   );
 };

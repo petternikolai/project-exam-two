@@ -18,6 +18,8 @@ import CreateBooking from "./pages/CreateBooking";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { PreviousLocationProvider } from "./context/PreviousLocationContext";
 import AuthProvider from "./auth/AuthProvider";
+import Bookings from "./pages/Bookings";
+import MyVenues from "./pages/MyVenues";
 
 const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -53,6 +55,14 @@ function App() {
                 <Route
                   path="/project-exam-two/create-booking"
                   element={<PrivateRoute element={<CreateBooking />} />}
+                />
+                <Route
+                  path="/project-exam-two/bookings"
+                  element={<PrivateRoute element={<Bookings />} />}
+                />
+                <Route
+                  path="/project-exam-two/manage-venues"
+                  element={<PrivateRoute element={<MyVenues />} />}
                 />
               </Routes>
             </Layout>

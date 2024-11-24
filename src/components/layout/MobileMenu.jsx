@@ -1,7 +1,6 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
-import { navigationNav } from "../../constants/navigationNav";
+import { Link } from "react-router-dom";
 
 export default function MobileMenu({
   mobileMenuOpen,
@@ -10,8 +9,6 @@ export default function MobileMenu({
   logout,
   userProfile,
 }) {
-  const navigate = useNavigate();
-
   return (
     <Dialog
       open={mobileMenuOpen}
@@ -36,18 +33,6 @@ export default function MobileMenu({
         </div>
         <div className="mt-6 flow-root">
           <div className="-my-6 divide-y divide-gray-500/20">
-            <div className="space-y-2 py-6">
-              {navigationNav.main.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
             <div className="py-6">
               {isLoggedIn ? (
                 <>
@@ -55,7 +40,7 @@ export default function MobileMenu({
                     <img
                       src={userProfile.avatar.url}
                       alt={userProfile.avatar.alt}
-                      className=" object-cover rounded-full h-10 w-10" // Rounded avatar
+                      className="object-cover rounded-full h-10 w-10"
                     />
                     <p className="font-bold">{userProfile.name}</p>
                   </div>
@@ -63,16 +48,32 @@ export default function MobileMenu({
                   <Link
                     to="/project-exam-two/profile"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                   >
-                    Profile
+                    Edit Profile
                   </Link>
+                  <Link
+                    to="/project-exam-two/bookings"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                  >
+                    Bookings
+                  </Link>
+                  {userProfile?.venueManager && (
+                    <Link
+                      to="/project-exam-two/manage-venues"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Manage Venues
+                    </Link>
+                  )}
                   <button
                     onClick={() => {
                       setMobileMenuOpen(false);
                       logout();
                     }}
-                    className="-mx-3 block w-full text-left rounded-lg px-3 py-2.5 text-base/7 font-semibold text-red-600 hover:bg-gray-50"
+                    className="-mx-3 block w-full text-left rounded-lg px-3 py-2.5 text-base font-semibold text-red-600 hover:bg-gray-50"
                   >
                     Log out
                   </button>
@@ -82,14 +83,14 @@ export default function MobileMenu({
                   <Link
                     to="/project-exam-two/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                   >
                     Sign up
                   </Link>
                   <Link
                     to="/project-exam-two/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                   >
                     Log in
                   </Link>
