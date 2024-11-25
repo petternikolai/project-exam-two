@@ -71,7 +71,6 @@ export default function Register() {
       }
 
       const data = await response.json();
-      console.log("Form submitted", data);
 
       login(data.userProfile);
       navigate("/project-exam-two/login");

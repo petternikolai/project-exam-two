@@ -37,7 +37,7 @@ header {
 /* Homepage styling */
 
 .home-background {
-  background-image: url("../assets/home-background.jpg");
+  background-image: url("../assets/home-bg.jpg");
   background-size: cover;
   background-position: bottom;
   background-repeat: no-repeat;
@@ -119,4 +119,24 @@ header {
 .max-h-screen {
   max-height: 1500px; /* Adjust as needed */
   opacity: 1;
+}
+
+/* Spinner styling */
+
+.spinner {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #afbf36; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

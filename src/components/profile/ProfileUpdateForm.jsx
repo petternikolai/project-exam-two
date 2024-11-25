@@ -10,9 +10,10 @@ export default function ProfileUpdateForm({
   return (
     <form className="md:col-span-2" onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+        {/* Avatar Section */}
         <div className="col-span-full flex items-center gap-x-8">
           <img
-            alt=""
+            alt="User Avatar"
             src={formData.avatar || "https://via.placeholder.com/256"}
             className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
           />
@@ -32,6 +33,7 @@ export default function ProfileUpdateForm({
           </div>
         </div>
 
+        {/* Bio Section */}
         <div className="col-span-full">
           <TextInput
             id="bio"
@@ -43,6 +45,7 @@ export default function ProfileUpdateForm({
           />
         </div>
 
+        {/* Venue Manager Section */}
         <div className="col-span-full">
           <label
             htmlFor="venueManager"
@@ -54,8 +57,8 @@ export default function ProfileUpdateForm({
             <select
               id="venueManager"
               name="venueManager"
-              value={formData.venueManager ? "Yes" : "No"}
-              onChange={handleSelectChange}
+              value={formData.venueManager ? "Yes" : "No"} // Boolean -> String
+              onChange={handleSelectChange} // Håndtering av dropdown
               className="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent sm:text-sm"
             >
               <option value="Yes">Yes</option>
@@ -65,6 +68,7 @@ export default function ProfileUpdateForm({
         </div>
       </div>
 
+      {/* Submit Button */}
       <div className="mt-8 flex">
         <button
           type="submit"

@@ -44,7 +44,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="relative isolate bg-white custom-height">
+    <div className="relative isolate bg-white">
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
         <div className="relative px-6 pb-10 pt-12 sm:pt-32 lg:static lg:px-4 lg:py-24">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">

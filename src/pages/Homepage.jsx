@@ -17,7 +17,7 @@ export default function Homepage() {
               <div className="mt-10 flex items-center gap-x-6">
                 <Link
                   to="/project-exam-two/venues"
-                  className="rounded-md bg-accent px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="rounded-md bg-accent px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   Find your stay
                 </Link>
