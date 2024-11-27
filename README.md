@@ -11,6 +11,7 @@ This project is part of the final exam for the second year at Noroff School of T
 - **PostCSS**
 - **FontAwesome**
 - **Heroicons**
+- **Google Maps API**
 
 ## Languages
 - **JavaScript**: 98.4%
