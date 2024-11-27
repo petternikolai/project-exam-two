@@ -60,10 +60,12 @@ To generate the project documentation, run the following command:
 
 ```bash
 npm run docs
+```
 
 ## Contributing
+
 As this is a school project contributions will not be accepted.
 
 ## Contact
+
 For any questions or feedback, please reach out to [pnkristoffersen@gmail.com].
-```
