@@ -1,25 +1,34 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../constants/apiUrls";
-import { API_KEY } from "../constants/apiKey";
+import { API_KEY } from "../constants/apiKeys";
 
+/**
+ * CreateBooking allows the user to create a booking for a specific venue.
+ * The form includes date selection, guest count, and venue information.
+ * Upon successful booking, a confirmation modal is shown.
+ *
+ * @returns {JSX.Element} A booking form for a venue, with success modal functionality.
+ */
 export default function CreateBooking() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { state } = location;
+  const location = useLocation(); // Access the current location (used for navigation state)
+  const navigate = useNavigate(); // Navigate between pages
+  const { state } = location; // Extract state passed from previous page
   const { venueId: stateVenueId, selectedDates, selectedGuests } = state || {};
 
-  // Extract venueId from the previous URL if not in state
+  // Extract venueId from state or fallback to the current path if venueId is not available
   const venueId = stateVenueId || location.pathname.split("/").pop();
-  const [venue, setVenue] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [venue, setVenue] = useState(null); // Store venue details
+  const [loading, setLoading] = useState(true); // Loading state while fetching venue data
+  const [error, setError] = useState(null); // Store any errors during fetch
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Modal visibility state
 
+  // Parse the selected dates into a start and end date
   const dates = selectedDates ? selectedDates.split(" - ") : ["", ""];
   const dateFrom = dates[0] || "";
   const dateTo = dates[1] || dateFrom; // If only one date is selected, use it for both from and to
 
+  // Initialize form data with the venue ID, selected dates, and guests
   const [formData, setFormData] = useState({
     dateFrom,
     dateTo,
@@ -27,7 +36,7 @@ export default function CreateBooking() {
     venueId,
   });
 
-  const accessToken = localStorage.getItem("authToken");
+  const accessToken = localStorage.getItem("authToken"); // Retrieve authentication token
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,34 +74,12 @@ export default function CreateBooking() {
     };
 
     fetchData();
-  }, [venueId]);
+  }, [venueId]); // Run effect when venueId changes
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.dateFrom || !formData.dateTo) {
-      console.error("Date fields cannot be empty");
-      return;
-    }
-
-    const [dayFrom, monthFrom, yearFrom] = formData.dateFrom.split(".");
-    const [dayTo, monthTo, yearTo] = formData.dateTo.split(".");
-
-    const dateFrom = new Date(`${yearFrom}-${monthFrom}-${dayFrom}`);
-    const dateTo = new Date(`${yearTo}-${monthTo}-${dayTo}`);
-
-    if (isNaN(dateFrom) || isNaN(dateTo)) {
-      console.error("Invalid date values");
-      return;
-    }
-
-    const bookingData = {
-      dateFrom: dateFrom.toISOString(),
-      dateTo: dateTo.toISOString(),
-      guests: formData.guests,
-      venueId: formData.venueId,
-    };
-
+  /**
+   * Handles the form submission and creates the booking.
+   */
+  const handleSubmit = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/holidaze/bookings`, {
         method: "POST",
@@ -101,23 +88,28 @@ export default function CreateBooking() {
           Authorization: `Bearer ${accessToken}`,
           "X-Noroff-API-Key": API_KEY,
         },
-        body: JSON.stringify(bookingData),
+        body: JSON.stringify(formData),
       });
+
       if (!response.ok) {
         throw new Error("Booking failed");
       }
       const result = await response.json();
-      setShowSuccessModal(true);
+      setShowSuccessModal(true); // Show success modal after successful booking
     } catch (error) {
       console.error("Error creating booking:", error);
     }
   };
 
+  /**
+   * Closes the success modal and redirects to the venues page.
+   */
   const handleCloseModal = () => {
     setShowSuccessModal(false);
     navigate("/project-exam-two/venues");
   };
 
+  // Render loading or error states while data is being fetched
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -131,7 +123,6 @@ export default function CreateBooking() {
             alt={venue.name || "Venue Image"}
             className="w-full h-80 object-cover rounded-md mb-4"
           />
-
           <h2 className="text-xl font-bold">{venue.name}</h2>
           <p className="text-sm mt-2">From: {formData.dateFrom}</p>
           <p className="text-sm mt-2">To: {formData.dateTo}</p>

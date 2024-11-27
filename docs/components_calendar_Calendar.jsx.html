@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/calendar/Calendar.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/calendar/Calendar.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import {
+  startOfMonth,
+  endOfMonth,
+  addMonths,
+  eachDayOfInterval,
+  startOfWeek,
+  endOfWeek,
+  isToday,
+  isBefore,
+  isSameDay,
+  isAfter,
+  differenceInCalendarDays,
+  addDays,
+  format,
+} from "date-fns";
+import CalendarHeader from "./CalendarHeader";
+import CalendarGrid from "./CalendarGrid";
+
+/**
+ * Calendar component provides an interactive calendar with functionalities
+ * like selecting a date range, handling bookings, and navigating months.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.className - Additional CSS classes for the container.
+ * @param {Function} props.onDateChange - Callback function triggered when the selected dates change.
+ * @param {Array} props.bookings - An array of booking objects with date ranges.
+ * @param {Function} props.setIsModalOpen - Function to toggle the modal state.
+ * @param {Function} props.setModalContent - Function to set the content of the modal.
+ *
+ * @returns {JSX.Element} The interactive calendar component.
+ */
+const Calendar = ({
+  className,
+  onDateChange,
+  bookings,
+  setIsModalOpen,
+  setModalContent,
+}) => {
+  const today = new Date();
+
+  /**
+   * Checks if a given day is booked based on the bookings array.
+   *
+   * @param {Date} day - The date to check.
+   * @returns {boolean} True if the date is booked, otherwise false.
+   */
+  const isBooked = (day) => {
+    return bookings.some((booking) => {
+      const dateFrom = new Date(booking.dateFrom);
+      const dateTo = new Date(booking.dateTo);
+      return (
+        isSameDay(day, dateFrom) ||
+        isSameDay(day, dateTo) ||
+        (isAfter(day, dateFrom) &amp;&amp; isBefore(day, dateTo))
+      );
+    });
+  };
+
+  /**
+   * Finds the next available date starting from a given date.
+   *
+   * @param {Date} startDate - The start date to begin searching.
+   * @returns {Date} The next available date.
+   */
+  const findNextAvailableDate = (startDate) => {
+    let nextAvailableDate = startDate;
+    while (isBooked(nextAvailableDate) || isBefore(nextAvailableDate, today)) {
+      nextAvailableDate = addDays(nextAvailableDate, 1);
+    }
+    return nextAvailableDate;
+  };
+
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    return isBooked(today) ? findNextAvailableDate(today) : today;
+  });
+  const [selectedStartDate, setSelectedStartDate] = useState(() => {
+    return isBooked(today) ? findNextAvailableDate(today) : today;
+  });
+  const [selectedEndDate, setSelectedEndDate] = useState(selectedStartDate);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [clickCount, setClickCount] = useState(0);
+
+  // Trigger the initial date change callback
+  useEffect(() => {
+    onDateChange(1, selectedStartDate, selectedEndDate);
+  }, []);
+
+  // Calendar calculations for the current month
+  const startOfTheMonth = startOfMonth(currentMonth);
+  const endOfTheMonth = endOfMonth(currentMonth);
+  const calendarStart = startOfWeek(startOfTheMonth, { weekStartsOn: 1 });
+  const calendarEnd = endOfWeek(endOfTheMonth, { weekStartsOn: 1 });
+  const calendarDays = eachDayOfInterval({
+    start: calendarStart,
+    end: calendarEnd,
+  });
+
+  // Handlers for navigating months
+  const handlePreviousMonth = () =>
+    setCurrentMonth(addMonths(currentMonth, -1));
+  const handleNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+
+  /**
+   * Handles a date click event to select start and end dates for a range.
+   *
+   * @param {Date} day - The clicked date.
+   */
+  const handleDateClick = (day) => {
+    if (isBefore(day, new Date()) &amp;&amp; !isToday(day)) return;
+
+    if (clickCount % 2 === 0) {
+      setSelectedStartDate(day);
+      setSelectedEndDate(day);
+      onDateChange(1, day, day);
+      setErrorMessage("");
+    } else {
+      if (isBefore(day, selectedStartDate)) {
+        setSelectedStartDate(day);
+        setSelectedEndDate(day);
+        onDateChange(1, day, day);
+        setErrorMessage("");
+      } else {
+        const daysCount = differenceInCalendarDays(day, selectedStartDate) + 1;
+        const rangeHasBookedDates = eachDayOfInterval({
+          start: selectedStartDate,
+          end: day,
+        }).some(isBooked);
+
+        if (rangeHasBookedDates) {
+          const bookedDates = eachDayOfInterval({
+            start: selectedStartDate,
+            end: day,
+          })
+            .filter(isBooked)
+            .map((d) => format(d, "yyyy-MM-dd"))
+            .join(", ");
+          setModalContent(
+            `The following dates are already booked: ${bookedDates}`
+          );
+          setIsModalOpen(true);
+          setSelectedStartDate(null);
+          setSelectedEndDate(null);
+          onDateChange(0, null, null);
+        } else {
+          setSelectedEndDate(day);
+          onDateChange(daysCount, selectedStartDate, day);
+          setErrorMessage("");
+        }
+      }
+    }
+    setClickCount((prev) => prev + 1);
+  };
+
+  /**
+   * Checks if a day is either the start or end date of the selected range.
+   *
+   * @param {Date} day - The date to check.
+   * @returns {boolean} True if the date is the start or end date, otherwise false.
+   */
+  const isStartOrEnd = (day) => {
+    return isSameDay(day, selectedStartDate) || isSameDay(day, selectedEndDate);
+  };
+
+  /**
+   * Checks if a date is in the past.
+   *
+   * @param {Date} day - The date to check.
+   * @returns {boolean} True if the date is in the past, otherwise false.
+   */
+  const isPastDate = (day) => {
+    return isBefore(day, new Date());
+  };
+
+  return (
+    &lt;div className={`max-w-96 ${className}`}>
+      {/* Calendar header for navigating months */}
+      &lt;CalendarHeader
+        currentMonth={currentMonth}
+        onPreviousMonth={handlePreviousMonth}
+        onNextMonth={handleNextMonth}
+      />
+      &lt;section className="text-center">
+        {/* Weekday headers */}
+        &lt;div className="mt-6 grid grid-cols-7 text-xs text-gray-700">
+          &lt;div>Mo.&lt;/div>
+          &lt;div>Tu.&lt;/div>
+          &lt;div>We.&lt;/div>
+          &lt;div>Th.&lt;/div>
+          &lt;div>Fr.&lt;/div>
+          &lt;div>Sa.&lt;/div>
+          &lt;div>Su.&lt;/div>
+        &lt;/div>
+        {/* Calendar grid with days */}
+        &lt;CalendarGrid
+          calendarDays={calendarDays}
+          currentMonth={currentMonth}
+          selectedStartDate={selectedStartDate}
+          selectedEndDate={selectedEndDate}
+          handleDateClick={handleDateClick}
+          isBooked={isBooked}
+          isStartOrEnd={isStartOrEnd}
+          isPastDate={isPastDate}
+        />
+      &lt;/section>
+      {/* Error message display */}
+      {errorMessage &amp;&amp; (
+        &lt;div className="mt-4 text-left text-red-500">{errorMessage}&lt;/div>
+      )}
+    &lt;/div>
+  );
+};
+
+export default Calendar;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

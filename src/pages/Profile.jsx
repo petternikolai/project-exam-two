@@ -1,23 +1,30 @@
 import { useState, useEffect } from "react";
-import useAuth from "../auth/useAuth";
+import useAuth from "../hooks/useAuth";
 import { handleSubmit } from "../utils/handleSubmit";
 import ProfileUpdateForm from "../components/profile/ProfileUpdateForm";
 import AdminPagesLayout from "../components/layout/AdminPagesLayout";
 
+/**
+ * Profile component allows users to update their profile information.
+ * It fetches and displays the user's current profile data, handles form submission,
+ * and shows notifications for successful or failed updates.
+ *
+ * @returns {JSX.Element} The profile update page with a form for editing user information.
+ */
 const Profile = () => {
-  const { userProfile, setUserProfile } = useAuth();
-  const token = localStorage.getItem("authToken");
+  const { userProfile, setUserProfile } = useAuth(); // Access user profile from context
+  const token = localStorage.getItem("authToken"); // Get the authentication token from local storage
 
   const [formData, setFormData] = useState({
     bio: "",
     avatar: "",
     venueManager: false,
-  });
-  const [isLoading, setIsLoading] = useState(false);
+  }); // Store form data
+  const [isLoading, setIsLoading] = useState(false); // Loading state during form submission
   const [showNotification, setShowNotification] = useState({
     show: false,
     message: "",
-  });
+  }); // State for showing notifications
 
   // Update formData when userProfile changes
   useEffect(() => {
@@ -28,9 +35,13 @@ const Profile = () => {
         venueManager: userProfile.venueManager || false,
       });
     }
-  }, [userProfile]);
+  }, [userProfile]); // Re-run effect when userProfile changes
 
-  // Handle text input and checkbox changes
+  /**
+   * Handles form field changes for text inputs and checkboxes.
+   *
+   * @param {Object} e - The event object for input changes.
+   */
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -39,19 +50,30 @@ const Profile = () => {
     }));
   };
 
-  // Handle dropdown changes
+  /**
+   * Handles dropdown selection change for the venue manager field.
+   *
+   * @param {Object} e - The event object for select input.
+   */
   const handleSelectChange = (e) => {
     const { value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      venueManager: value === "Yes", // Converts "Yes" to true, "No" to false
+      venueManager: value === "Yes", // Convert "Yes" to true, "No" to false
     }));
   };
 
+  /**
+   * Handles the form submission and sends updated data to the server.
+   *
+   * @param {Object} e - The form submit event.
+   */
   const handleSubmitWrapper = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault(); // Prevent default form submission
+    setIsLoading(true); // Set loading state
+
     try {
+      // Handle the submission logic
       await handleSubmit(
         e,
         formData,
@@ -64,21 +86,23 @@ const Profile = () => {
       setShowNotification({
         show: true,
         message: "Your changes were successfully saved!",
-      });
+      }); // Success notification
     } catch (error) {
       console.error("Failed to save changes:", error);
       setShowNotification({
         show: true,
         message: "An error occurred while saving changes.",
-      });
+      }); // Error notification
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Reset loading state
     }
   };
 
-  // Handle closing notifications
+  /**
+   * Handles closing the notification when clicked.
+   */
   const handleCloseNotification = () => {
-    setShowNotification({ show: false, message: "" });
+    setShowNotification({ show: false, message: "" }); // Close the notification
   };
 
   return (
@@ -89,6 +113,7 @@ const Profile = () => {
         setShowNotification: handleCloseNotification,
       }}
     >
+      {/* Profile form heading */}
       <div className="col-span-1">
         <h1 className="text-2xl font-bold text-gray-800">
           Personal Information
@@ -97,6 +122,8 @@ const Profile = () => {
           Update your profile information.
         </p>
       </div>
+
+      {/* Profile update form */}
       <ProfileUpdateForm
         formData={formData}
         handleChange={handleChange}

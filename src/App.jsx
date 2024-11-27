@@ -21,22 +21,30 @@ import AuthProvider from "./auth/AuthProvider";
 import Bookings from "./pages/Bookings";
 import MyVenues from "./pages/MyVenues";
 import Loader from "./components/loaders/Loader";
+import { GOOGLE_API_KEY } from "./constants/apiKeys";
 
-const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-
+/**
+ * The main app component that defines the routes and layout of the application.
+ * It wraps the app in necessary context providers like `PreviousLocationProvider` and `AuthProvider`
+ * and configures the routing logic for different pages.
+ *
+ * @returns {JSX.Element} The main app structure with routing, layout, and context providers.
+ */
 function App() {
   return (
     <LoadScript
-      googleMapsApiKey={apiKey}
-      libraries={["marker"]}
-      loadingElement={<Loader />}
+      googleMapsApiKey={GOOGLE_API_KEY} // Load Google Maps with the provided API key
+      libraries={["marker"]} // Load required libraries for Google Maps
+      loadingElement={<Loader />} // Display a loading element while Google Maps is being loaded
     >
       <Router>
+        {/* Scrolls the page to the top on every route change */}
         <ScrollToTop />
         <PreviousLocationProvider>
           <AuthProvider>
             <Layout>
               <Routes>
+                {/* Define all routes for the application */}
                 <Route path="/" element={<Homepage />} />
                 <Route path="/project-exam-two/login" element={<Login />} />
                 <Route
@@ -57,6 +65,8 @@ function App() {
                   element={<UserProfile />}
                 />
                 <Route path="/user/:id" element={<RenderUserProfile />} />
+
+                {/* Protected routes wrapped with PrivateRoute */}
                 <Route
                   path="/project-exam-two/create-booking"
                   element={<PrivateRoute element={<CreateBooking />} />}

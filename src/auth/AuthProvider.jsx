@@ -5,16 +5,27 @@ import fetchUserProfile from "../services/fetchUserProfile";
 import { usePreviousLocation } from "../context/PreviousLocationContext";
 import Loader from "../components/loaders/Loader";
 
+/**
+ * AuthProvider manages the global authentication state and provides
+ * helper functions for login, logout, and setting user profiles.
+ * It wraps the application with an authentication context.
+ *
+ * @param {React.ReactNode} children - The components to be rendered within the provider.
+ * @returns {JSX.Element} The authentication context provider.
+ */
 const AuthProvider = ({ children }) => {
+  // State to manage authentication details
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     userProfile: null,
-    loading: true, // Ny tilstand for å spore lasting
+    loading: true, // Tracks the loading state while authenticating
   });
-  const navigate = useNavigate();
-  const location = useLocation();
-  const previousLocation = usePreviousLocation();
 
+  const navigate = useNavigate(); // Hook for navigation
+  const location = useLocation(); // Current route location
+  const previousLocation = usePreviousLocation(); // Stores the previous route location
+
+  // Fetch user profile when the component mounts
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
@@ -23,12 +34,14 @@ const AuthProvider = ({ children }) => {
       fetchUserProfile(username, token)
         .then((userProfile) => {
           if (userProfile) {
+            // User successfully authenticated
             setAuthState({
               isLoggedIn: true,
               userProfile: userProfile,
-              loading: false, // Lasting fullført
+              loading: false, // Authentication complete
             });
           } else {
+            // Failed to fetch the user profile
             setAuthState({
               isLoggedIn: false,
               userProfile: null,
@@ -37,6 +50,7 @@ const AuthProvider = ({ children }) => {
           }
         })
         .catch(() => {
+          // Handle errors during authentication
           setAuthState({
             isLoggedIn: false,
             userProfile: null,
@@ -44,16 +58,25 @@ const AuthProvider = ({ children }) => {
           });
         });
     } else {
+      // No token in localStorage; stop loading
       setAuthState((prevState) => ({
         ...prevState,
-        loading: false, // Ingen token, lasting fullført
+        loading: false,
       }));
     }
   }, []);
 
+  /**
+   * Logs in the user by saving their profile and token to localStorage
+   * and updating the authentication state.
+   *
+   * @param {Object} userProfile - The user's profile data.
+   * @param {string} token - The authentication token.
+   */
   const login = (userProfile, token) => {
     const username = userProfile?.name;
     const accessToken = userProfile?.accessToken;
+
     if (username && accessToken) {
       localStorage.setItem("authToken", accessToken);
       localStorage.setItem("username", username);
@@ -65,6 +88,10 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Logs out the user by clearing localStorage and resetting the authentication state.
+   * Redirects the user to the current location or the home page.
+   */
   const logout = () => {
     setAuthState({
       isLoggedIn: false,
@@ -79,6 +106,11 @@ const AuthProvider = ({ children }) => {
     navigate(redirectTo);
   };
 
+  /**
+   * Updates the user profile in the authentication state.
+   *
+   * @param {Object} profile - The updated user profile.
+   */
   const setUserProfile = (profile) => {
     setAuthState((prevState) => ({
       ...prevState,

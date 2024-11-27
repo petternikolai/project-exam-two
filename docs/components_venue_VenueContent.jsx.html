@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/venue/VenueContent.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/venue/VenueContent.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import VenueImageGallery from "./VenueImageGallery";
+import VenueInfo from "./VenueInfo";
+import VenueOptions from "./VenueOptions";
+import VenueDescription from "./VenueDescription";
+import VenueHost from "./VenueHost";
+import VenueAvailability from "./VenueAvailability";
+import VenueHighlights from "./VenueHighlights";
+import VenueDetails from "./VenueDetails";
+import VenueLocation from "./VenueLocation";
+import { handleDateChange } from "../../utils/venueUtils";
+
+/**
+ * VenueContent renders the main content of a venue detail page, including the image gallery,
+ * venue information, booking options, description, host details, availability calendar,
+ * highlights, detailed features, and location.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.venue - The venue data to display.
+ * @param {Array} props.selectedDates - The currently selected booking dates.
+ * @param {number} props.selectedGuests - The currently selected number of guests.
+ * @param {Function} props.setSelectedGuests - Function to update the selected guests.
+ * @param {Function} props.setTotalPrice - Function to update the total price of the booking.
+ * @param {Function} props.setSelectedDates - Function to update the selected booking dates.
+ * @param {Function} props.setIsModalOpen - Function to toggle the modal's open state.
+ * @param {Function} props.setModalContent - Function to set the content of the modal.
+ * @param {Function} props.onBookNow - Function to handle the "Book Now" action.
+ * @param {Function} props.handleBooking - Function to handle booking confirmation.
+ *
+ * @returns {JSX.Element} A detailed venue content layout.
+ */
+export default function VenueContent({
+  venue,
+  selectedDates,
+  selectedGuests,
+  setSelectedGuests,
+  setTotalPrice,
+  setSelectedDates,
+  setIsModalOpen,
+  setModalContent,
+  onBookNow,
+  handleBooking,
+}) {
+  return (
+    &lt;>
+      {/* Venue Image Gallery */}
+      &lt;VenueImageGallery media={venue.data.media} />
+      &lt;div className="mx-auto max-w-2xl px-4 pb-8 pt-5 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-8 lg:pt-8">
+        {/* Venue Info */}
+        &lt;VenueInfo name={venue.data.name} />
+        {/* Booking Options */}
+        &lt;VenueOptions
+          price={venue.data.price}
+          rating={venue.data.rating}
+          selectedDates={selectedDates}
+          selectedGuests={selectedGuests}
+          setSelectedGuests={setSelectedGuests}
+          maxGuests={venue.data.maxGuests}
+          onBookNow={onBookNow} // Pass onBookNow here
+          handleBooking={handleBooking} // Pass handleBooking here
+        />
+        &lt;div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+          {/* Venue Description */}
+          &lt;VenueDescription description={venue.data.description} />
+          {/* Host Information */}
+          &lt;VenueHost owner={venue.data.owner} />
+          {/* Availability Calendar */}
+          &lt;VenueAvailability
+            pricePerDay={venue.data.price}
+            bookings={venue.data.bookings}
+            handleDateChange={(days, startDate, endDate) =>
+              handleDateChange(
+                days,
+                startDate,
+                endDate,
+                venue.data,
+                setTotalPrice,
+                setSelectedDates
+              )
+            }
+            setIsModalOpen={setIsModalOpen}
+            setModalContent={setModalContent}
+          />
+          {/* Venue Highlights */}
+          &lt;VenueHighlights meta={venue.data.meta} />
+          {/* Venue Details */}
+          &lt;VenueDetails maxGuests={venue.data.maxGuests} />
+          {/* Venue Location */}
+          &lt;VenueLocation location={venue.data.location} />
+        &lt;/div>
+      &lt;/div>
+    &lt;/>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

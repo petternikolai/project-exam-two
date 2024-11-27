@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/pagination/Pagination.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/pagination/Pagination.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import {
+  ArrowLongLeftIcon,
+  ArrowLongRightIcon,
+} from "@heroicons/react/20/solid";
+
+/**
+ * Pagination component handles navigation between pages of data.
+ * It includes buttons for previous, next, and numbered page navigation.
+ *
+ * @param {Object} props - The component props.
+ * @param {number} props.currentPage - The current page number.
+ * @param {number} props.totalCount - The total number of items.
+ * @param {number} props.pageSize - The number of items per page.
+ * @param {Function} props.onPageChange - Callback function to handle page changes.
+ *
+ * @returns {JSX.Element} A pagination control for navigating between pages.
+ */
+const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  /**
+   * Handles page changes and scrolls to the top of the page.
+   *
+   * @param {number} page - The page number to navigate to.
+   */
+  const handlePageChange = (page) => {
+    onPageChange(page);
+    window.scrollTo(0, 0); // Scroll to the top of the page
+  };
+
+  // Navigate to the previous page or wrap to the last page
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    } else {
+      handlePageChange(totalPages); // Go to the last page
+    }
+  };
+
+  // Navigate to the next page or wrap to the first page
+  const handleNext = () => {
+    if (currentPage &lt; totalPages) {
+      handlePageChange(currentPage + 1);
+    } else {
+      handlePageChange(1); // Go to the first page
+    }
+  };
+
+  // Render numbered page buttons
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i &lt;= totalPages; i++) {
+      pageNumbers.push(
+        &lt;button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium ${
+            currentPage === i
+              ? "border-accent text-accent"
+              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+          }`}
+        >
+          {i}
+        &lt;/button>
+      );
+    }
+    return pageNumbers;
+  };
+
+  return (
+    &lt;nav className="flex items-center justify-between border-t border-gray-200 mt-6 px-4 sm:px-0">
+      {/* Previous button */}
+      &lt;div className="-mt-px flex w-0 flex-1">
+        &lt;button
+          onClick={handlePrevious}
+          className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+        >
+          &lt;ArrowLongLeftIcon
+            aria-hidden="true"
+            className="mr-3 h-5 w-5 text-gray-400"
+          />
+          Previous
+        &lt;/button>
+      &lt;/div>
+
+      {/* Page numbers */}
+      &lt;div className="hidden md:-mt-px md:flex">{renderPageNumbers()}&lt;/div>
+
+      {/* Next button */}
+      &lt;div className="-mt-px flex w-0 flex-1 justify-end">
+        &lt;button
+          onClick={handleNext}
+          className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+        >
+          Next
+          &lt;ArrowLongRightIcon
+            aria-hidden="true"
+            className="ml-3 h-5 w-5 text-gray-400"
+          />
+        &lt;/button>
+      &lt;/div>
+    &lt;/nav>
+  );
+};
+
+export default Pagination;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

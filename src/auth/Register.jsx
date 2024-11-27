@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoePrints } from "@fortawesome/pro-duotone-svg-icons";
-import { API_KEY } from "../constants/apiKey";
+import { API_KEY } from "../constants/apiKeys";
 import { API_BASE_URL, API_REGISTER_URL } from "../constants/apiUrls";
-import useAuth from "./useAuth";
+import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../components/form/TextInput";
 import CheckboxInput from "../components/form/CheckboxInput";
 
+/**
+ * Register component allows users to create a new account by providing
+ * their details (username, email, password). It validates the input fields,
+ * checks password confirmation, and sends the data to the API for registration.
+ *
+ * @returns {JSX.Element} A registration form with validations and UI feedback.
+ */
 export default function Register() {
+  // State to manage form data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,17 +24,28 @@ export default function Register() {
     confirmPassword: "",
     venueManager: false,
   });
-  const [error, setError] = useState("");
-  const [passwordMatch, setPasswordMatch] = useState(true);
-  const { login } = useAuth();
-  const navigate = useNavigate();
 
+  // State for displaying error messages
+  const [error, setError] = useState("");
+
+  // State to check if passwords match
+  const [passwordMatch, setPasswordMatch] = useState(true);
+
+  const { login } = useAuth(); // Authentication context hook
+  const navigate = useNavigate(); // Hook for programmatic navigation
+
+  // Validate if passwords match whenever they change
   useEffect(() => {
     if (formData.password && formData.confirmPassword) {
       setPasswordMatch(formData.password === formData.confirmPassword);
     }
   }, [formData.password, formData.confirmPassword]);
 
+  /**
+   * Handles input field changes and updates the form state.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+   */
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -35,14 +54,23 @@ export default function Register() {
     }));
   };
 
+  /**
+   * Validates the form and submits the registration data to the API.
+   * If successful, logs the user in and navigates to the login page.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ensure passwords match before proceeding
     if (!passwordMatch) {
       setError("Passwords do not match");
       return;
     }
-    setError("");
+    setError(""); // Clear any previous errors
 
+    // Prepare payload for the API request
     const payload = {
       name: formData.name,
       email: formData.email,
@@ -72,13 +100,21 @@ export default function Register() {
 
       const data = await response.json();
 
+      // Log the user in and navigate to the login page
       login(data.userProfile);
       navigate("/project-exam-two/login");
     } catch (error) {
+      // Display error messages to the user
       setError(error.message);
     }
   };
 
+  /**
+   * Checks if the password meets the minimum length requirement.
+   *
+   * @param {string} password - The password to check.
+   * @returns {boolean} True if the password is at least 8 characters.
+   */
   const isPasswordLongEnough = (password) => {
     return password.length >= 8;
   };
@@ -86,11 +122,13 @@ export default function Register() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        {/* Registration form heading */}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
             You're just a few steps away from your dream vacation...
           </h2>
           <div className="flex mx-auto">
+            {/* Animated footprints */}
             {[...Array(6)].map((_, index) => (
               <FontAwesomeIcon
                 key={index}
@@ -107,6 +145,7 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-2xl flex flex-col lg:flex-row lg:space-x-8">
+          {/* Registration form */}
           <form onSubmit={handleSubmit} className="space-y-6 flex-1">
             <TextInput
               id="name"
@@ -138,6 +177,7 @@ export default function Register() {
               required
               autoComplete="new-password"
             />
+            {/* Password strength indicator */}
             {formData.password && (
               <div className="mt-2">
                 <div className="relative w-full h-2 bg-gray-200 rounded-full">
@@ -188,19 +228,16 @@ export default function Register() {
               </button>
             </div>
           </form>
+          {/* Registration guidelines */}
           <div className="bg-accent p-4 rounded-md text-sm text-black mt-4 lg:mt-0 lg:w-1/3">
             <h4 className="font-semibold">Guidelines:</h4>
             <ul className="space-y-2 pl-0 mt-2">
-              <li className="pl-0">
+              <li>
                 The username must not contain punctuation symbols apart from
                 underscore (_).
               </li>
-              <li className="pl-0">
-                The email must be a valid stud.noroff.no email address.
-              </li>
-              <li className="pl-0">
-                The password must be at least 8 characters long.
-              </li>
+              <li>The email must be a valid stud.noroff.no email address.</li>
+              <li>The password must be at least 8 characters long.</li>
             </ul>
           </div>
         </div>

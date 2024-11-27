@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/SpecificVenue.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/SpecificVenue.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { format } from "date-fns";
+import VenueSkeleton from "../components/venue/VenueSkeleton";
+import VenueContent from "../components/venue/VenueContent";
+import DateErrorModal from "../components/modals/DateErrorModal";
+import fetchVenueDetails from "../services/fetchVenueDetails";
+
+/**
+ * SpecificVenue renders the details page for a specific venue.
+ * It handles fetching venue details, displaying the venue content, and managing user interactions.
+ *
+ * @returns {JSX.Element} A detailed venue page with options for booking.
+ */
+export default function SpecificVenue() {
+  const { id } = useParams(); // Get the venue ID from the URL
+  const navigate = useNavigate(); // For navigation between pages
+  const [venue, setVenue] = useState(null); // State to store venue details
+  const [totalPrice, setTotalPrice] = useState(0); // Total price for booking
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [modalContent, setModalContent] = useState(""); // Content to display in the modal
+  const today = format(new Date(), "MM/dd/yyyy"); // Today's date formatted
+  const [selectedDates, setSelectedDates] = useState(`${today} - ${today}`); // Default booking dates
+  const [selectedGuests, setSelectedGuests] = useState(1); // Number of guests
+  const [error, setError] = useState(null); // Error state
+
+  // Check if the user is authenticated
+  const isAuthenticated = localStorage.getItem("authToken") !== null;
+
+  // Fetch venue details on component mount or when `id` changes
+  useEffect(() => {
+    fetchVenueDetails(id)
+      .then((venueData) => {
+        if (venueData) {
+          setVenue(venueData);
+        } else {
+          console.error("Invalid venue data:", venueData);
+          setError("Invalid venue data");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching venue details:", error);
+        setError("Failed to load venue details");
+      });
+  }, [id]);
+
+  // Close the modal
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setModalContent("");
+  };
+
+  // Handle the booking process
+  const handleBooking = () => {
+    if (!isAuthenticated) {
+      // Redirect to login if not authenticated
+      navigate("/project-exam-two/login");
+      return; // Stop further execution
+    }
+
+    // Proceed to the booking page with state
+    navigate("/project-exam-two/create-booking", {
+      state: {
+        venueId: id,
+        selectedDates,
+        selectedGuests,
+        totalPrice,
+      },
+    });
+  };
+
+  // Display error message if any
+  if (error) {
+    return &lt;div>Error: {error}&lt;/div>;
+  }
+
+  // Display skeleton loader while fetching data
+  if (!venue) {
+    return &lt;VenueSkeleton />;
+  }
+
+  return (
+    &lt;div className="bg-white">
+      {/* Venue content */}
+      &lt;VenueContent
+        venue={venue}
+        selectedDates={selectedDates}
+        selectedGuests={selectedGuests}
+        setSelectedGuests={setSelectedGuests}
+        setTotalPrice={setTotalPrice}
+        setSelectedDates={setSelectedDates}
+        setIsModalOpen={setIsModalOpen}
+        setModalContent={setModalContent}
+        handleBooking={handleBooking}
+      />
+
+      {/* Modal for displaying errors */}
+      &lt;DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>
+        {modalContent}
+      &lt;/DateErrorModal>
+    &lt;/div>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

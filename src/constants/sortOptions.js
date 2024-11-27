@@ -1,3 +1,6 @@
+/**
+ * Sorting options for venues.
+ */
 export const sortOptions = [
   { name: "Rating (High to low)", current: false },
   { name: "Rating (Low to high)", current: false },

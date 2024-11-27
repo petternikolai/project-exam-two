@@ -1,6 +1,6 @@
 import useFetch from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants/apiUrls";
-import useAuth from "../auth/useAuth";
+import useAuth from "../hooks/useAuth";
 import { useState, useEffect } from "react";
 import { useDeleteBooking } from "../hooks/useDeleteBooking";
 import DeleteConfirmationModal from "../components/modals/DeleteConfirmationModal";
@@ -9,39 +9,47 @@ import ErrorState from "../components/bookings/ErrorState";
 import BookingsList from "../components/bookings/BookingsList";
 import AdminPagesLayout from "../components/layout/AdminPagesLayout";
 
+/**
+ * Bookings displays the user's upcoming bookings and provides functionality to delete bookings.
+ * It includes loading and error states, and interacts with the booking API.
+ *
+ * @returns {JSX.Element} A page displaying the list of bookings with options to delete.
+ */
 export default function Bookings() {
-  const { userProfile, loading: authLoading } = useAuth();
-  const [bookings, setBookings] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [bookingToDelete, setBookingToDelete] = useState(null);
+  const { userProfile, loading: authLoading } = useAuth(); // Get authentication data
+  const [bookings, setBookings] = useState([]); // Store the list of bookings
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for confirmation
+  const [bookingToDelete, setBookingToDelete] = useState(null); // Store the booking to delete
 
-  const accessToken = localStorage.getItem("authToken");
+  const accessToken = localStorage.getItem("authToken"); // Get authentication token
 
   const apiUrl =
     userProfile?.name && accessToken
       ? `${API_BASE_URL}/holidaze/profiles/${userProfile.name}/bookings?_venue=true`
-      : null;
+      : null; // Construct the API URL
 
-  const { data: fetchedBookings, error: fetchError } = useFetch(apiUrl);
+  const { data: fetchedBookings, error: fetchError } = useFetch(apiUrl); // Fetch bookings data
 
   const { deleteBooking, error: deleteError } = useDeleteBooking(
     accessToken,
     bookings,
     setBookings
-  );
+  ); // Function to handle booking deletion
 
   useEffect(() => {
+    // Set the bookings once data is fetched
     if (fetchedBookings?.data && Array.isArray(fetchedBookings.data)) {
       setBookings(fetchedBookings.data);
     }
   }, [fetchedBookings]);
 
   const handleDeleteBooking = async () => {
-    await deleteBooking(bookingToDelete);
-    toggleModal();
+    await deleteBooking(bookingToDelete); // Delete the selected booking
+    toggleModal(); // Close the confirmation modal
   };
 
   const toggleModal = (id = null) => {
+    // Toggle the modal visibility and set the booking to delete
     setBookingToDelete(id);
     setIsModalOpen((prev) => !prev);
   };
@@ -49,17 +57,17 @@ export default function Bookings() {
   return (
     <AdminPagesLayout title="Bookings">
       {authLoading ? (
-        <LoadingState />
+        <LoadingState /> // Display loading state while authenticating
       ) : !userProfile || !accessToken ? (
         <p className="text-lg text-red-500">
           Unauthorized access. Please log in to view your bookings.
         </p>
       ) : !fetchedBookings && !fetchError ? (
-        <LoadingState />
+        <LoadingState /> // Display loading state while fetching bookings
       ) : fetchError || deleteError ? (
         <ErrorState
           error={fetchError || deleteError || "Failed to fetch bookings."}
-        />
+        /> // Display error if fetch or delete fails
       ) : (
         <>
           <div className="col-span-1">
@@ -69,12 +77,13 @@ export default function Bookings() {
             </p>
           </div>
           <div className="md:col-span-2 mt-6">
-            <BookingsList bookings={bookings} onDelete={toggleModal} />
+            <BookingsList bookings={bookings} onDelete={toggleModal} />{" "}
+            {/* Render the bookings list and delete handler */}
           </div>
           <DeleteConfirmationModal
             isOpen={isModalOpen}
             onClose={toggleModal}
-            onConfirm={handleDeleteBooking}
+            onConfirm={handleDeleteBooking} // Confirm booking deletion
           />
         </>
       )}

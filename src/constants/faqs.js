@@ -1,3 +1,6 @@
+/**
+ * Frequently asked questions for Holidaze.
+ */
 export const faqs = [
   {
     question: "What is Holidaze?",

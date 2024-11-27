@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: auth/AuthProvider.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: auth/AuthProvider.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import AuthContext from "./AuthContext";
+import fetchUserProfile from "../services/fetchUserProfile";
+import { usePreviousLocation } from "../context/PreviousLocationContext";
+import Loader from "../components/loaders/Loader";
+
+/**
+ * AuthProvider manages the global authentication state and provides
+ * helper functions for login, logout, and setting user profiles.
+ * It wraps the application with an authentication context.
+ *
+ * @param {React.ReactNode} children - The components to be rendered within the provider.
+ * @returns {JSX.Element} The authentication context provider.
+ */
+const AuthProvider = ({ children }) => {
+  // State to manage authentication details
+  const [authState, setAuthState] = useState({
+    isLoggedIn: false,
+    userProfile: null,
+    loading: true, // Tracks the loading state while authenticating
+  });
+
+  const navigate = useNavigate(); // Hook for navigation
+  const location = useLocation(); // Current route location
+  const previousLocation = usePreviousLocation(); // Stores the previous route location
+
+  // Fetch user profile when the component mounts
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const username = localStorage.getItem("username");
+
+    if (token &amp;&amp; username) {
+      fetchUserProfile(username, token)
+        .then((userProfile) => {
+          if (userProfile) {
+            // User successfully authenticated
+            setAuthState({
+              isLoggedIn: true,
+              userProfile: userProfile,
+              loading: false, // Authentication complete
+            });
+          } else {
+            // Failed to fetch the user profile
+            setAuthState({
+              isLoggedIn: false,
+              userProfile: null,
+              loading: false,
+            });
+          }
+        })
+        .catch(() => {
+          // Handle errors during authentication
+          setAuthState({
+            isLoggedIn: false,
+            userProfile: null,
+            loading: false,
+          });
+        });
+    } else {
+      // No token in localStorage; stop loading
+      setAuthState((prevState) => ({
+        ...prevState,
+        loading: false,
+      }));
+    }
+  }, []);
+
+  /**
+   * Logs in the user by saving their profile and token to localStorage
+   * and updating the authentication state.
+   *
+   * @param {Object} userProfile - The user's profile data.
+   * @param {string} token - The authentication token.
+   */
+  const login = (userProfile, token) => {
+    const username = userProfile?.name;
+    const accessToken = userProfile?.accessToken;
+
+    if (username &amp;&amp; accessToken) {
+      localStorage.setItem("authToken", accessToken);
+      localStorage.setItem("username", username);
+      setAuthState({
+        isLoggedIn: true,
+        userProfile: userProfile.data || userProfile,
+        loading: false,
+      });
+    }
+  };
+
+  /**
+   * Logs out the user by clearing localStorage and resetting the authentication state.
+   * Redirects the user to the current location or the home page.
+   */
+  const logout = () => {
+    setAuthState({
+      isLoggedIn: false,
+      userProfile: null,
+      loading: false,
+    });
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
+
+    // Redirect to the current location or home page
+    const redirectTo = location.pathname || "/";
+    navigate(redirectTo);
+  };
+
+  /**
+   * Updates the user profile in the authentication state.
+   *
+   * @param {Object} profile - The updated user profile.
+   */
+  const setUserProfile = (profile) => {
+    setAuthState((prevState) => ({
+      ...prevState,
+      userProfile: profile,
+    }));
+  };
+
+  return (
+    &lt;AuthContext.Provider
+      value={{ ...authState, login, logout, setUserProfile }}
+    >
+      {authState.loading ? &lt;Loader /> : children}
+    &lt;/AuthContext.Provider>
+  );
+};
+
+export default AuthProvider;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

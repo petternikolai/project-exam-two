@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/profile/ProfileUpdateForm.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/profile/ProfileUpdateForm.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import TextInput from "../form/TextInput";
+
+/**
+ * ProfileUpdateForm renders a form for updating the user's profile.
+ * It includes fields for avatar URL, bio, and venue manager status.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.formData - The current state of the form data.
+ * @param {Function} props.handleChange - Callback function for handling input changes.
+ * @param {Function} props.handleSelectChange - Callback function for handling dropdown selection changes.
+ * @param {Function} props.handleSubmit - Callback function for handling form submission.
+ * @param {boolean} props.isLoading - Indicates whether the form is in a loading state.
+ *
+ * @returns {JSX.Element} A user profile update form component.
+ */
+export default function ProfileUpdateForm({
+  formData,
+  handleChange,
+  handleSelectChange,
+  handleSubmit,
+  isLoading,
+}) {
+  return (
+    &lt;form className="md:col-span-2" onSubmit={handleSubmit}>
+      &lt;div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+        {/* Avatar Section */}
+        &lt;div className="col-span-full flex items-center gap-x-8">
+          &lt;img
+            alt="User Avatar"
+            src={formData.avatar || "https://via.placeholder.com/256"}
+            className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
+          />
+          &lt;div>
+            {/* Avatar URL input */}
+            &lt;TextInput
+              id="avatar"
+              name="avatar"
+              type="text"
+              label="Avatar URL"
+              value={formData.avatar}
+              onChange={handleChange}
+            />
+            &lt;p className="mt-2 text-xs/5 text-gray-400">
+              Must be a fully formed URL that links to a live and publicly
+              accessible image.
+            &lt;/p>
+          &lt;/div>
+        &lt;/div>
+
+        {/* Bio Section */}
+        &lt;div className="col-span-full">
+          &lt;TextInput
+            id="bio"
+            name="bio"
+            type="text"
+            label="Bio"
+            value={formData.bio}
+            onChange={handleChange}
+          />
+        &lt;/div>
+
+        {/* Venue Manager Section */}
+        &lt;div className="col-span-full">
+          &lt;label
+            htmlFor="venueManager"
+            className="block text-sm/6 font-medium text-black"
+          >
+            Venue Manager
+          &lt;/label>
+          &lt;div className="mt-2">
+            {/* Dropdown for venue manager selection */}
+            &lt;select
+              id="venueManager"
+              name="venueManager"
+              value={formData.venueManager ? "Yes" : "No"} // Boolean -> String
+              onChange={handleSelectChange}
+              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-accent focus:ring-accent sm:text-sm"
+            >
+              &lt;option value="Yes">Yes&lt;/option>
+              &lt;option value="No">No&lt;/option>
+            &lt;/select>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      {/* Submit Button */}
+      &lt;div className="mt-8 flex">
+        &lt;button
+          type="submit"
+          className="rounded-md bg-accent px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+          disabled={isLoading}
+        >
+          {isLoading ? "Saving..." : "Save"}
+        &lt;/button>
+      &lt;/div>
+    &lt;/form>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

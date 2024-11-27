@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../constants/apiUrls";
-import { API_KEY } from "../constants/apiKey";
+import { API_KEY } from "../constants/apiKeys";
 
 export function useDeleteBooking(accessToken, bookings, setBookings) {
   const [error, setError] = useState(null);

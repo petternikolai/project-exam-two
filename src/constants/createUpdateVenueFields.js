@@ -1,3 +1,6 @@
+/**
+ * Fields configuration for venue forms.
+ */
 const createUpdateVenueFields = [
   {
     label: "Venue Name",

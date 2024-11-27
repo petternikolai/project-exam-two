@@ -6,6 +6,7 @@
   "homepage": "https://petternikolai.github.io/project-exam-two",
   "scripts": {
     "dev": "vite",
+    "docs": "jsdoc -c jsdoc.json",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -55,6 +56,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "gh-pages": "^6.2.0",
     "globals": "^15.9.0",
+    "jsdoc": "^4.0.4",
     "typescript": "^5.6.3",
     "vite": "^5.4.8"
   }

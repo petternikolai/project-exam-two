@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/venue/VenueCard.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/venue/VenueCard.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar, faPaw } from "@fortawesome/free-solid-svg-icons";
+import { faWifi, faCircleParking } from "@fortawesome/pro-solid-svg-icons";
+import { faPanFrying } from "@fortawesome/pro-duotone-svg-icons";
+import { Link } from "react-router-dom";
+
+const defaultImageUrl =
+  "https://amorgoshotel.com/wp-content/uploads/2014/12/Amorgos-Standard-Room1-e1464286427430.jpg";
+
+/**
+ * VenueCard renders a card with details of a venue, including its name, image,
+ * rating, location, capacity, price, and available amenities. The card is clickable
+ * and navigates to the venue's detailed page.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.venue - The venue data to display.
+ * @param {string} props.venue.id - The unique identifier for the venue.
+ * @param {string} props.venue.name - The name of the venue.
+ * @param {Object[]} props.venue.media - Array of media objects for the venue.
+ * @param {Object} props.venue.location - The location data of the venue.
+ * @param {string} props.venue.location.city - The city where the venue is located.
+ * @param {string} props.venue.location.country - The country where the venue is located.
+ * @param {number} props.venue.maxGuests - Maximum number of guests allowed at the venue.
+ * @param {number} props.venue.price - Price per night at the venue.
+ * @param {number} props.venue.rating - The average rating of the venue.
+ * @param {Object} props.venue.meta - Metadata about the venue's amenities.
+ * @param {boolean} props.venue.meta.wifi - Whether the venue has Wi-Fi.
+ * @param {boolean} props.venue.meta.parking - Whether the venue has parking.
+ * @param {boolean} props.venue.meta.breakfast - Whether the venue offers breakfast.
+ * @param {boolean} props.venue.meta.pets - Whether pets are allowed at the venue.
+ *
+ * @returns {JSX.Element} A clickable venue card component.
+ */
+const VenueCard = ({ venue }) => (
+  &lt;Link
+    key={venue.id}
+    to={`/project-exam-two/venues/${venue.id}`}
+    state={{ venue }}
+    className="group text-sm cursor-pointer"
+  >
+    {/* Venue image */}
+    &lt;div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+      &lt;img
+        alt={venue.media[0]?.alt || "No image"}
+        src={venue.media[0]?.url || defaultImageUrl}
+        onError={(e) => {
+          e.target.onerror = null; // Prevent infinite loops on error
+          e.target.src = defaultImageUrl;
+        }}
+        className="h-64 w-full object-cover object-center"
+      />
+    &lt;/div>
+
+    {/* Venue name and rating */}
+    &lt;div className="flex justify-between items-center">
+      &lt;h3 className="mt-4 font-medium text-gray-900">{venue.name}&lt;/h3>
+      &lt;div className="flex items-center">
+        &lt;FontAwesomeIcon
+          icon={faStar}
+          className="text-accent mt-3 text-lg mr-2"
+        />
+        &lt;p className="mt-4 text-gray-900">
+          {venue.rating === 0 ? "No ratings" : venue.rating.toFixed(1)}
+        &lt;/p>
+      &lt;/div>
+    &lt;/div>
+
+    {/* Venue location */}
+    {venue.location.country &amp;&amp; venue.location.city &amp;&amp; (
+      &lt;p className="mt-2 text-gray-600">
+        {venue.location.city}, {venue.location.country}
+      &lt;/p>
+    )}
+
+    {/* Venue capacity */}
+    &lt;p className="mt-2 text-gray-600">
+      Capacity: {venue.maxGuests} {venue.maxGuests === 1 ? "guest" : "guests"}
+    &lt;/p>
+
+    {/* Venue price and amenities */}
+    &lt;div className="flex justify-between">
+      &lt;p className="mt-2 text-gray-600">${venue.price} per night&lt;/p>
+      &lt;div className="mt-2 flex space-x-2 text-gray-600">
+        {venue.meta.wifi &amp;&amp; &lt;FontAwesomeIcon icon={faWifi} />}
+        {venue.meta.parking &amp;&amp; &lt;FontAwesomeIcon icon={faCircleParking} />}
+        {venue.meta.breakfast &amp;&amp; &lt;FontAwesomeIcon icon={faPanFrying} />}
+        {venue.meta.pets &amp;&amp; &lt;FontAwesomeIcon icon={faPaw} />}
+      &lt;/div>
+    &lt;/div>
+  &lt;/Link>
+);
+
+export default VenueCard;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

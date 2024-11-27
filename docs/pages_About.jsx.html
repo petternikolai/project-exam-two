@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/About.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/About.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import imgPetterNikolai from "../assets/petter.png";
+import Stats from "../components/stats/Stats";
+import imgAbout from "../assets/about.jpg";
+import imgPetterLandscape from "../assets/petter-landscape.png";
+
+/**
+ * About renders the "About Holidaze" page, providing information about the company,
+ * its mission, history, and testimonials from customers.
+ *
+ * @returns {JSX.Element} The About page layout with sections for mission, history, and testimonials.
+ */
+export default function About() {
+  return (
+    &lt;>
+      {/* About Holidaze Section */}
+      &lt;div className="bg-white px-6 py-12 sm:py-16 lg:px-8">
+        &lt;div className="mx-auto max-w-2xl text-center">
+          &lt;h1 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+            About Holidaze
+          &lt;/h1>
+          &lt;p className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
+            Holidaze is a platform that connects travelers with unique and
+            memorable accommodation experiences. We offer a wide range of
+            venues, from cozy cabins to luxurious villas, to ensure you find the
+            perfect place for your next vacation.
+          &lt;/p>
+          &lt;img
+            src={imgAbout}
+            alt="A girl wearing a hoodie that says 'I know something about you'"
+            className="mt-8 rounded-xl shadow-xl"
+          />
+        &lt;/div>
+      &lt;/div>
+
+      {/* Mission Section */}
+      &lt;div className="bg-white px-6 lg:px-8">
+        &lt;div className="mx-auto max-w-2xl">
+          &lt;h3 className="text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">
+            Our Mission
+          &lt;/h3>
+          &lt;p className="mt-6 text-lg leading-8 text-gray-600">
+            Our mission is to provide travelers with unique and memorable
+            accommodation experiences, connecting them with hosts who offer
+            exceptional hospitality and distinctive venues.
+          &lt;/p>
+
+          {/* History Section */}
+          &lt;h3 className="mt-10 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">
+            Our History
+          &lt;/h3>
+          &lt;p className="mt-6 text-lg leading-8 text-gray-600">
+            Holidaze was founded in 2020 with the goal of revolutionizing the
+            travel industry by offering unique and personalized accommodation
+            experiences. Since then, we have grown to become a trusted platform
+            for travelers and hosts alike.
+          &lt;/p>
+
+          {/* Customer Testimonials */}
+          &lt;h3 className="mt-10 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">
+            Customer Testimonials
+          &lt;/h3>
+          &lt;p className="mt-6 text-lg leading-8 text-gray-600">
+            Hear what our satisfied customers have to say about their
+            experiences with Holidaze.
+          &lt;/p>
+          &lt;blockquote className="mt-8 border-l-4 border-accent pl-4 text-lg italic text-gray-600">
+            "Holidaze made our vacation unforgettable. The venue was stunning,
+            and the booking process was seamless."
+          &lt;/blockquote>
+          &lt;p className="mt-2 text-base leading-6 text-gray-600">
+            - John &amp; Jane Doe
+          &lt;/p>
+
+          {/* Contact Information */}
+          &lt;h3 className="mt-10 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">
+            Contact Us
+          &lt;/h3>
+          &lt;p className="mt-6 text-lg leading-8 text-gray-600">
+            Have questions or need assistance? Reach out to our support team at{" "}
+            &lt;a href="mailto:support@holidaze.com" className="text-accent">
+              support@holidaze.com
+            &lt;/a>{" "}
+            or call us at +47 123 45 678.
+          &lt;/p>
+        &lt;/div>
+      &lt;/div>
+
+      {/* CEO Section */}
+      &lt;div className="bg-white pb-16 pt-24 sm:pb-24 sm:pt-32 xl:pb-32">
+        &lt;div className="bg-accent pb-20 sm:pb-24 xl:pb-0">
+          &lt;div className="mx-auto flex max-w-7xl flex-col items-center gap-x-8 gap-y-10 px-6 sm:gap-y-8 lg:px-8 xl:flex-row xl:items-stretch">
+            &lt;div className="-mt-8 w-full max-w-2xl xl:-mb-8 xl:w-96 xl:flex-none">
+              &lt;div className="relative aspect-[2/1] h-full md:-mx-8 xl:mx-0 xl:aspect-auto">
+                &lt;img
+                  alt="A man leaning on a railing looking out at the sea"
+                  src={imgPetterNikolai}
+                  className="hidden xl:block inset-0 h-full w-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
+                />
+                &lt;img
+                  alt="A man leaning on a railing looking out at the sea"
+                  src={imgPetterLandscape}
+                  className="xl:hidden inset-0 h-full w-full rounded-2xl bg-gray-800 object-cover shadow-2xl"
+                />
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="w-full max-w-2xl xl:max-w-none xl:flex-auto xl:px-16 xl:py-24">
+              &lt;figure className="relative isolate pt-6 sm:pt-12">
+                &lt;blockquote className="text-xl/8 font-semibold text-black sm:text-2xl/9">
+                  &lt;p>
+                    Holidaze is a company that offers a wide range of holiday
+                    accommodations, including hotels, guest houses, and bed and
+                    breakfasts. We are committed to providing our customers with
+                    the best possible service and ensuring they have a memorable
+                    and enjoyable holiday experience.
+                  &lt;/p>
+                &lt;/blockquote>
+                &lt;figcaption className="mt-8 text-base">
+                  &lt;div className="font-semibold text-black">
+                    Petter-Nikolai Kristoffersen
+                  &lt;/div>
+                  &lt;div className="mt-1 text-gray-600">CEO of Holidaze&lt;/div>
+                &lt;/figcaption>
+              &lt;/figure>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      {/* Stats Section */}
+      &lt;Stats />
+    &lt;/>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

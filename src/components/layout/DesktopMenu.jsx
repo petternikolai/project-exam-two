@@ -2,15 +2,32 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Link, useNavigate } from "react-router-dom";
 
+/**
+ * UserMenu renders a desktop dropdown menu for user actions.
+ * The menu includes links for viewing the profile, bookings, managing venues, and authentication actions.
+ *
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isLoggedIn - Indicates if the user is logged in.
+ * @param {Function} props.logout - Function to log out the user.
+ * @param {Object} props.userProfile - The logged-in user's profile data.
+ * @param {string} [props.userProfile.name] - The name of the user.
+ * @param {Object} [props.userProfile.avatar] - The user's avatar information.
+ * @param {string} [props.userProfile.avatar.url] - The URL of the user's avatar image.
+ * @param {string} [props.userProfile.avatar.alt] - The alt text for the avatar image.
+ * @param {boolean} [props.userProfile.venueManager] - Indicates if the user is a venue manager.
+ *
+ * @returns {JSX.Element} A dropdown menu component with user actions.
+ */
 export default function UserMenu({ isLoggedIn, logout, userProfile }) {
   const navigate = useNavigate();
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
+        {/* Dropdown toggle button */}
         <MenuButton className="relative inline-flex items-center justify-center">
           <div className="group relative inline-block h-10 w-10 overflow-visible rounded-full bg-gray-200 hover:bg-gray-300 active:bg-gray-400">
-            {/* Avatar */}
+            {/* User Avatar */}
             {userProfile?.avatar?.url ? (
               <img
                 src={userProfile.avatar.url}
@@ -39,6 +56,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
         </MenuButton>
       </div>
 
+      {/* Dropdown menu items */}
       <MenuItems
         transition
         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -46,6 +64,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
         <div className="py-1">
           {isLoggedIn ? (
             <>
+              {/* Profile Link */}
               <MenuItem>
                 <Link
                   to="/project-exam-two/profile"
@@ -54,6 +73,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
                   Profile
                 </Link>
               </MenuItem>
+              {/* Bookings Link */}
               <MenuItem>
                 <Link
                   to="/project-exam-two/bookings"
@@ -62,6 +82,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
                   Bookings
                 </Link>
               </MenuItem>
+              {/* Venue Manager Link */}
               {userProfile?.venueManager && (
                 <MenuItem>
                   <Link
@@ -72,6 +93,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
                   </Link>
                 </MenuItem>
               )}
+              {/* Logout Button */}
               <MenuItem>
                 <button
                   onClick={logout}
@@ -83,6 +105,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
             </>
           ) : (
             <>
+              {/* Login Link */}
               <MenuItem>
                 <Link
                   to="/project-exam-two/login"
@@ -91,6 +114,7 @@ export default function UserMenu({ isLoggedIn, logout, userProfile }) {
                   Log in
                 </Link>
               </MenuItem>
+              {/* Sign Up Link */}
               <MenuItem>
                 <Link
                   to="/project-exam-two/register"

@@ -1,3 +1,6 @@
+/**
+ * Navigation links for the footer section of the application.
+ */
 export const navigationFooter = {
   main: [
     { name: "About", href: "/project-exam-two/about" },

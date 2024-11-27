@@ -3,10 +3,21 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
+/**
+ * DateErrorModal displays a modal indicating a date conflict, such as fully booked dates.
+ *
+ * @param {Object} props - The component props.
+ * @param {boolean} props.isOpen - Indicates whether the modal is open.
+ * @param {Function} props.onClose - Callback function to close the modal.
+ * @param {React.ReactNode} props.children - Additional information or context to display in the modal.
+ *
+ * @returns {JSX.Element} A modal component for date errors.
+ */
 const DateErrorModal = ({ isOpen, onClose, children }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={onClose}>
+        {/* Background overlay */}
         <Transition
           show={isOpen}
           enter="ease-out duration-300"
@@ -19,6 +30,7 @@ const DateErrorModal = ({ isOpen, onClose, children }) => {
           <div className="fixed inset-0 bg-black bg-opacity-25" />
         </Transition>
 
+        {/* Modal content */}
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition
@@ -31,6 +43,7 @@ const DateErrorModal = ({ isOpen, onClose, children }) => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                {/* Header with icon */}
                 <div className="flex flex-row gap-2">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
                     <ExclamationTriangleIcon
@@ -43,10 +56,12 @@ const DateErrorModal = ({ isOpen, onClose, children }) => {
                     dates!
                   </h3>
                 </div>
+                {/* Body content */}
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">{children}</p>
                 </div>
 
+                {/* Footer with close button */}
                 <div className="mt-4 text-center">
                   <button
                     type="button"

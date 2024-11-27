@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { API_KEY } from "../constants/apiKey"; // Import the API key
+import { API_KEY } from "../constants/apiKeys"; // Import the API key
+
+/**
+ * Custom hook for data fetching with error handling.
+ *
+ * @param {string} url - The API endpoint to fetch data from.
+ *
+ * @returns {Object} An object containing `data`, `loading`, and `error` states.
+ */
 
 export default function useFetch(url) {
   const [data, setData] = useState(null);
