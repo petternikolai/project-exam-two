@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/handleSubmit.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/handleSubmit.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import createVenue from "./createVenue";
+import updateVenue from "./updateVenue";
+
+/**
+ * Handles the submission of the venue form, creating or updating the venue based on whether it's an edit.
+ * It validates the form data, creates the `newVenue` object, and calls the appropriate API function to either create or update a venue.
+ * After the operation, it updates the venues list in the state and closes the modal.
+ *
+ * @param {Object} event - The form submit event.
+ * @param {Object} editingVenue - The venue being edited, or `null` if a new venue is being created.
+ * @param {Function} setVenues - Function to update the list of venues in the state.
+ * @param {Function} setEditingVenue - Function to reset the editing venue state.
+ * @param {Function} setIsModalOpen - Function to control the visibility of the modal.
+ */
+const handleSubmit = (
+  event,
+  editingVenue,
+  setVenues,
+  setEditingVenue,
+  setIsModalOpen
+) => {
+  event.preventDefault(); // Prevent the default form submission behavior
+  const token = localStorage.getItem("authToken"); // Get the authentication token from localStorage
+
+  // Create the new venue object from the form data
+  const newVenue = {
+    name: event.target.venueName.value,
+    description: event.target.venueDescription.value,
+    price: parseFloat(event.target.venuePrice.value),
+    maxGuests: parseInt(event.target.venueCapacity.value, 10),
+    rating: parseFloat(event.target.venueRating.value) || 0, // Default to 0 if rating is not provided
+  };
+
+  // If location details are provided, add them to the newVenue object
+  if (
+    event.target.venueAddress.value ||
+    event.target.venueCity.value ||
+    event.target.venueZip.value ||
+    event.target.venueCountry.value ||
+    event.target.venueLat.value ||
+    event.target.venueLng.value
+  ) {
+    newVenue.location = {
+      address: event.target.venueAddress.value,
+      city: event.target.venueCity.value,
+      zip: event.target.venueZip.value,
+      country: event.target.venueCountry.value,
+      lat: parseFloat(event.target.venueLat.value),
+      lng: parseFloat(event.target.venueLng.value),
+    };
+  }
+
+  // Add meta information (features like Wi-Fi, parking, etc.)
+  newVenue.meta = {
+    wifi: event.target.venueWifi.checked,
+    parking: event.target.venueParking.checked,
+    breakfast: event.target.venueBreakfast.checked,
+    pets: event.target.venuePets.checked,
+  };
+
+  // Add media (image URL and alt text) if provided
+  if (event.target.venueImageUrl.value) {
+    newVenue.media = [
+      {
+        url: event.target.venueImageUrl.value,
+        alt: event.target.venueImageAlt.value,
+      },
+    ];
+  }
+
+  // If editing an existing venue, update it, otherwise create a new venue
+  if (editingVenue) {
+    updateVenue(editingVenue.id, newVenue, token)
+      .then((response) => {
+        // Update the venue list in the state by replacing the updated venue
+        setVenues((prevVenues) =>
+          prevVenues.map((venue) =>
+            venue.id === editingVenue.id
+              ? { ...venue, ...response.data }
+              : venue
+          )
+        );
+        setEditingVenue(null); // Reset the editing venue state
+        setIsModalOpen(false); // Close the modal
+      })
+      .catch((error) => {
+        console.error("Error updating venue:", error); // Log errors during the update process
+      });
+  } else {
+    // Create a new venue if no editingVenue is provided
+    createVenue(newVenue)
+      .then((response) => {
+        // Add the new venue to the venue list in the state
+        setVenues((prevVenues) => [...prevVenues, response.data]);
+        setIsModalOpen(false); // Close the modal after creation
+      })
+      .catch((error) => {
+        console.error("Error creating venue:", error); // Log errors during the creation process
+      });
+  }
+};
+
+export default handleSubmit;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

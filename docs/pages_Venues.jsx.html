@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/Venues.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/Venues.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import FilterSort from "../components/filters/FilterSort";
+import VenueSkeleton from "../components/loaders/VenueSkeleton";
+import useVenueFilters from "../hooks/useVenueFilters";
+import SearchInput from "../components/ui/SearchInput";
+import VenueCard from "../components/venue/VenueCard";
+import Pagination from "../components/pagination/Pagination"; // Import Pagination component
+import sortVenues from "../utils/sortVenues"; // Import sortVenues function
+import fetchAllVenues from "../services/fetchAllVenues"; // Import fetchAllVenues function
+
+/**
+ * Venues component displays a list of venues with sorting, filtering, and pagination functionality.
+ * It fetches all venues, applies filters and sorting, and renders them in a paginated grid.
+ * The user can search, filter, and sort the venues.
+ *
+ * @returns {JSX.Element} A page displaying the list of venues with sorting, filtering, and pagination controls.
+ */
+export default function Venues() {
+  const [currentPage, setCurrentPage] = useState(1); // Tracks the current page for pagination
+  const venuesPerPage = 27; // Number of venues per page for pagination
+  const [allFetchedVenues, setAllFetchedVenues] = useState([]); // State to store all fetched venues
+  const [venues, setVenues] = useState([]); // State to store filtered and sorted venues to be displayed
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [error, setError] = useState(null); // State to handle errors during data fetching
+  const [totalCount, setTotalCount] = useState(0); // Total number of venues after filtering
+
+  const { filters, setFilters, clearFilters, applyFilters } = useVenueFilters(); // Custom hook for venue filters
+  const [sortOption, setSortOption] = useState(""); // Sort option for sorting venues
+  const [searchQuery, setSearchQuery] = useState(""); // Search query for venue search
+
+  /**
+   * Fetches all venues from the API on component mount.
+   * Sets the fetched venues to the state and handles any errors.
+   */
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // Set loading to true while fetching data
+      try {
+        const { allFetchedVenues, totalFetchedCount } = await fetchAllVenues(); // Fetch venues data
+        setAllFetchedVenues(allFetchedVenues); // Store all venues in state
+        setTotalCount(totalFetchedCount); // Set the total number of fetched venues
+      } catch (err) {
+        setError(err); // Handle any errors during fetching
+      } finally {
+        setLoading(false); // Set loading to false once data fetching is complete
+      }
+    };
+
+    fetchData(); // Call the fetchData function
+  }, []); // Only run once on mount
+
+  /**
+   * Filters and sorts the venues based on the selected filters, search query, and sort option.
+   * This is triggered every time the venues, current page, sort option, filters, or search query change.
+   */
+  useEffect(() => {
+    if (allFetchedVenues.length > 0 &amp;&amp; typeof applyFilters === "function") {
+      // Apply filters and search query
+      const filteredVenues = applyFilters({ data: allFetchedVenues }).filter(
+        (venue) => venue.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      // Apply sorting to the filtered venues
+      const sortedVenues = sortVenues(filteredVenues, sortOption);
+      // Paginate the sorted venues
+      setVenues(
+        sortedVenues.slice(
+          (currentPage - 1) * venuesPerPage,
+          currentPage * venuesPerPage
+        )
+      );
+      setTotalCount(filteredVenues.length); // Update total count based on filtered venues
+    }
+  }, [allFetchedVenues, currentPage, sortOption, searchQuery, filters]); // Dependencies for useEffect
+
+  /**
+   * Resets the current page to 1 whenever filters or the search query changes.
+   */
+  useEffect(() => {
+    setCurrentPage(1); // Reset pagination to the first page
+  }, [filters, searchQuery]);
+
+  /**
+   * Handles page changes in the pagination control.
+   *
+   * @param {number} page - The page number to navigate to.
+   */
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // Update the current page state
+  };
+
+  // If the component is loading, show a loading skeleton
+  if (loading) {
+    return &lt;VenueSkeleton />;
+  }
+
+  // If there is an error, display the error message
+  if (error) {
+    return &lt;p>{error.message}&lt;/p>;
+  }
+
+  return (
+    &lt;>
+      {/* Filter and sort controls */}
+      &lt;FilterSort
+        filters={filters}
+        setFilters={setFilters}
+        clearFilters={clearFilters}
+        sortOption={sortOption}
+        setSortOption={setSortOption}
+      />
+      &lt;div className="bg-white">
+        &lt;div className="mx-auto max-w-7xl overflow-hidden px-4 sm:px-6 lg:px-8">
+          {/* Search input to filter venues */}
+          &lt;SearchInput
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+          {/* Display venue cards in a grid layout */}
+          &lt;div className="grid grid-cols-1 mt-8 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
+            {venues.map((venue) => (
+              &lt;VenueCard key={venue.id} venue={venue} />
+            ))}
+          &lt;/div>
+          {/* Pagination control */}
+          &lt;Pagination
+            currentPage={currentPage}
+            totalCount={totalCount}
+            pageSize={venuesPerPage}
+            onPageChange={handlePageChange}
+          />
+        &lt;/div>
+      &lt;/div>
+    &lt;/>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+/**
+ * Avatar renders a user's profile picture and name. If the user is logged in,
+ * it provides a link to their profile page.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.altText - The alternative text for the profile image.
+ * @param {string} props.imageUrl - The URL of the profile image.
+ * @param {string} props.name - The user's name.
+ *
+ * @returns {JSX.Element} An avatar component with a name and optional profile link.
+ */
 export default function Avatar({ altText, imageUrl, name }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Tracks login state
 
+  // Check login state on component mount
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    setIsLoggedIn(!!token);
+    setIsLoggedIn(!!token); // Set state based on token presence
   }, []);
 
+  // Common avatar content
   const AvatarContent = (
     <div className="flex items-center">
       <div>
+        {/* Profile image or placeholder */}
         {imageUrl ? (
           <img
             alt={altText}
@@ -43,6 +57,7 @@ export default function Avatar({ altText, imageUrl, name }) {
     </div>
   );
 
+  // If logged in, provide a link to the user's profile; otherwise, just display the avatar
   return isLoggedIn ? (
     <Link
       to={`/project-exam-two/user-profile/${name}`}

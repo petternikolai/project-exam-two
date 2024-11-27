@@ -4,11 +4,21 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { sortOptions } from "../../constants/sortOptions";
 import { classNames } from "../../utils/classNames";
 
+/**
+ * SortMenu provides a dropdown menu for selecting sorting options.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.sortOption - The currently selected sorting option.
+ * @param {Function} props.setSortOption - Function to update the selected sorting option.
+ *
+ * @returns {JSX.Element} A dropdown menu for selecting sort options.
+ */
 function SortMenu({ sortOption, setSortOption }) {
   return (
     <div className="col-start-1 row-start-1 py-4">
       <div className="mx-auto flex max-w-7xl justify-end px-4 sm:px-6 lg:px-8">
         <Menu as="div" className="relative inline-block">
+          {/* Dropdown toggle button */}
           <div className="flex">
             <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
               Sort by: {sortOption}
@@ -19,6 +29,7 @@ function SortMenu({ sortOption, setSortOption }) {
             </MenuButton>
           </div>
 
+          {/* Dropdown options */}
           <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition focus:outline-none">
             <div className="py-1">
               {sortOptions.map((option) => (

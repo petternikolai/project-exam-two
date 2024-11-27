@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+/**
+ * Custom hook for filtering venues based on selected criteria.
+ *
+ * @returns {Object} An object containing `filters`, `setFilters`, `clearFilters`, and `applyFilters`.
+ */
+
 export default function useVenueFilters() {
   const [filters, setFilters] = useState({
     price: [],

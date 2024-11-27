@@ -1,6 +1,9 @@
+/**
+ * Labels for filter options.
+ */
 export const filterLabels = {
   price: "Price",
-  maxGuests: "Capacity", // Change the label for maxGuests
+  maxGuests: "Capacity",
   rating: "Rating",
   amenities: "Amenities",
 };

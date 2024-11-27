@@ -6,21 +6,28 @@ import VenueContent from "../components/venue/VenueContent";
 import DateErrorModal from "../components/modals/DateErrorModal";
 import fetchVenueDetails from "../services/fetchVenueDetails";
 
+/**
+ * SpecificVenue renders the details page for a specific venue.
+ * It handles fetching venue details, displaying the venue content, and managing user interactions.
+ *
+ * @returns {JSX.Element} A detailed venue page with options for booking.
+ */
 export default function SpecificVenue() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [venue, setVenue] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState("");
-  const today = format(new Date(), "MM/dd/yyyy");
-  const [selectedDates, setSelectedDates] = useState(`${today} - ${today}`);
-  const [selectedGuests, setSelectedGuests] = useState(1);
-  const [error, setError] = useState(null);
+  const { id } = useParams(); // Get the venue ID from the URL
+  const navigate = useNavigate(); // For navigation between pages
+  const [venue, setVenue] = useState(null); // State to store venue details
+  const [totalPrice, setTotalPrice] = useState(0); // Total price for booking
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [modalContent, setModalContent] = useState(""); // Content to display in the modal
+  const today = format(new Date(), "MM/dd/yyyy"); // Today's date formatted
+  const [selectedDates, setSelectedDates] = useState(`${today} - ${today}`); // Default booking dates
+  const [selectedGuests, setSelectedGuests] = useState(1); // Number of guests
+  const [error, setError] = useState(null); // Error state
 
-  // Check if the user is authenticated based on the presence of 'authToken' in localStorage
+  // Check if the user is authenticated
   const isAuthenticated = localStorage.getItem("authToken") !== null;
 
+  // Fetch venue details on component mount or when `id` changes
   useEffect(() => {
     fetchVenueDetails(id)
       .then((venueData) => {
@@ -37,19 +44,21 @@ export default function SpecificVenue() {
       });
   }, [id]);
 
+  // Close the modal
   const handleModalClose = () => {
     setIsModalOpen(false);
     setModalContent("");
   };
 
+  // Handle the booking process
   const handleBooking = () => {
     if (!isAuthenticated) {
-      // Redirect to login page with state
+      // Redirect to login if not authenticated
       navigate("/project-exam-two/login");
-      return; // Prevent further execution
+      return; // Stop further execution
     }
 
-    // If authenticated, proceed with the booking
+    // Proceed to the booking page with state
     navigate("/project-exam-two/create-booking", {
       state: {
         venueId: id,
@@ -60,16 +69,19 @@ export default function SpecificVenue() {
     });
   };
 
+  // Display error message if any
   if (error) {
     return <div>Error: {error}</div>;
   }
 
+  // Display skeleton loader while fetching data
   if (!venue) {
     return <VenueSkeleton />;
   }
 
   return (
     <div className="bg-white">
+      {/* Venue content */}
       <VenueContent
         venue={venue}
         selectedDates={selectedDates}
@@ -82,6 +94,7 @@ export default function SpecificVenue() {
         handleBooking={handleBooking}
       />
 
+      {/* Modal for displaying errors */}
       <DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>
         {modalContent}
       </DateErrorModal>

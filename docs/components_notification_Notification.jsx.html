@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/notification/Notification.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/notification/Notification.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useEffect } from "react";
+import { Transition } from "@headlessui/react";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/20/solid";
+
+/**
+ * Notification is a functional component for displaying notifications with
+ * smooth transitions. The notification automatically hides after 5 seconds
+ * or can be manually closed by the user.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.showNotification - Notification state object.
+ * @param {boolean} props.showNotification.show - Whether the notification is visible.
+ * @param {string} props.showNotification.message - The message to display in the notification.
+ * @param {Function} props.setShowNotification - Function to update the notification state.
+ *
+ * @returns {JSX.Element} The notification component with transitions.
+ */
+export default function Notification({
+  showNotification,
+  setShowNotification,
+}) {
+  // Automatically close the notification after 5 seconds
+  useEffect(() => {
+    if (showNotification.show) {
+      const timer = setTimeout(() => {
+        setShowNotification({ show: false, message: "" });
+      }, 5000); // Auto-hide after 5 seconds
+
+      return () => clearTimeout(timer); // Cleanup the timer on unmount
+    }
+  }, [showNotification, setShowNotification]);
+
+  return (
+    &lt;div
+      aria-live="assertive"
+      className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 mt-20"
+    >
+      &lt;div className="flex w-full flex-col items-center space-y-4 sm:items-end">
+        &lt;Transition
+          show={showNotification.show &amp;&amp; !!showNotification.message} // Only show if there is a message
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 translate-y-2"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-2"
+        >
+          &lt;div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+            &lt;div className="p-4">
+              &lt;div className="flex items-start">
+                {/* Notification Icon */}
+                &lt;div className="flex-shrink-0">
+                  &lt;CheckCircleIcon
+                    className="h-6 w-6 text-green-400"
+                    aria-hidden="true"
+                  />
+                &lt;/div>
+                {/* Notification Message */}
+                &lt;div className="ml-3 w-0 flex-1 pt-0.5">
+                  &lt;p className="text-sm font-medium text-gray-900">
+                    {showNotification.message}
+                  &lt;/p>
+                &lt;/div>
+                {/* Close Button */}
+                &lt;div className="ml-4 flex-shrink-0 flex">
+                  &lt;button
+                    onClick={() =>
+                      setShowNotification({ show: false, message: "" })
+                    }
+                    className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    &lt;span className="sr-only">Close&lt;/span>
+                    &lt;XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                  &lt;/button>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        &lt;/Transition>
+      &lt;/div>
+    &lt;/div>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

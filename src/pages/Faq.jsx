@@ -6,6 +6,12 @@ import {
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { faqs } from "../constants/faqs";
 
+/**
+ * Faq renders a list of frequently asked questions with expandable answers.
+ * It uses a disclosure component to show and hide each answer.
+ *
+ * @returns {JSX.Element} A list of FAQs with expandable sections for each question.
+ */
 export default function Faq() {
   return (
     <div className="bg-white">
@@ -15,6 +21,7 @@ export default function Faq() {
             Frequently asked questions
           </h1>
           <dl className="mt-10 space-y-6 divide-y divide-gray-900/10">
+            {/* Map through the FAQs and display each one with a disclosure */}
             {faqs.map((faq) => (
               <Disclosure key={faq.question} as="div" className="pt-6">
                 <dt>
@@ -23,6 +30,7 @@ export default function Faq() {
                       {faq.question}
                     </span>
                     <span className="ml-6 flex h-7 items-center">
+                      {/* Toggle the plus/minus icons based on the disclosure state */}
                       <PlusIcon
                         aria-hidden="true"
                         className="h-6 w-6 group-data-[open]:hidden"
@@ -35,6 +43,7 @@ export default function Faq() {
                   </DisclosureButton>
                 </dt>
                 <DisclosurePanel as="dd" className="mt-2 pr-12">
+                  {/* Display the answer for the FAQ */}
                   <p className="text-base/7 text-gray-600">{faq.answer}</p>
                 </DisclosurePanel>
               </Disclosure>

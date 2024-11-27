@@ -1,3 +1,6 @@
+/**
+ * Navigation links for the application.
+ */
 export const navigationNav = {
   main: [
     { name: "Home", href: "/" },

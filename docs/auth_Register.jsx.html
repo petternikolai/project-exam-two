@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: auth/Register.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: auth/Register.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoePrints } from "@fortawesome/pro-duotone-svg-icons";
+import { API_KEY } from "../constants/apiKeys";
+import { API_BASE_URL, API_REGISTER_URL } from "../constants/apiUrls";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import TextInput from "../components/form/TextInput";
+import CheckboxInput from "../components/form/CheckboxInput";
+
+/**
+ * Register component allows users to create a new account by providing
+ * their details (username, email, password). It validates the input fields,
+ * checks password confirmation, and sends the data to the API for registration.
+ *
+ * @returns {JSX.Element} A registration form with validations and UI feedback.
+ */
+export default function Register() {
+  // State to manage form data
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    venueManager: false,
+  });
+
+  // State for displaying error messages
+  const [error, setError] = useState("");
+
+  // State to check if passwords match
+  const [passwordMatch, setPasswordMatch] = useState(true);
+
+  const { login } = useAuth(); // Authentication context hook
+  const navigate = useNavigate(); // Hook for programmatic navigation
+
+  // Validate if passwords match whenever they change
+  useEffect(() => {
+    if (formData.password &amp;&amp; formData.confirmPassword) {
+      setPasswordMatch(formData.password === formData.confirmPassword);
+    }
+  }, [formData.password, formData.confirmPassword]);
+
+  /**
+   * Handles input field changes and updates the form state.
+   *
+   * @param {React.ChangeEvent&lt;HTMLInputElement>} e - The input change event.
+   */
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  /**
+   * Validates the form and submits the registration data to the API.
+   * If successful, logs the user in and navigates to the login page.
+   *
+   * @param {React.FormEvent&lt;HTMLFormElement>} e - The form submission event.
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Ensure passwords match before proceeding
+    if (!passwordMatch) {
+      setError("Passwords do not match");
+      return;
+    }
+    setError(""); // Clear any previous errors
+
+    // Prepare payload for the API request
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      venueManager: formData.venueManager,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_REGISTER_URL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        if (response.status === 400) {
+          throw new Error("Invalid registration details");
+        } else if (response.status === 409) {
+          throw new Error("User already exists");
+        } else {
+          throw new Error("Registration failed");
+        }
+      }
+
+      const data = await response.json();
+
+      // Log the user in and navigate to the login page
+      login(data.userProfile);
+      navigate("/project-exam-two/login");
+    } catch (error) {
+      // Display error messages to the user
+      setError(error.message);
+    }
+  };
+
+  /**
+   * Checks if the password meets the minimum length requirement.
+   *
+   * @param {string} password - The password to check.
+   * @returns {boolean} True if the password is at least 8 characters.
+   */
+  const isPasswordLongEnough = (password) => {
+    return password.length >= 8;
+  };
+
+  return (
+    &lt;>
+      &lt;div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        {/* Registration form heading */}
+        &lt;div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          &lt;h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+            You're just a few steps away from your dream vacation...
+          &lt;/h2>
+          &lt;div className="flex mx-auto">
+            {/* Animated footprints */}
+            {[...Array(6)].map((_, index) => (
+              &lt;FontAwesomeIcon
+                key={index}
+                icon={faShoePrints}
+                className={`mt-6 mx-auto text-accent text-xl/6 icon-animation`}
+                style={{ animationDelay: `${index * 0.5}s` }}
+                swapOpacity={index % 2 === 0}
+              />
+            ))}
+          &lt;/div>
+          &lt;h3 className="mt-10 text-center text-lg tracking-tight text-gray-900">
+            ...enter your details and let's find your perfect getaway!
+          &lt;/h3>
+        &lt;/div>
+
+        &lt;div className="mt-10 sm:mx-auto sm:w-full sm:max-w-2xl flex flex-col lg:flex-row lg:space-x-8">
+          {/* Registration form */}
+          &lt;form onSubmit={handleSubmit} className="space-y-6 flex-1">
+            &lt;TextInput
+              id="name"
+              name="name"
+              type="text"
+              label="Username"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              autoComplete="username"
+            />
+            &lt;TextInput
+              id="email"
+              name="email"
+              type="email"
+              label="Email address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              autoComplete="email"
+            />
+            &lt;TextInput
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              autoComplete="new-password"
+            />
+            {/* Password strength indicator */}
+            {formData.password &amp;&amp; (
+              &lt;div className="mt-2">
+                &lt;div className="relative w-full h-2 bg-gray-200 rounded-full">
+                  &lt;div
+                    className={`absolute top-0 left-0 h-full rounded-full transition-all duration-300 ${
+                      isPasswordLongEnough(formData.password)
+                        ? "bg-green-500 w-full"
+                        : "bg-red-500 w-1/3"
+                    }`}
+                  >&lt;/div>
+                &lt;/div>
+                {!isPasswordLongEnough(formData.password) &amp;&amp; (
+                  &lt;p className="text-red-500 text-sm mt-1">
+                    Password must be at least 8 characters long
+                  &lt;/p>
+                )}
+              &lt;/div>
+            )}
+            &lt;TextInput
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              autoComplete="new-password"
+            />
+            {!passwordMatch &amp;&amp; (
+              &lt;p className="text-red-500 text-sm mt-2">
+                Passwords do not match
+              &lt;/p>
+            )}
+            &lt;CheckboxInput
+              id="venueManager"
+              name="venueManager"
+              label="I want to be a venue manager"
+              checked={formData.venueManager}
+              onChange={handleChange}
+            />
+            {error &amp;&amp; &lt;p className="text-red-500 text-sm">{error}&lt;/p>}
+            &lt;div>
+              &lt;button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-accent px-3 py-1.5 text-sm/6 font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                Register
+              &lt;/button>
+            &lt;/div>
+          &lt;/form>
+          {/* Registration guidelines */}
+          &lt;div className="bg-accent p-4 rounded-md text-sm text-black mt-4 lg:mt-0 lg:w-1/3">
+            &lt;h4 className="font-semibold">Guidelines:&lt;/h4>
+            &lt;ul className="space-y-2 pl-0 mt-2">
+              &lt;li>
+                The username must not contain punctuation symbols apart from
+                underscore (_).
+              &lt;/li>
+              &lt;li>The email must be a valid stud.noroff.no email address.&lt;/li>
+              &lt;li>The password must be at least 8 characters long.&lt;/li>
+            &lt;/ul>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/>
+  );
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

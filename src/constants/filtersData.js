@@ -1,3 +1,6 @@
+/**
+ * Data for filter options.
+ */
 export const filtersData = {
   price: [
     { value: "0-500", label: "$0 - $500" },

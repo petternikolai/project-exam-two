@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/createVenue.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/createVenue.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import axios from "axios";
+import { API_KEY } from "../constants/apiKeys";
+import { API_BASE_URL } from "../constants/apiUrls";
+
+/**
+ * Creates a new venue by sending a POST request to the API with the provided venue data.
+ * It includes the authorization token and API key in the request headers.
+ *
+ * @param {Object} venueData - The data for the venue to be created. This should include venue details.
+ * @returns {Object} The response data from the API, which contains the created venue details.
+ */
+const createVenue = async (venueData) => {
+  const accessToken = localStorage.getItem("authToken"); // Retrieve authentication token from localStorage
+
+  // Send a POST request to create the venue
+  const response = await axios.post(
+    `${API_BASE_URL}/holidaze/venues`, // API endpoint for creating a venue
+    venueData, // The venue data to be sent in the request body
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // Authorization header with Bearer token
+        "X-Noroff-API-Key": API_KEY, // API key for authentication
+      },
+    }
+  );
+
+  // Return the data from the API response
+  return response.data;
+};
+
+export default createVenue;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#API_BASE_URL">API_BASE_URL</a></li><li><a href="global.html#API_KEY">API_KEY</a></li><li><a href="global.html#AdminPagesLayout">AdminPagesLayout</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AuthProvider">AuthProvider</a></li><li><a href="global.html#Calendar">Calendar</a></li><li><a href="global.html#CalendarGrid">CalendarGrid</a></li><li><a href="global.html#CalendarHeader">CalendarHeader</a></li><li><a href="global.html#CreateUpdateVenueModal">CreateUpdateVenueModal</a></li><li><a href="global.html#DateErrorModal">DateErrorModal</a></li><li><a href="global.html#DeleteConfirmationModal">DeleteConfirmationModal</a></li><li><a href="global.html#FilterSection">FilterSection</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Loader">Loader</a></li><li><a href="global.html#MapComponent">MapComponent</a></li><li><a href="global.html#MyVenues">MyVenues</a></li><li><a href="global.html#MyVenuesSkeletonLoader">MyVenuesSkeletonLoader</a></li><li><a href="global.html#NotificationProvider">NotificationProvider</a></li><li><a href="global.html#Pagination">Pagination</a></li><li><a href="global.html#PreviousLocationProvider">PreviousLocationProvider</a></li><li><a href="global.html#PrivateRoute">PrivateRoute</a></li><li><a href="global.html#Profile">Profile</a></li><li><a href="global.html#ScrollToTop">ScrollToTop</a></li><li><a href="global.html#SearchInput">SearchInput</a></li><li><a href="global.html#SortMenu">SortMenu</a></li><li><a href="global.html#VenueCard">VenueCard</a></li><li><a href="global.html#VenueItem">VenueItem</a></li><li><a href="global.html#VenueLocation">VenueLocation</a></li><li><a href="global.html#classNames">classNames</a></li><li><a href="global.html#createUpdateVenueFields">createUpdateVenueFields</a></li><li><a href="global.html#createVenue">createVenue</a></li><li><a href="global.html#decodeToken">decodeToken</a></li><li><a href="global.html#faqs">faqs</a></li><li><a href="global.html#fetchAllVenues">fetchAllVenues</a></li><li><a href="global.html#fetchUserProfile">fetchUserProfile</a></li><li><a href="global.html#fetchVenueDetails">fetchVenueDetails</a></li><li><a href="global.html#filterLabels">filterLabels</a></li><li><a href="global.html#filtersData">filtersData</a></li><li><a href="global.html#handleDateChange">handleDateChange</a></li><li><a href="global.html#handleDelete">handleDelete</a></li><li><a href="global.html#handleNavClick">handleNavClick</a></li><li><a href="global.html#handleSubmit">handleSubmit</a></li><li><a href="global.html#handleViewBookings">handleViewBookings</a></li><li><a href="global.html#navigationFooter">navigationFooter</a></li><li><a href="global.html#navigationNav">navigationNav</a></li><li><a href="global.html#sortOptions">sortOptions</a></li><li><a href="global.html#sortVenues">sortVenues</a></li><li><a href="global.html#stats">stats</a></li><li><a href="global.html#updateVenue">updateVenue</a></li><li><a href="global.html#useAuth">useAuth</a></li><li><a href="global.html#useNotification">useNotification</a></li><li><a href="global.html#usePreviousLocation">usePreviousLocation</a></li><li><a href="global.html#validateImageUrl">validateImageUrl</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,11 +1,24 @@
-import Notification from "../common/Notification";
+import Notification from "../notification/Notification";
 
+/**
+ * AdminPagesLayout provides a structured layout for admin pages.
+ * It includes a main content area and an optional notification section.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.title - The title of the page, used for accessibility.
+ * @param {React.ReactNode} props.children - The content to display in the main section.
+ * @param {Object} [props.notificationProps] - Optional props for the Notification component.
+ * @param {Object} [props.notificationProps.showNotification] - Controls whether the notification is visible.
+ * @param {Function} [props.notificationProps.setShowNotification] - Function to toggle the notification visibility.
+ *
+ * @returns {JSX.Element} A layout component with main content and notifications.
+ */
 const AdminPagesLayout = ({ title, children, notificationProps }) => {
   return (
     <>
       <div className="flex justify-center">
         <div className="w-full max-w-7xl">
-          {/* Main Content */}
+          {/* Main Content Section */}
           <main>
             <h1 className="sr-only">{title}</h1>
             <div className="divide-y divide-white/5">

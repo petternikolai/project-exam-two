@@ -4,6 +4,21 @@ import { useEffect, useState } from "react";
 import MustBeLoggedInModal from "../modals/MustBeLoggedInModal";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
+/**
+ * VenueOptions renders the booking options for a venue, including price, ratings,
+ * selected dates, guest count, and a booking button.
+ *
+ * @param {Object} props - The component props.
+ * @param {number} props.price - The price per day for the venue.
+ * @param {number} props.rating - The average rating of the venue.
+ * @param {Array|string} props.selectedDates - The currently selected dates for booking.
+ * @param {number} props.selectedGuests - The number of guests selected.
+ * @param {Function} props.setSelectedGuests - Function to update the selected number of guests.
+ * @param {number} props.maxGuests - The maximum number of guests allowed.
+ * @param {Function} [props.handleBooking] - Callback function triggered when booking.
+ *
+ * @returns {JSX.Element} A section with booking options for the venue.
+ */
 export default function VenueOptions({
   price,
   rating,
@@ -11,25 +26,27 @@ export default function VenueOptions({
   selectedGuests,
   setSelectedGuests,
   maxGuests,
-  handleBooking = () => {}, // Add default function for handleBooking
+  handleBooking = () => {}, // Default to a no-op function
 }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate
-
-  const handleBookingClick = () => {
-    handleBooking();
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+  const navigate = useNavigate(); // Navigate between pages
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-    setIsLoggedIn(!!authToken);
+    setIsLoggedIn(!!authToken); // Update login state
   }, []);
+
+  const handleBookingClick = () => {
+    handleBooking(); // Trigger booking callback
+  };
 
   return (
     <div className="mt-4 lg:row-span-3 lg:mt-0">
+      {/* Price display */}
       <h2 className="sr-only">Product information</h2>
       <p className="text-3xl tracking-tight text-gray-900">${price} / day</p>
+
+      {/* Ratings display */}
       <div className="mt-4">
         <h3 className="sr-only">Reviews</h3>
         <div className="flex items-center">
@@ -48,14 +65,19 @@ export default function VenueOptions({
           <p className="sr-only">{rating} out of 5 stars</p>
         </div>
       </div>
+
+      {/* Selected dates */}
       {selectedDates && (
         <h3 className="mt-4 block text-sm font-medium text-gray-700">
           <p>
-            Selected dates:<br></br>
+            Selected dates:
+            <br />
             {selectedDates}
           </p>
         </h3>
       )}
+
+      {/* Guest selection */}
       <div className="mt-4">
         <label
           htmlFor="guests"
@@ -77,6 +99,8 @@ export default function VenueOptions({
           ))}
         </select>
       </div>
+
+      {/* Booking button */}
       <form className="mt-10">
         <button
           type="button"
