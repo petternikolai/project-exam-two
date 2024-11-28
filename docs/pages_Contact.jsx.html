@@ -35,13 +35,13 @@ import {
 import ContactFormSuccessModal from "../components/modals/ContactFormSuccessModal";
 
 /**
- * Contact renders the contact page with a form for users to send inquiries.
- * The form includes fields for the user's name, email, phone number, and message.
- * Upon form submission, a success modal is displayed.
+ * Contact component displays the contact form with fields for first name, last name, email, phone number, and message.
+ * It also shows a success modal after form submission and includes contact details like address, phone, and email.
  *
- * @returns {JSX.Element} A contact form with success modal functionality.
+ * @returns {JSX.Element} The contact form with its input fields and success modal.
  */
 export default function Contact() {
+  // State to hold form data values for first name, last name, email, phone number, and message
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -49,29 +49,31 @@ export default function Contact() {
     phoneNumber: "",
     message: "",
   });
+
+  // State to track if the success modal is open
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   /**
-   * Handles changes in the form inputs.
+   * Handles changes to the form fields and updates the form data state.
    *
-   * @param {Object} e - The event object.
+   * @param {Object} e - The event object for the input change.
    */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value, // Dynamically update the respective field
     });
   };
 
   /**
-   * Handles the form submission, clears the form data, and opens the success modal.
+   * Handles form submission, clears the form, and opens the success modal.
    *
-   * @param {Object} e - The event object.
+   * @param {Object} e - The event object for form submission.
    */
   const handleSubmit = (e) => {
-    e.preventDefault();
-    // Clear the form
+    e.preventDefault(); // Prevent default form submission
+    // Clear the form data
     setFormData({
       firstName: "",
       lastName: "",
@@ -79,7 +81,7 @@ export default function Contact() {
       phoneNumber: "",
       message: "",
     });
-    // Open the success modal
+    // Open the success modal upon form submission
     setIsModalOpen(true);
   };
 
@@ -87,12 +89,13 @@ export default function Contact() {
    * Closes the success modal.
    */
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen(false); // Set the modal to closed
   };
 
   return (
     &lt;div className="relative isolate bg-white">
       &lt;div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
+        {/* Contact information section */}
         &lt;div className="relative px-6 pb-10 pt-12 sm:pt-32 lg:static lg:px-4 lg:py-24">
           &lt;div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
             &lt;h2 className="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
@@ -108,136 +111,180 @@ export default function Contact() {
             &lt;dl className="mt-10 space-y-4 text-base/7 text-gray-600">
               &lt;div className="flex gap-x-4">
                 &lt;dt className="flex-none">
+                  &lt;span className="sr-only">Address&lt;/span>
+                  &lt;BuildingOffice2Icon
+                    aria-hidden="true"
+                    className="h-7 w-6 text-accent"
+                  />
+                &lt;/dt>
+                &lt;dd>
+                  Parkveien 1, 0350
+                  &lt;br />
+                  Oslo, Norway
+                &lt;/dd>
+              &lt;/div>
+              &lt;div className="flex gap-x-4">
+                &lt;dt className="flex-none">
+                  &lt;span className="sr-only">Telephone&lt;/span>
+                  &lt;PhoneIcon
+                    aria-hidden="true"
+                    className="h-7 w-6 text-accent"
+                  />
+                &lt;/dt>
+                &lt;dd>
+                  &lt;a
+                    href="tel:+1 (555) 234-5678"
+                    className="hover:text-gray-900"
+                  >
+                    +47 123 45 678
+                  &lt;/a>
+                &lt;/dd>
+              &lt;/div>
+              &lt;div className="flex gap-x-4">
+                &lt;dt className="flex-none">
                   &lt;span className="sr-only">Email&lt;/span>
-                  &lt;EnvelopeIcon className="h-6 w-6 text-accent" />
+                  &lt;EnvelopeIcon
+                    aria-hidden="true"
+                    className="h-7 w-6 text-accent"
+                  />
                 &lt;/dt>
-                &lt;dd className="flex-1">contact@holidaze.com&lt;/dd>
-              &lt;/div>
-              &lt;div className="flex gap-x-4">
-                &lt;dt className="flex-none">
-                  &lt;span className="sr-only">Phone&lt;/span>
-                  &lt;PhoneIcon className="h-6 w-6 text-accent" />
-                &lt;/dt>
-                &lt;dd className="flex-1">+1 123 456 7890&lt;/dd>
-              &lt;/div>
-              &lt;div className="flex gap-x-4">
-                &lt;dt className="flex-none">
-                  &lt;span className="sr-only">Office&lt;/span>
-                  &lt;BuildingOffice2Icon className="h-6 w-6 text-accent" />
-                &lt;/dt>
-                &lt;dd className="flex-1">123 Main St, City, Country&lt;/dd>
+                &lt;dd>
+                  &lt;a
+                    href="mailto:hello@holidaze.com"
+                    className="hover:text-gray-900"
+                  >
+                    hello@holidaze.com
+                  &lt;/a>
+                &lt;/dd>
               &lt;/div>
             &lt;/dl>
           &lt;/div>
         &lt;/div>
 
-        {/* Contact Form */}
+        {/* Contact form */}
         &lt;form
           onSubmit={handleSubmit}
-          className="space-y-6 md:col-span-1 lg:col-span-2 lg:space-y-8"
+          className="px-6 pb-12 pt-10 sm:pb-16 lg:px-4 lg:py-24"
         >
-          &lt;div className="grid grid-cols-1 gap-y-6 md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-            &lt;div className="sm:col-span-1">
-              &lt;label
-                htmlFor="firstName"
-                className="block text-sm font-semibold text-gray-900"
+          &lt;div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
+            &lt;div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+              {/* First Name Input */}
+              &lt;div>
+                &lt;label
+                  htmlFor="firstName"
+                  className="block text-sm/6 font-semibold text-gray-900"
+                >
+                  First name
+                &lt;/label>
+                &lt;div className="mt-2.5">
+                  &lt;input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                    autoComplete="given-name"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
+                  />
+                &lt;/div>
+              &lt;/div>
+
+              {/* Last Name Input */}
+              &lt;div>
+                &lt;label
+                  htmlFor="lastName"
+                  className="block text-sm/6 font-semibold text-gray-900"
+                >
+                  Last name
+                &lt;/label>
+                &lt;div className="mt-2.5">
+                  &lt;input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    required
+                    autoComplete="family-name"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
+                  />
+                &lt;/div>
+              &lt;/div>
+
+              {/* Email Input */}
+              &lt;div className="sm:col-span-2">
+                &lt;label
+                  htmlFor="email"
+                  className="block text-sm/6 font-semibold text-gray-900"
+                >
+                  Email
+                &lt;/label>
+                &lt;div className="mt-2.5">
+                  &lt;input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    autoComplete="email"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
+                  />
+                &lt;/div>
+              &lt;/div>
+
+              {/* Phone Number Input */}
+              &lt;div className="sm:col-span-2">
+                &lt;label
+                  htmlFor="phoneNumber"
+                  className="block text-sm/6 font-semibold text-gray-900"
+                >
+                  Phone number
+                &lt;/label>
+                &lt;div className="mt-2.5">
+                  &lt;input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    type="tel"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    required
+                    autoComplete="tel"
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
+                  />
+                &lt;/div>
+              &lt;/div>
+
+              {/* Message Textarea */}
+              &lt;div className="sm:col-span-2">
+                &lt;label
+                  htmlFor="message"
+                  className="block text-sm/6 font-semibold text-gray-900"
+                >
+                  Message
+                &lt;/label>
+                &lt;div className="mt-2.5">
+                  &lt;textarea
+                    id="message"
+                    name="message"
+                    rows={4}
+                    required
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
+                  />
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+            &lt;div className="mt-8 flex justify-end">
+              &lt;button
+                type="submit"
+                className="rounded-md bg-accent px-3.5 py-2.5 text-center text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accentbg-accent"
               >
-                First Name
-              &lt;/label>
-              &lt;input
-                id="firstName"
-                name="firstName"
-                type="text"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-                autoComplete="given-name"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-              />
+                Send message
+              &lt;/button>
             &lt;/div>
-            &lt;div className="sm:col-span-1">
-              &lt;label
-                htmlFor="lastName"
-                className="block text-sm font-semibold text-gray-900"
-              >
-                Last Name
-              &lt;/label>
-              &lt;input
-                id="lastName"
-                name="lastName"
-                type="text"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-                autoComplete="family-name"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-              />
-            &lt;/div>
-          &lt;/div>
-          &lt;div className="grid grid-cols-1 gap-y-6 md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-            &lt;div className="sm:col-span-1">
-              &lt;label
-                htmlFor="email"
-                className="block text-sm font-semibold text-gray-900"
-              >
-                Email
-              &lt;/label>
-              &lt;input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                autoComplete="email"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-              />
-            &lt;/div>
-            &lt;div className="sm:col-span-1">
-              &lt;label
-                htmlFor="phoneNumber"
-                className="block text-sm font-semibold text-gray-900"
-              >
-                Phone Number
-              &lt;/label>
-              &lt;input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                required
-                autoComplete="tel"
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-              />
-            &lt;/div>
-          &lt;/div>
-          &lt;div className="sm:col-span-2">
-            &lt;label
-              htmlFor="message"
-              className="block text-sm font-semibold text-gray-900"
-            >
-              Message
-            &lt;/label>
-            &lt;div className="mt-2.5">
-              &lt;textarea
-                id="message"
-                name="message"
-                rows={4}
-                required
-                value={formData.message}
-                onChange={handleChange}
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm/6"
-              />
-            &lt;/div>
-          &lt;/div>
-          &lt;div className="mt-8 flex justify-end">
-            &lt;button
-              type="submit"
-              className="rounded-md bg-accent px-3.5 py-2.5 text-center text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              Send message
-            &lt;/button>
           &lt;/div>
         &lt;/form>
       &lt;/div>
@@ -261,7 +308,7 @@ export default function Contact() {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Nov 27 2024 20:39:50 GMT+0100 (sentraleuropeisk normaltid)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu Nov 28 2024 17:34:45 GMT+0100 (sentraleuropeisk normaltid)
 </footer>
 
 <script> prettyPrint(); </script>
