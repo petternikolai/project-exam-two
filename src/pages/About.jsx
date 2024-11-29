@@ -2,6 +2,7 @@ import imgPetterNikolai from "../assets/petter.png";
 import Stats from "../components/stats/Stats";
 import imgAbout from "../assets/about.jpg";
 import imgPetterLandscape from "../assets/petter-landscape.png";
+import { Helmet } from "react-helmet-async";
 
 /**
  * About renders the "About Holidaze" page, providing information about the company,
@@ -12,6 +13,14 @@ import imgPetterLandscape from "../assets/petter-landscape.png";
 export default function About() {
   return (
     <>
+      <Helmet>
+        <title>About Us - Holidaze</title>
+        <meta
+          name="description"
+          content="Learn more about Holidaze and our mission to provide the best venue and booking services."
+        />
+      </Helmet>
+
       {/* About Holidaze Section */}
       <div className="bg-white px-6 py-12 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">

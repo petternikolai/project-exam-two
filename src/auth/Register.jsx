@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../components/form/TextInput";
 import CheckboxInput from "../components/form/CheckboxInput";
+import { Helmet } from "react-helmet-async";
 
 /**
  * Register component allows users to create a new account by providing
@@ -121,6 +122,14 @@ export default function Register() {
 
   return (
     <>
+      <Helmet>
+        <title>Register - Holidaze</title>
+        <meta
+          name="description"
+          content="Create a new account on Holidaze and start managing your bookings and venues."
+        />
+      </Helmet>
+      {/* Registration form container */}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         {/* Registration form heading */}
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">

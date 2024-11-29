@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { handleSubmit } from "../utils/handleSubmit";
 import ProfileUpdateForm from "../components/profile/ProfileUpdateForm";
 import AdminPagesLayout from "../components/layout/AdminPagesLayout";
+import { Helmet } from "react-helmet-async";
 
 /**
  * Profile component allows users to update their profile information.
@@ -113,6 +114,14 @@ const Profile = () => {
         setShowNotification: handleCloseNotification,
       }}
     >
+      <Helmet>
+        <title>Your Profile - Holidaze</title>
+        <meta
+          name="description"
+          content="View and edit your profile details on Holidaze."
+        />
+      </Helmet>
+
       {/* Profile form heading */}
       <div className="col-span-1">
         <h1 className="text-2xl font-bold text-gray-800">

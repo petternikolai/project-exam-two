@@ -9,6 +9,7 @@ import handleSubmit from "../services/handleSubmit";
 import handleDelete from "../services/handleDelete";
 import handleViewBookings from "../services/handleViewBookings";
 import AdminPagesLayout from "../components/layout/AdminPagesLayout";
+import { Helmet } from "react-helmet-async";
 
 /**
  * MyVenues component handles the display and management of the user's listed venues.
@@ -108,6 +109,14 @@ const MyVenues = () => {
 
   return (
     <AdminPagesLayout title="My Venues">
+      <Helmet>
+        <title>Manage Your Venues - Holidaze</title>
+        <meta
+          name="description"
+          content="View, edit, and manage the venues you have listed on Holidaze."
+        />
+      </Helmet>
+
       {/* Loading state display */}
       {loading ? (
         <>

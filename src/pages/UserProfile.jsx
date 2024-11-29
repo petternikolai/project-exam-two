@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import RenderUserProfile from "../components/profile/RenderUserProfile";
 import useFetch from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants/apiUrls";
+import { Helmet } from "react-helmet-async";
 
 /**
  * UserProfile fetches and displays a user's profile, including their bookings and venues.
@@ -40,5 +41,16 @@ export default function UserProfile() {
     return <RenderUserProfile profileData={profileData.data} />;
   };
 
-  return <div>{renderContent()}</div>;
+  return (
+    <>
+      <Helmet>
+        <title>User Profile - Holidaze</title>
+        <meta
+          name="description"
+          content="View the profile and listings of this user on Holidaze."
+        />
+      </Helmet>
+      <div>{renderContent()}</div>;
+    </>
+  );
 }
