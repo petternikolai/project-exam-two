@@ -1,5 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default defineConfig({
   base: "/project-exam-two/",
@@ -9,6 +12,9 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
+  },
+  define: {
+    "process.env": process.env,
   },
   server: {
     historyApiFallback: true,
