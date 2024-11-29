@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "../constants/apiUrls";
 import { API_KEY } from "../constants/apiKeys";
+import { Helmet } from "react-helmet-async";
 
 /**
  * CreateBooking allows the user to create a booking for a specific venue.
@@ -114,41 +115,51 @@ export default function CreateBooking() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-4">Create Booking</h1>
-      {venue && (
-        <div className="mb-4 p-4 border rounded-md">
-          <img
-            src={venue.media?.[0]?.url || "default-image-url.jpg"}
-            alt={venue.name || "Venue Image"}
-            className="w-full h-80 object-cover rounded-md mb-4"
-          />
-          <h2 className="text-xl font-bold">{venue.name}</h2>
-          <p className="text-sm mt-2">From: {formData.dateFrom}</p>
-          <p className="text-sm mt-2">To: {formData.dateTo}</p>
-          <p className="text-sm mt-2">Guests: {formData.guests}</p>
-          <button
-            onClick={handleSubmit}
-            className="mt-4 flex w-full items-center justify-center rounded-md bg-accent px-8 py-3 text-base font-medium text-black"
-          >
-            Confirm Booking
-          </button>
-        </div>
-      )}
-      {showSuccessModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-md">
-            <h2 className="text-xl font-bold mb-4">Booking Successful</h2>
-            <p>Your booking has been successfully created.</p>
+    <>
+      <Helmet>
+        <title>Create a Booking - Holidaze</title>
+        <meta
+          name="description"
+          content="Easily create a booking for your next stay at Holidaze venues."
+        />
+      </Helmet>
+
+      <div className="container mx-auto p-4 max-w-2xl">
+        <h1 className="text-2xl font-bold mb-4">Create Booking</h1>
+        {venue && (
+          <div className="mb-4 p-4 border rounded-md">
+            <img
+              src={venue.media?.[0]?.url || "default-image-url.jpg"}
+              alt={venue.name || "Venue Image"}
+              className="w-full h-80 object-cover rounded-md mb-4"
+            />
+            <h2 className="text-xl font-bold">{venue.name}</h2>
+            <p className="text-sm mt-2">From: {formData.dateFrom}</p>
+            <p className="text-sm mt-2">To: {formData.dateTo}</p>
+            <p className="text-sm mt-2">Guests: {formData.guests}</p>
             <button
-              onClick={handleCloseModal}
+              onClick={handleSubmit}
               className="mt-4 flex w-full items-center justify-center rounded-md bg-accent px-8 py-3 text-base font-medium text-black"
             >
-              Close
+              Confirm Booking
             </button>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+        {showSuccessModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-md">
+              <h2 className="text-xl font-bold mb-4">Booking Successful</h2>
+              <p>Your booking has been successfully created.</p>
+              <button
+                onClick={handleCloseModal}
+                className="mt-4 flex w-full items-center justify-center rounded-md bg-accent px-8 py-3 text-base font-medium text-black"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

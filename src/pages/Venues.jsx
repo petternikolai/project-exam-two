@@ -4,9 +4,10 @@ import VenueSkeleton from "../components/loaders/VenueSkeleton";
 import useVenueFilters from "../hooks/useVenueFilters";
 import SearchInput from "../components/ui/SearchInput";
 import VenueCard from "../components/venue/VenueCard";
-import Pagination from "../components/pagination/Pagination"; // Import Pagination component
-import sortVenues from "../utils/sortVenues"; // Import sortVenues function
-import fetchAllVenues from "../services/fetchAllVenues"; // Import fetchAllVenues function
+import Pagination from "../components/pagination/Pagination";
+import sortVenues from "../utils/sortVenues";
+import fetchAllVenues from "../services/fetchAllVenues";
+import { Helmet } from "react-helmet-async";
 
 /**
  * Venues component displays a list of venues with sorting, filtering, and pagination functionality.
@@ -100,6 +101,14 @@ export default function Venues() {
 
   return (
     <>
+      <Helmet>
+        <title>Explore Venues - Holidaze</title>
+        <meta
+          name="description"
+          content="Discover amazing venues for your next trip on Holidaze."
+        />
+      </Helmet>
+
       {/* Filter and sort controls */}
       <FilterSort
         filters={filters}

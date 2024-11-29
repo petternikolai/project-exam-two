@@ -22,6 +22,7 @@ import Bookings from "./pages/Bookings";
 import MyVenues from "./pages/MyVenues";
 import Loader from "./components/loaders/Loader";
 import { GOOGLE_API_KEY } from "./constants/apiKeys";
+import { HelmetProvider } from "react-helmet-async";
 
 /**
  * The main app component that defines the routes and layout of the application.
@@ -32,59 +33,67 @@ import { GOOGLE_API_KEY } from "./constants/apiKeys";
  */
 function App() {
   return (
-    <LoadScript
-      googleMapsApiKey={GOOGLE_API_KEY} // Load Google Maps with the provided API key
-      libraries={["marker"]} // Load required libraries for Google Maps
-      loadingElement={<Loader />} // Display a loading element while Google Maps is being loaded
-    >
-      <Router>
-        {/* Scrolls the page to the top on every route change */}
-        <ScrollToTop />
-        <PreviousLocationProvider>
-          <AuthProvider>
-            <Layout>
-              <Routes>
-                {/* Define all routes for the application */}
-                <Route path="/" element={<Homepage />} />
-                <Route path="/project-exam-two/login" element={<Login />} />
-                <Route
-                  path="/project-exam-two/register"
-                  element={<Register />}
-                />
-                <Route path="/project-exam-two/about" element={<About />} />
-                <Route path="/project-exam-two/faq" element={<Faq />} />
-                <Route path="/project-exam-two/contact" element={<Contact />} />
-                <Route path="/project-exam-two/venues" element={<Venues />} />
-                <Route path="/project-exam-two/profile" element={<Profile />} />
-                <Route
-                  path="/project-exam-two/venues/:id"
-                  element={<SpecificVenue />}
-                />
-                <Route
-                  path="/project-exam-two/user-profile/:id"
-                  element={<UserProfile />}
-                />
-                <Route path="/user/:id" element={<RenderUserProfile />} />
+    <HelmetProvider>
+      <LoadScript
+        googleMapsApiKey={GOOGLE_API_KEY} // Load Google Maps with the provided API key
+        libraries={["marker"]} // Load required libraries for Google Maps
+        loadingElement={<Loader />} // Display a loading element while Google Maps is being loaded
+      >
+        <Router>
+          {/* Scrolls the page to the top on every route change */}
+          <ScrollToTop />
+          <PreviousLocationProvider>
+            <AuthProvider>
+              <Layout>
+                <Routes>
+                  {/* Define all routes for the application */}
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/project-exam-two/login" element={<Login />} />
+                  <Route
+                    path="/project-exam-two/register"
+                    element={<Register />}
+                  />
+                  <Route path="/project-exam-two/about" element={<About />} />
+                  <Route path="/project-exam-two/faq" element={<Faq />} />
+                  <Route
+                    path="/project-exam-two/contact"
+                    element={<Contact />}
+                  />
+                  <Route path="/project-exam-two/venues" element={<Venues />} />
+                  <Route
+                    path="/project-exam-two/profile"
+                    element={<Profile />}
+                  />
+                  <Route
+                    path="/project-exam-two/venues/:id"
+                    element={<SpecificVenue />}
+                  />
+                  <Route
+                    path="/project-exam-two/user-profile/:id"
+                    element={<UserProfile />}
+                  />
+                  <Route path="/user/:id" element={<RenderUserProfile />} />
 
-                {/* Protected routes wrapped with PrivateRoute */}
-                <Route
-                  path="/project-exam-two/create-booking"
-                  element={<PrivateRoute element={<CreateBooking />} />}
-                />
-                <Route
-                  path="/project-exam-two/bookings"
-                  element={<PrivateRoute element={<Bookings />} />}
-                />
-                <Route
-                  path="/project-exam-two/manage-venues"
-                  element={<PrivateRoute element={<MyVenues />} />}
-                />
-              </Routes>
-            </Layout>
-          </AuthProvider>
-        </PreviousLocationProvider>
-      </Router>
-    </LoadScript>
+                  {/* Protected routes wrapped with PrivateRoute */}
+                  <Route
+                    path="/project-exam-two/create-booking"
+                    element={<PrivateRoute element={<CreateBooking />} />}
+                  />
+                  <Route
+                    path="/project-exam-two/bookings"
+                    element={<PrivateRoute element={<Bookings />} />}
+                  />
+                  <Route
+                    path="/project-exam-two/manage-venues"
+                    element={<PrivateRoute element={<MyVenues />} />}
+                  />
+                </Routes>
+              </Layout>
+            </AuthProvider>
+          </PreviousLocationProvider>
+        </Router>
+      </LoadScript>
+    </HelmetProvider>
   );
 }
 

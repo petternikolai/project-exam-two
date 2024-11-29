@@ -8,6 +8,7 @@ import LoadingState from "../components/bookings/LoadingState";
 import ErrorState from "../components/bookings/ErrorState";
 import BookingsList from "../components/bookings/BookingsList";
 import AdminPagesLayout from "../components/layout/AdminPagesLayout";
+import { Helmet } from "react-helmet-async";
 
 /**
  * Bookings displays the user's upcoming bookings and provides functionality to delete bookings.
@@ -56,6 +57,13 @@ export default function Bookings() {
 
   return (
     <AdminPagesLayout title="Bookings">
+      <Helmet>
+        <title>Your Bookings - Holidaze</title>
+        <meta
+          name="description"
+          content="View and manage all your bookings with Holidaze."
+        />
+      </Helmet>
       {authLoading ? (
         <LoadingState /> // Display loading state while authenticating
       ) : !userProfile || !accessToken ? (

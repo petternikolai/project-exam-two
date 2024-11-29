@@ -5,6 +5,7 @@ import VenueSkeleton from "../components/venue/VenueSkeleton";
 import VenueContent from "../components/venue/VenueContent";
 import DateErrorModal from "../components/modals/DateErrorModal";
 import fetchVenueDetails from "../services/fetchVenueDetails";
+import { Helmet } from "react-helmet-async";
 
 /**
  * SpecificVenue renders the details page for a specific venue.
@@ -80,24 +81,33 @@ export default function SpecificVenue() {
   }
 
   return (
-    <div className="bg-white">
-      {/* Venue content */}
-      <VenueContent
-        venue={venue}
-        selectedDates={selectedDates}
-        selectedGuests={selectedGuests}
-        setSelectedGuests={setSelectedGuests}
-        setTotalPrice={setTotalPrice}
-        setSelectedDates={setSelectedDates}
-        setIsModalOpen={setIsModalOpen}
-        setModalContent={setModalContent}
-        handleBooking={handleBooking}
-      />
+    <>
+      <Helmet>
+        <title>Venue Details - Holidaze</title>
+        <meta
+          name="description"
+          content="Explore detailed information about this venue and make a booking on Holidaze."
+        />
+      </Helmet>
+      <div className="bg-white">
+        {/* Venue content */}
+        <VenueContent
+          venue={venue}
+          selectedDates={selectedDates}
+          selectedGuests={selectedGuests}
+          setSelectedGuests={setSelectedGuests}
+          setTotalPrice={setTotalPrice}
+          setSelectedDates={setSelectedDates}
+          setIsModalOpen={setIsModalOpen}
+          setModalContent={setModalContent}
+          handleBooking={handleBooking}
+        />
 
-      {/* Modal for displaying errors */}
-      <DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>
-        {modalContent}
-      </DateErrorModal>
-    </div>
+        {/* Modal for displaying errors */}
+        <DateErrorModal isOpen={isModalOpen} onClose={handleModalClose}>
+          {modalContent}
+        </DateErrorModal>
+      </div>
+    </>
   );
 }

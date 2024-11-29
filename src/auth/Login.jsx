@@ -5,6 +5,7 @@ import { API_BASE_URL, API_LOGIN_URL } from "../constants/apiUrls";
 import useAuth from "../hooks/useAuth";
 import TextInput from "../components/form/TextInput";
 import { usePreviousLocation } from "../context/PreviousLocationContext";
+import { Helmet } from "react-helmet-async";
 
 /**
  * Login component handles user authentication by allowing users
@@ -85,72 +86,81 @@ export default function Login() {
   };
 
   return (
-    <div className="flex custom-height">
-      {/* Left-side form container */}
-      <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div>
-            <h2 className="text-2xl/9 font-bold tracking-tight text-gray-900">
-              Sign in to your account
-            </h2>
-            <p className="mt-2 text-sm/6 text-gray-500">
-              Not a member?{" "}
-              <Link
-                to="/project-exam-two/register"
-                className="font-semibold text-accent"
-              >
-                Sign up now
-              </Link>
-            </p>
-          </div>
-          <div className="mt-10">
-            {/* Login form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email input field */}
-              <TextInput
-                id="email"
-                name="email"
-                type="email"
-                label="Email address"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                autoComplete="email"
-              />
-              {/* Password input field */}
-              <TextInput
-                id="password"
-                name="password"
-                type="password"
-                label="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                autoComplete="current-password"
-              />
-              {/* Error message display */}
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-              <div>
-                {/* Submit button */}
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm/6 font-medium text-black bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+    <>
+      <Helmet>
+        <title>Login - Holidaze</title>
+        <meta
+          name="description"
+          content="Log in to your Holidaze account to manage bookings and venues."
+        />
+      </Helmet>
+      <div className="flex custom-height">
+        {/* Left-side form container */}
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-sm lg:w-96">
+            <div>
+              <h2 className="text-2xl/9 font-bold tracking-tight text-gray-900">
+                Sign in to your account
+              </h2>
+              <p className="mt-2 text-sm/6 text-gray-500">
+                Not a member?{" "}
+                <Link
+                  to="/project-exam-two/register"
+                  className="font-semibold text-accent"
                 >
-                  Sign in
-                </button>
-              </div>
-            </form>
+                  Sign up now
+                </Link>
+              </p>
+            </div>
+            <div className="mt-10">
+              {/* Login form */}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Email input field */}
+                <TextInput
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="Email address"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  autoComplete="email"
+                />
+                {/* Password input field */}
+                <TextInput
+                  id="password"
+                  name="password"
+                  type="password"
+                  label="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  autoComplete="current-password"
+                />
+                {/* Error message display */}
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+                <div>
+                  {/* Submit button */}
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm/6 font-medium text-black bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+                  >
+                    Sign in
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
+        {/* Right-side image container */}
+        <div className="relative hidden w-0 flex-1 lg:block">
+          <img
+            alt="Login page background"
+            src={loginImg}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
       </div>
-      {/* Right-side image container */}
-      <div className="relative hidden w-0 flex-1 lg:block">
-        <img
-          alt="Login page background"
-          src={loginImg}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      </div>
-    </div>
+    </>
   );
 }
