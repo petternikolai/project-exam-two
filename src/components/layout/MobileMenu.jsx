@@ -39,7 +39,11 @@ export default function MobileMenu({
       <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/project-exam-two/" className="-m-1.5 p-1.5">
+          <Link
+            to="/"
+            className="-m-1.5 p-1.5"
+            onClick={() => setMobileMenuOpen(false)}
+          >
             <span className="sr-only">Holidaze</span>
             <div className="logo text-accent">Holidaze</div>
           </Link>
@@ -56,6 +60,48 @@ export default function MobileMenu({
 
         <div className="mt-6 flow-root">
           <div className="-my-6 divide-y divide-gray-500/20">
+            {/* General Navigation Links */}
+            <div className="py-6">
+              <nav className="space-y-4">
+                <Link
+                  to="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/project-exam-two/venues"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  Venues
+                </Link>
+                <Link
+                  to="/project-exam-two/about"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  About
+                </Link>
+                <Link
+                  to="/project-exam-two/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  Contact
+                </Link>
+                <Link
+                  to="/project-exam-two/faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                >
+                  FAQ
+                </Link>
+              </nav>
+            </div>
+
+            {/* Authentication-Specific Links */}
             <div className="py-6">
               {isLoggedIn ? (
                 <>
@@ -74,7 +120,7 @@ export default function MobileMenu({
                     onClick={() => setMobileMenuOpen(false)}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                   >
-                    Edit Profile
+                    Profile
                   </Link>
                   <Link
                     to="/project-exam-two/bookings"
@@ -89,7 +135,7 @@ export default function MobileMenu({
                       onClick={() => setMobileMenuOpen(false)}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
-                      Manage Venues
+                      My Venues
                     </Link>
                   )}
                   <button
